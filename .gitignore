@@ -1,4 +1,4 @@
-# Built application files
+B1;2802;0c# Built application files
 *.apk
 *.ap_
 
@@ -23,3 +23,6 @@ local.properties
 proguard/
 
 .idea/
+
+src/
+pkg/

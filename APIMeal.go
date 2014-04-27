@@ -3,17 +3,23 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
+	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 var (
 	port = "8181"
 	sqdb *sql.DB
 )
+
+type Resto struct {
+	id   int
+	name string
+}
 
 func init_db() {
 	os.Remove("./foo.db")
@@ -22,8 +28,7 @@ func init_db() {
 		log.Fatal(err)
 	}
 	sql := `
-create table foo (id integer not null primary key, name text);
-delete from foo;
+create table restaurant (id integer not null primary key, name text);
 `
 	_, err = db.Exec(sql)
 	if err != nil {
@@ -33,53 +38,91 @@ delete from foo;
 	sqdb = db
 }
 
-func handleIndex(res http.ResponseWriter, req *http.Request) {
-	data, _ := json.Marshal("{'connected':'true'}")
-	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	res.Write(data)
+func (rest Resto) getAll() { //GET no param
+
 }
 
-func handleAdd(res http.ResponseWriter, req *http.Request) {
+func (rest Resto) get() { //GET with ID
+	log.Println(rest.id)
+}
+
+func (rest Resto) add() { //new one
 	tx, err := sqdb.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
-	stmt, err := tx.Prepare("insert into foo(id, name) values(?, ?)")
+	stmt, err := tx.Prepare("insert into restaurant(id, name) values(?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
-	for i := 0; i < 100; i++ {
-		_, err = stmt.Exec(i, fmt.Sprintf("dd %03d", i))
-		if err != nil {
-			log.Fatal(err)
-		}
+	_, err = stmt.Exec(rest.id, rest.name)
+	if err != nil {
+		log.Fatal(err)
 	}
 	tx.Commit()
 }
 
-func handleGet(res http.ResponseWriter, req *http.Request) {
-	rows, err := sqdb.Query("select id, name from foo")
+func (rest Resto) del() { //delete
+	tx, err := sqdb.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		var name string
-		rows.Scan(&id, &name)
-		fmt.Println(id, name)
+	stmt, err := tx.Prepare("delete from restaurant where id=?")
+	if err != nil {
+		log.Fatal(err)
 	}
-	rows.Close()
+	defer stmt.Close()
+	_, err = stmt.Exec(rest.id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tx.Commit()
+}
+
+func atoi(s string) int {
+	d, err := strconv.Atoi(s)
+	if err != nil {
+		log.Panicln(err)
+		return 0
+	}
+	return d
+}
+
+func (rest Resto) put() { //update
+
+}
+
+func handleResto(res http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	r := Resto{atoi(vars["id"]), vars["name"]}
+	log.Println("rest is ", r)
+	switch req.Method {
+	case "POST":
+		r.add()
+	case "GET":
+		r.get()
+	case "DELETE":
+		r.del()
+	case "PUT":
+		r.put()
+	}
+	data, _ := json.Marshal("{'request':'success'}")
+	res.Write(data)
 }
 
 func main() {
 	init_db()
-	log.Println("Starting and listening on ", port)
-	http.HandleFunc("/", handleIndex)
-	http.HandleFunc("/add", handleAdd)
-	http.HandleFunc("/get", handleGet)
 
+	r := mux.NewRouter()
+	r.Headers("Content-Type", "application/json; charset=utf-8")
+	r.HandleFunc("/restaurants", handleResto)
+	r.HandleFunc("/restaurants/{id}", handleResto)
+	r.HandleFunc("/restaurants/{id}/{name}", handleResto)
+	r.HandleFunc("/restaurants/{name}", handleResto)
+	http.Handle("/", r)
+
+	log.Println("Starting and listening on ", port, "...")
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal("Error: %v", err)

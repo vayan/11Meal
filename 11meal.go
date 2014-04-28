@@ -2,13 +2,15 @@ package main
 
 import (
 	"github.com/coopernurse/gorp"
+	"github.com/gorilla/schema"
 	"log"
 	"strconv"
 )
 
 var (
-	port  = "8181"
-	dbmap *gorp.DbMap
+	port    = "8181"
+	dbmap   *gorp.DbMap
+	decoder = schema.NewDecoder()
 )
 
 func checkErr(err error, msg string) {
@@ -29,7 +31,6 @@ func atoi(s string) int {
 func main() {
 	dbmap = init_db()
 	defer dbmap.Db.Close()
-
 	start_web_server()
 
 }

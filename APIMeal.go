@@ -7,11 +7,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
-	"os"
 )
 
 func init_db() *gorp.DbMap {
-	os.Remove("./foo.db")
+	//os.Remove("./foo.db")
 	db, err := sql.Open("sqlite3", "./foo.db")
 	checkErr(err, "Failed open DB")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
@@ -26,8 +25,8 @@ func init_db() *gorp.DbMap {
 	checkErr(err, "Create tables failed")
 
 	//debug
-	err = dbmap.TruncateTables()
-	checkErr(err, "TruncateTables failed")
+	//err = dbmap.TruncateTables()
+	//checkErr(err, "TruncateTables failed")
 	return dbmap
 }
 
@@ -36,8 +35,6 @@ func start_web_server() {
 	r.Headers("Content-Type", "application/json; charset=utf-8")
 	r.HandleFunc("/restaurants", handleResto)
 	r.HandleFunc("/restaurants/{id}", handleResto)
-	r.HandleFunc("/restaurants/{id}/{name}", handleResto)
-	r.HandleFunc("/restaurants/{name}", handleResto)
 
 	r.HandleFunc("/table", handleTable)
 	r.HandleFunc("/table/{id}", handleTable)

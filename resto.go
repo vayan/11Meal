@@ -6,6 +6,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Resto struct {
@@ -29,8 +30,9 @@ func (rest Resto) getAll() []Resto { //GET no param
 
 func (rest Resto) get() { //GET with ID
 	log.Println("before selected ", rest)
-	err := dbmap.SelectOne(&rest, "select * from restos where Id=?", rest.Id)
+	obj, err := dbmap.Get(Resto{}, rest.Id)
 	checkErr(err, "get resto failed")
+	rest = *obj.(*Resto)
 	log.Println("after selected ", rest)
 }
 
@@ -57,19 +59,36 @@ func (rest Resto) put() { //update
 
 func handleResto(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
-	r := Resto{0, "foo", "test", "test"}
-	if vars["id"] != "" {
-		r.Id = atoi(vars["id"])
-	}
-	log.Println("rest is ", r)
+	log.Printf("recv %s : %s\n", req.Method, vars)
 	switch req.Method {
 	case "POST":
+		err := req.ParseForm()
+		r := new(Resto)
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(r, req.PostForm)
+		checkErr(err, "Error decode form")
 		r.add()
 	case "GET":
-		r.get()
+		d, err := strconv.Atoi(vars["id"])
+		r := Resto{0, "", "", ""}
+		if err != nil {
+			r.getAll()
+		} else {
+			r.Id = d
+			r.get()
+		}
 	case "DELETE":
+		d := atoi(vars["id"])
+		r := Resto{d, "", "", ""}
 		r.del()
 	case "PUT":
+		d := atoi(vars["id"])
+		err := req.ParseForm()
+		r := new(Resto)
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(r, req.PostForm)
+		checkErr(err, "Error decode form")
+		r.Id = d
 		r.put()
 	}
 	data, _ := json.Marshal("{'request':'success'}")

@@ -54,3 +54,38 @@ func (r Resto) setID(id int) Global {
 func (r Resto) getID() int {
 	return r.Id
 }
+
+func (r Reservation) setID(id int) Global {
+	r.Id = id
+	return r
+}
+
+func (r Reservation) getID() int {
+	return r.Id
+}
+func (r User) setID(id int) Global {
+	r.Id = id
+	return r
+}
+
+func (r User) getID() int {
+	return r.Id
+}
+
+func (r Order) setID(id int) Global {
+	r.Id = id
+	return r
+}
+
+func (r Order) getID() int {
+	return r.Id
+}
+
+func (r Meal) setID(id int) Global {
+	r.Id = id
+	return r
+}
+
+func (r Meal) getID() int {
+	return r.Id
+}

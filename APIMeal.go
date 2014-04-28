@@ -2,14 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
-	"reflect"
-	"strconv"
 )
 
 func init_db() *gorp.DbMap {
@@ -22,6 +19,7 @@ func init_db() *gorp.DbMap {
 	dbmap.AddTableWithName(Reservation{}, "reservations").SetKeys(true, "Id")
 	dbmap.AddTableWithName(Order{}, "orders").SetKeys(true, "Id")
 	dbmap.AddTableWithName(Meal{}, "meals").SetKeys(true, "Id")
+	dbmap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
 
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create tables failed")

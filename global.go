@@ -1,6 +1,13 @@
 package main
 
-import ()
+import (
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+	"reflect"
+	"strconv"
+)
 
 type Global interface {
 	setID(id int) Global
@@ -15,19 +22,16 @@ func get(r Global) {
 	log.Println("after selected ", obj)
 }
 
-// func getAll(r Global, tp string) []Global {
-//  restos := reflect.Zero(reflect.SliceOf(reflect.TypeOf(r))).Interface()
-//  log.Println("get all resto ")
-//  _, err := dbmap.Select(&restos, "select * from ? order by Id", tp)
-//  checkErr(err, "getAll rest failed")
-//  log.Println("All rows:")
-//  g := make([]Global, len(restos))
-//  for x, p := range restos {
-//      log.Printf("    %d: %v\n", x, p)
-//      g[x] = p
-//  }
-//  return g
-// }
+func getAll(g Global, tp string) []Global {
+	// glo := getSliceObj(tp)
+	// _, err := dbmap.Select(&glo, "select * from "+tp)
+	// checkErr(err, "Select failed")
+	// log.Println("All rows:")
+	// for x, p := range glo {
+	// 	log.Printf("    %d: %v\n", x, p)
+	// }
+	return nil
+}
 
 func add(r Global) {
 	log.Println("add new resto")
@@ -36,16 +40,42 @@ func add(r Global) {
 	log.Println("new resto added", r)
 }
 
+func del(r Global) {
+	log.Println("del resto", r)
+	count, err := dbmap.Delete(r)
+	checkErr(err, "Del resto failed")
+	log.Println("resto deleted:", count)
+}
+
+func put(r Global) { //update
+	log.Println("update resto", r)
+	count, err := dbmap.Update(r)
+	checkErr(err, "Update resto failed")
+	log.Println("resto updated:", count)
+}
+
+func getObj(t string) Global {
+	switch t {
+	case "restos":
+		return (new(Resto))
+	case "tables":
+		return (new(Table))
+	case "reservations":
+		return (new(Reservation))
+	case "orders":
+		return (new(Order))
+	case "meals":
+		return (new(Meal))
+	case "users":
+		return (new(User))
+	}
+	return nil
+}
+
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
-	var obj Global
+	var obj = getObj(vars["table"])
 
-	switch vars["table"] {
-	case "restos":
-		obj = new(Resto)
-	case "tables":
-		obj = new(Table)
-	}
 	switch req.Method {
 	case "POST":
 		err := req.ParseForm()
@@ -56,8 +86,8 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		d, err := strconv.Atoi(vars["id"])
 		if err != nil {
-			//test := getAll(obj, vars["table"])
-			//log.Println("result ", test)
+			test := getAll(obj, vars["table"])
+			log.Println("result ", test)
 		} else {
 			log.Println("seting id to ", d)
 			obj = obj.setID(d)
@@ -66,8 +96,8 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		}
 	case "DELETE":
 		d := atoi(vars["id"])
-		obj.setID(d)
-		//obj.del()
+		obj = obj.setID(d)
+		del(obj)
 
 	case "PUT":
 		d := atoi(vars["id"])
@@ -75,8 +105,8 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		checkErr(err, "Error parse form")
 		err = decoder.Decode(obj, req.PostForm)
 		checkErr(err, "Error decode form")
-		obj.setID(d)
-		//obj.put()
+		obj = obj.setID(d)
+		put(obj)
 	}
 	data, _ := json.Marshal("{'request':'success'}")
 	res.Write(data)

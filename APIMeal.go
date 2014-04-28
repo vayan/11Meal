@@ -2,15 +2,17 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+	"reflect"
+	"strconv"
 )
 
 func init_db() *gorp.DbMap {
-	//os.Remove("./foo.db")
 	db, err := sql.Open("sqlite3", "./foo.db")
 	checkErr(err, "Failed open DB")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
@@ -33,23 +35,9 @@ func init_db() *gorp.DbMap {
 func start_web_server() {
 	r := mux.NewRouter()
 	r.Headers("Content-Type", "application/json; charset=utf-8")
-	r.HandleFunc("/restaurants", handleResto)
-	r.HandleFunc("/restaurants/{id}", handleResto)
 
-	r.HandleFunc("/table", handleTable)
-	r.HandleFunc("/table/{id}", handleTable)
-
-	r.HandleFunc("/reservation", handleReservation)
-	r.HandleFunc("/reservation/{id}", handleReservation)
-
-	r.HandleFunc("/users", handleUsers)
-	r.HandleFunc("/users/{id}", handleUsers)
-
-	r.HandleFunc("/orders", handleOrder)
-	r.HandleFunc("/orders/{id}", handleOrder)
-
-	r.HandleFunc("/meal", handleMeal)
-	r.HandleFunc("/meal/{id}", handleMeal)
+	r.HandleFunc("/{table}/{id}", handleglobal)
+	r.HandleFunc("/{table}", handleglobal)
 
 	http.Handle("/", r)
 

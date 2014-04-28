@@ -2,57 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 )
-
-var (
-	port  = "8181"
-	dbmap *gorp.DbMap
-)
-
-type Table struct {
-	Id      int
-	Is_free bool
-	Seats   int
-}
-
-type Meal struct {
-	Id    int
-	Name  string
-	Price int
-}
-
-type Order struct {
-	Id int
-}
-
-type User struct {
-	Id         int
-	First_name string
-	Last_name  string
-	Email      string
-	Phone      string
-	Login      string
-}
-
-type Reservation struct {
-	Id          int
-	Is_finished bool
-}
-
-type Resto struct {
-	Id       int
-	Name     string
-	Address  string
-	Position string
-}
 
 func init_db() *gorp.DbMap {
 	os.Remove("./foo.db")
@@ -75,143 +31,32 @@ func init_db() *gorp.DbMap {
 	return dbmap
 }
 
-func (rest Resto) getAll() []Resto { //GET no param
-	var restos []Resto
-	log.Println("get all resto ")
-	_, err := dbmap.Select(&restos, "select * from restos order by Id")
-	checkErr(err, "getAll rest failed")
-	log.Println("All rows:")
-	for x, p := range restos {
-		log.Printf("    %d: %v\n", x, p)
-	}
-	return restos
-}
+func start_web_server() {
+	r := mux.NewRouter()
+	r.Headers("Content-Type", "application/json; charset=utf-8")
+	r.HandleFunc("/restaurants", handleResto)
+	r.HandleFunc("/restaurants/{id}", handleResto)
+	r.HandleFunc("/restaurants/{id}/{name}", handleResto)
+	r.HandleFunc("/restaurants/{name}", handleResto)
 
-func (rest Resto) get() { //GET with ID
-	log.Println("before selected ", rest)
-	err := dbmap.SelectOne(&rest, "select * from restos where Id=?", rest.Id)
-	checkErr(err, "get resto failed")
-	log.Println("after selected ", rest)
-}
+	r.HandleFunc("/table", handleTable)
+	r.HandleFunc("/table/{id}", handleTable)
 
-func (rest Resto) add() { //new one
-	log.Println("add new resto")
-	err := dbmap.Insert(&rest)
-	checkErr(err, "Insert resto failed")
-	log.Println("new resto added", rest)
-}
+	r.HandleFunc("/reservation", handleReservation)
+	r.HandleFunc("/reservation/{id}", handleReservation)
 
-func (rest Resto) del() { //delete
-	log.Println("del resto", rest)
-	count, err := dbmap.Delete(&rest)
-	checkErr(err, "Del resto failed")
-	log.Println("resto deleted:", count)
-}
+	r.HandleFunc("/users", handleUsers)
+	r.HandleFunc("/users/{id}", handleUsers)
 
-func (rest Resto) put() { //update
-	log.Println("update resto", rest)
-	count, err := dbmap.Update(&rest)
-	checkErr(err, "Update resto failed")
-	log.Println("resto updated:", count)
-}
+	r.HandleFunc("/orders", handleOrder)
+	r.HandleFunc("/orders/{id}", handleOrder)
 
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg, err)
-	}
-}
+	r.HandleFunc("/meal", handleMeal)
+	r.HandleFunc("/meal/{id}", handleMeal)
 
-func atoi(s string) int {
-	d, err := strconv.Atoi(s)
-	if err != nil {
-		log.Panicln(err)
-		return 0
-	}
-	return d
-}
+	http.Handle("/", r)
 
-func handleResto(res http.ResponseWriter, req *http.Request) {
-	vars := mux.Vars(req)
-	r := Resto{0, "foo", "test", "test"}
-	if vars["id"] != "" {
-		r.Id = atoi(vars["id"])
-	}
-	log.Println("rest is ", r)
-	switch req.Method {
-	case "POST":
-		r.add()
-	case "GET":
-		r.get()
-	case "DELETE":
-		r.del()
-	case "PUT":
-		r.put()
-	}
-	data, _ := json.Marshal("{'request':'success'}")
-	res.Write(data)
-}
-
-func handleReservation(res http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case "POST":
-
-	case "GET":
-
-	case "DELETE":
-
-	case "PUT":
-
-	}
-}
-
-func handleUsers(res http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case "POST":
-
-	case "GET":
-
-	case "DELETE":
-
-	case "PUT":
-
-	}
-}
-
-func handleOrder(res http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case "POST":
-
-	case "GET":
-
-	case "DELETE":
-
-	case "PUT":
-
-	}
-}
-
-func handleMeal(res http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case "POST":
-
-	case "GET":
-
-	case "DELETE":
-
-	case "PUT":
-
-	}
-}
-
-func handleTable(res http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case "POST":
-
-	case "GET":
-
-	case "DELETE":
-
-	case "PUT":
-
-	}
+	log.Println("Starting and listening on ", port, "...")
+	err := http.ListenAndServe(":"+port, nil)
+	checkErr(err, "Failed to start server")
 }

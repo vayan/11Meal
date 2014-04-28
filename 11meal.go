@@ -1,40 +1,35 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
+	"github.com/coopernurse/gorp"
 	"log"
-	"net/http"
+	"strconv"
 )
+
+var (
+	port  = "8181"
+	dbmap *gorp.DbMap
+)
+
+func checkErr(err error, msg string) {
+	if err != nil {
+		log.Fatalln(msg, err)
+	}
+}
+
+func atoi(s string) int {
+	d, err := strconv.Atoi(s)
+	if err != nil {
+		log.Panicln(err)
+		return 0
+	}
+	return d
+}
 
 func main() {
 	dbmap = init_db()
 	defer dbmap.Db.Close()
 
-	r := mux.NewRouter()
-	r.Headers("Content-Type", "application/json; charset=utf-8")
-	r.HandleFunc("/restaurants", handleResto)
-	r.HandleFunc("/restaurants/{id}", handleResto)
-	r.HandleFunc("/restaurants/{id}/{name}", handleResto)
-	r.HandleFunc("/restaurants/{name}", handleResto)
+	start_web_server()
 
-	r.HandleFunc("/table", handleTable)
-	r.HandleFunc("/table/{id}", handleTable)
-
-	r.HandleFunc("/reservation", handleReservation)
-	r.HandleFunc("/reservation/{id}", handleReservation)
-
-	r.HandleFunc("/users", handleUsers)
-	r.HandleFunc("/users/{id}", handleUsers)
-
-	r.HandleFunc("/orders", handleOrder)
-	r.HandleFunc("/orders/{id}", handleOrder)
-
-	r.HandleFunc("/meal", handleMeal)
-	r.HandleFunc("/meal/{id}", handleMeal)
-
-	http.Handle("/", r)
-
-	log.Println("Starting and listening on ", port, "...")
-	err := http.ListenAndServe(":"+port, nil)
-	checkErr(err, "Failed to start server")
 }

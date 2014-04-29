@@ -80,7 +80,6 @@ func getObj(t string) Global {
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var sql_req string
-	log.Println("in gloglgo")
 	vars := mux.Vars(req)
 	obj_array := getObjArray(vars["table"])
 	obj := getObj(vars["table"])

@@ -12,25 +12,15 @@ import (
 type Global interface {
 	setID(id int) Global
 	getID() int
+	getAll() []Global
 }
 
-func get(r Global) {
+func get(r Global) Global {
 	log.Println("before selected ", r, "is type ", reflect.TypeOf(r))
 	obj, err := dbmap.Get(reflect.ValueOf(r).Interface(), r.getID())
 	checkErr(err, "get resto failed")
-	//rest = *obj.(*Global)
 	log.Println("after selected ", obj)
-}
-
-func getAll(g Global, tp string) []Global {
-	// glo := getSliceObj(tp)
-	// _, err := dbmap.Select(&glo, "select * from "+tp)
-	// checkErr(err, "Select failed")
-	// log.Println("All rows:")
-	// for x, p := range glo {
-	// 	log.Printf("    %d: %v\n", x, p)
-	// }
-	return nil
+	return obj.(Global)
 }
 
 func add(r Global) {
@@ -75,6 +65,7 @@ func getObj(t string) Global {
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	var obj = getObj(vars["table"])
+	var data []byte
 
 	switch req.Method {
 	case "POST":
@@ -86,13 +77,14 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	case "GET":
 		d, err := strconv.Atoi(vars["id"])
 		if err != nil {
-			test := getAll(obj, vars["table"])
+			test := obj.getAll()
 			log.Println("result ", test)
 		} else {
 			log.Println("seting id to ", d)
 			obj = obj.setID(d)
 			log.Println("id is now ", obj.getID())
-			get(obj)
+			obj = get(obj)
+
 		}
 	case "DELETE":
 		d := atoi(vars["id"])
@@ -108,6 +100,6 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		obj = obj.setID(d)
 		put(obj)
 	}
-	data, _ := json.Marshal("{'request':'success'}")
+	data, _ = json.Marshal(obj)
 	res.Write(data)
 }

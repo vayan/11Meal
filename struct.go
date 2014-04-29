@@ -1,5 +1,9 @@
 package main
 
+import (
+	"log"
+)
+
 type Reservation struct {
 	Id          int
 	Is_finished bool
@@ -88,4 +92,82 @@ func (r Meal) setID(id int) Global {
 
 func (r Meal) getID() int {
 	return r.Id
+}
+
+func (r Resto) getAll() []Global {
+	var glo []Resto
+	_, err := dbmap.Select(&glo, "select * from restos")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
+}
+
+func (r Table) getAll() []Global {
+	var glo []Table
+	_, err := dbmap.Select(&glo, "select * from tables")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
+}
+
+func (r Reservation) getAll() []Global {
+	var glo []Reservation
+	_, err := dbmap.Select(&glo, "select * from reservations")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
+}
+
+func (r User) getAll() []Global {
+	var glo []User
+	_, err := dbmap.Select(&glo, "select * from users")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
+}
+
+func (r Order) getAll() []Global {
+	var glo []Order
+	_, err := dbmap.Select(&glo, "select * from orders")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
+}
+
+func (r Meal) getAll() []Global {
+	var glo []Meal
+	_, err := dbmap.Select(&glo, "select * from meals")
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	ret := make([]Global, len(glo))
+	for x, p := range glo {
+		log.Printf("    %d: %v\n", x, p)
+		ret[x] = p
+	}
+	return ret
 }

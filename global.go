@@ -154,9 +154,96 @@ func handleTable(res http.ResponseWriter, req *http.Request) {
 }
 
 func handleMeal(res http.ResponseWriter, req *http.Request) {
+	var obj Resto
+	var tab Meal
+	var data []byte
 
+	vars := mux.Vars(req)
+	obj.Id = atoi(vars["id_resto"])
+	data, _ = json.Marshal("{success:false}")
+	switch req.Method {
+	case "POST":
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id_rest = obj.getID()
+		add(&tab)
+		data, _ = json.Marshal(tab)
+	case "GET":
+		d, err := strconv.Atoi(vars["id_meal"])
+		if err != nil {
+			test := tab.allinResto(obj.getID())
+			data, _ = json.Marshal(test)
+		} else {
+			tab.Id = d
+			tab2 := get(tab)
+			if tab2 != nil {
+				data, _ = json.Marshal(tab2)
+			}
+		}
+	case "DELETE":
+		d := atoi(vars["id"])
+		tab.Id = d
+		del(tab)
+		data, _ = json.Marshal("{success:true}")
+	case "PUT":
+		d := atoi(vars["id_meal"])
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id = d
+		put(tab)
+		data, _ = json.Marshal(tab)
+	}
+	res.Write(data)
 }
 
 func handleReservation(res http.ResponseWriter, req *http.Request) {
+	var obj User
+	var tab Reservation
+	var data []byte
 
+	vars := mux.Vars(req)
+	obj.Id = atoi(vars["id_user"])
+	data, _ = json.Marshal("{success:false}")
+	switch req.Method {
+	case "POST":
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id_user = obj.getID()
+		add(&tab)
+		data, _ = json.Marshal(tab)
+	case "GET":
+		d, err := strconv.Atoi(vars["id_resa"])
+		if err != nil {
+			test := tab.allinResto(obj.getID())
+			data, _ = json.Marshal(test)
+		} else {
+			tab.Id = d
+			tab2 := get(tab)
+			if tab2 != nil {
+				data, _ = json.Marshal(tab2)
+			}
+		}
+	case "DELETE":
+		d := atoi(vars["id"])
+		tab.Id = d
+		del(tab)
+		data, _ = json.Marshal("{success:true}")
+	case "PUT":
+		d := atoi(vars["id_resa"])
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id = d
+		put(tab)
+		data, _ = json.Marshal(tab)
+	}
+	res.Write(data)
+}
 }

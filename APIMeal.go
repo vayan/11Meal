@@ -41,7 +41,9 @@ func start_web_server() {
 	r.HandleFunc("/restos/{id_resto}/tables/{id_table}", handleTable)
 	r.HandleFunc("/restos/{id_resto}/meals", handleMeal)
 	r.HandleFunc("/restos/{id_resto}/meals/{id_meal}", handleMeal)
-	r.HandleFunc("/restos/{id_resto}/reservations", handleReservation)
+
+	//r.HandleFunc("/restos/{id_resto}/reservations", handleReservation) //todo
+
 	r.HandleFunc("/users/{id_user}/reservations", handleReservation)
 	r.HandleFunc("/users/{id_user}/reservations/{id_resa}", handleReservation)
 

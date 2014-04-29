@@ -36,6 +36,14 @@ func start_web_server() {
 
 	r.HandleFunc("/{table}/{id}", handleglobal)
 	r.HandleFunc("/{table}", handleglobal)
+	//r.HandleFunc("/{table}/{id}/{under_table}", handleDeep)
+	r.HandleFunc("/restos/{id_resto}/tables", handleTable)
+	r.HandleFunc("/restos/{id_resto}/tables/{id_table}", handleTable)
+	r.HandleFunc("/restos/{id_resto}/meals", handleMeal)
+	r.HandleFunc("/restos/{id_resto}/meals/{id_meal}", handleMeal)
+	r.HandleFunc("/restos/{id_resto}/reservations", handleReservation)
+	r.HandleFunc("/users/{id_user}/reservations", handleReservation)
+	r.HandleFunc("/users/{id_user}/reservations/{id_resa}", handleReservation)
 
 	http.Handle("/", r)
 

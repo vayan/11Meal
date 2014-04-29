@@ -16,6 +16,9 @@ type Global interface {
 }
 
 func get(r Global) Global {
+	if r == nil {
+		return nil
+	}
 	log.Println("get ", r.getID())
 	obj, err := dbmap.Get(reflect.ValueOf(r).Interface(), r.getID())
 	checkErr(err, "get resto failed")
@@ -101,4 +104,59 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 	res.Write(data)
+}
+
+func handleTable(res http.ResponseWriter, req *http.Request) {
+	var obj Resto
+	var tab Table
+	var data []byte
+
+	vars := mux.Vars(req)
+	obj.Id = atoi(vars["id_resto"])
+	data, _ = json.Marshal("{success:false}")
+	switch req.Method {
+	case "POST":
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id_rest = obj.getID()
+		add(&tab)
+		data, _ = json.Marshal(tab)
+	case "GET":
+		d, err := strconv.Atoi(vars["id_table"])
+		if err != nil {
+			test := tab.allinResto(obj.getID())
+			data, _ = json.Marshal(test)
+		} else {
+			tab.Id = d
+			tab2 := get(tab)
+			if tab2 != nil {
+				data, _ = json.Marshal(tab2)
+			}
+		}
+	case "DELETE":
+		d := atoi(vars["id"])
+		tab.Id = d
+		del(tab)
+		data, _ = json.Marshal("{success:true}")
+	case "PUT":
+		d := atoi(vars["id_table"])
+		err := req.ParseForm()
+		checkErr(err, "Error parse form")
+		err = decoder.Decode(&tab, req.PostForm)
+		checkErr(err, "Error decode form")
+		tab.Id = d
+		put(tab)
+		data, _ = json.Marshal(tab)
+	}
+	res.Write(data)
+}
+
+func handleMeal(res http.ResponseWriter, req *http.Request) {
+
+}
+
+func handleReservation(res http.ResponseWriter, req *http.Request) {
+
 }

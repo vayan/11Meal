@@ -6,6 +6,8 @@ import (
 
 type Reservation struct {
 	Id          int
+	Id_user     int
+	Id_resto    int
 	Is_finished bool
 }
 
@@ -19,17 +21,23 @@ type User struct {
 }
 
 type Order struct {
-	Id int
+	Id             int
+	total_price    int
+	Id_user        int
+	Id_reservation int
+	meals          []int
 }
 
 type Meal struct {
-	Id    int
-	Name  string
-	Price int
+	Id       int
+	Id_resto int
+	Name     string
+	Price    int
 }
 
 type Table struct {
 	Id      int
+	Id_rest int
 	Is_free bool
 	Seats   int
 }
@@ -39,6 +47,14 @@ type Resto struct {
 	Name     string
 	Address  string
 	Position string
+}
+
+func (r Table) allinResto(id_rest int) []Table {
+	var glo []Table
+	_, err := dbmap.Select(&glo, "select * from tables where Id_rest=?", id_rest)
+	checkErr(err, "Select failed")
+	log.Println("All rows:", glo)
+	return glo
 }
 
 func (r Table) setID(id int) Global {
@@ -93,6 +109,8 @@ func (r Meal) setID(id int) Global {
 func (r Meal) getID() int {
 	return r.Id
 }
+
+//ugly stuff under this...cause of Go
 
 func (r Resto) getAll() []Global {
 	var glo []Resto

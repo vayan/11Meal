@@ -34,18 +34,9 @@ func start_web_server() {
 	r := mux.NewRouter()
 	r.Headers("Content-Type", "application/json; charset=utf-8")
 
-	r.HandleFunc("/{table}/{id}", handleglobal)
-	r.HandleFunc("/{table}", handleglobal)
-	//r.HandleFunc("/{table}/{id}/{under_table}", handleDeep)
-	r.HandleFunc("/restos/{id_resto}/tables", handleTable)
-	r.HandleFunc("/restos/{id_resto}/tables/{id_table}", handleTable)
-	r.HandleFunc("/restos/{id_resto}/meals", handleMeal)
-	r.HandleFunc("/restos/{id_resto}/meals/{id_meal}", handleMeal)
-
-	//r.HandleFunc("/restos/{id_resto}/reservations", handleReservation) //todo
-
-	r.HandleFunc("/users/{id_user}/reservations", handleReservation)
-	r.HandleFunc("/users/{id_user}/reservations/{id_resa}", handleReservation)
+	r.HandleFunc("/test/{table}/{column}/{id}", handleglobal)
+	r.HandleFunc("/test/{table}", handleglobal)
+	r.HandleFunc("/test/{table}/{id}", handleglobal)
 
 	http.Handle("/", r)
 

@@ -77,12 +77,28 @@ func getObj(t string) interface{} {
 	return nil
 }
 
-func handleglobal(res http.ResponseWriter, req *http.Request) {
-	var data []byte
+func get(vars map[string]string, obj_array interface{}) {
 	var sql_req string
-	vars := mux.Vars(req)
 	table := strings.ToLower(vars["table"])
 	column := strings.ToLower(vars["column"])
+
+	if len(table) > 0 && len(column) > 0 && len(vars["id"]) > 0 {
+		sql_req = "select * from " + table + " where " + column + " like " + vars["id"]
+	} else if len(table) > 0 && len(vars["id"]) > 0 {
+		sql_req = "select * from " + table + " where Id like " + vars["id"]
+	} else {
+		sql_req = "select * from " + table
+	}
+	_, err := dbmap.Select(obj_array, sql_req)
+	checkErr(err, "Error sql select")
+	log.Println("get ", obj_array)
+}
+
+func handleglobal(res http.ResponseWriter, req *http.Request) {
+	var data []byte
+
+	vars := mux.Vars(req)
+	table := strings.ToLower(vars["table"])
 	obj_array := getObjArray(table)
 	obj := getObj(table)
 	data, _ = json.Marshal("{success:false}")
@@ -90,19 +106,9 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	} else {
 		switch req.Method {
 		case "GET":
-			if len(table) > 0 && len(column) > 0 && len(vars["id"]) > 0 {
-				sql_req = "select * from " + table + " where " + column + " like " + vars["id"]
-			} else if len(table) > 0 && len(vars["id"]) > 0 {
-				sql_req = "select * from " + table + " where Id like " + vars["id"]
-			} else {
-				sql_req = "select * from " + table
-			}
-			_, err := dbmap.Select(obj_array, sql_req)
-			checkErr(err, "Error sql select")
-			log.Println("get ", obj_array)
+			get(vars, obj_array)
 			if reflect.ValueOf(obj_array).Elem().Len() > 0 {
-				data, err = json.Marshal(obj_array)
-				checkErr(err, "Error marshal obj")
+				data, _ = json.Marshal(obj_array)
 			}
 		case "POST":
 			err := req.ParseForm()

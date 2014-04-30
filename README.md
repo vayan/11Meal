@@ -9,7 +9,7 @@
  * `go get` all the dep. (see below)
  * `cd $GOPATH`
  * `mkdir src/github.com/vayan/`
- * `cd github.com/vayan/`
+ * `cd src/github.com/vayan/`
  * `git clone git@github.com:vayan/11Meal.git`
  * `cd 11Meal`
  * `git checkout backend-master`

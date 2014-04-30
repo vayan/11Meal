@@ -8,7 +8,7 @@
  * Create an env with this folder GOPATH=/foo/bar
  * `go get` all the dep. (see below)
  * `cd $GOPATH`
- * `mkdir github.com/vayan/`
+ * `mkdir src/github.com/vayan/`
  * `cd github.com/vayan/`
  * `git clone git@github.com:vayan/11Meal.git`
  * `cd 11Meal`

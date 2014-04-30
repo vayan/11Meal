@@ -15,11 +15,42 @@ public class Reservation {
 		CREDIT_CARD,
 	}
 
+	// Attributes
 	protected UUID mId;
 	protected Date mDate;
 	protected State mState;
 	protected Payment mPayMethod;
 	
+	// Getters/setters
+	public UUID getId() {
+		return mId;
+	}
+
+	public Date getDate() {
+		return mDate;
+	}
+
+	public void setDate(Date date) {
+		mDate = date;
+	}
+
+	public State getState() {
+		return mState;
+	}
+
+	public void setState(State state) {
+		mState = state;
+	}
+
+	public Payment getPayMethod() {
+		return mPayMethod;
+	}
+
+	public void setPayMethod(Payment payMethod) {
+		mPayMethod = payMethod;
+	}
+
+	// Methods
 	public void sendInvitation(User user) {
 		//TODO: complete stub
 	}

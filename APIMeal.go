@@ -34,9 +34,9 @@ func start_web_server() {
 	r := mux.NewRouter()
 	r.Headers("Content-Type", "application/json; charset=utf-8")
 
-	r.HandleFunc("/test/{table}/{column}/{id}", handleglobal)
-	r.HandleFunc("/test/{table}", handleglobal)
-	r.HandleFunc("/test/{table}/{id}", handleglobal)
+	r.HandleFunc("/{table}/{column}/{id}", handleglobal)
+	r.HandleFunc("/{table}/{id}", handleglobal)
+	r.HandleFunc("/{table}", handleglobal)
 
 	http.Handle("/", r)
 

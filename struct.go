@@ -20,10 +20,10 @@ type User struct {
 
 type Order struct {
 	Id             int
-	total_price    int
+	Total_price    int
 	Id_user        int
 	Id_reservation int
-	meals          []int
+	Meals          string
 }
 
 type Meal struct {
@@ -45,57 +45,4 @@ type Resto struct {
 	Name     string
 	Address  string
 	Position string
-}
-
-func (r Table) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r Table) getID() int {
-	return r.Id
-}
-
-func (r Resto) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r Resto) getID() int {
-	return r.Id
-}
-
-func (r Reservation) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r Reservation) getID() int {
-	return r.Id
-}
-func (r User) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r User) getID() int {
-	return r.Id
-}
-
-func (r Order) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r Order) getID() int {
-	return r.Id
-}
-
-func (r Meal) setID(id int) Global {
-	r.Id = id
-	return r
-}
-
-func (r Meal) getID() int {
-	return r.Id
 }

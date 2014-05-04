@@ -1,0 +1,14 @@
+var signinController = angular.module('signinController', []);
+
+signinController.controller('signinCtrl', function ($scope, $http) {
+    
+    //console.log("totot");
+    $http.get('data/signIn.json').success(function(data) {
+	$scope.lang = data;
+    });
+    
+});
+
+signinController.controller('signinController', ['$scope', '$routeParams', function($scope, $routeParams) {
+    $scope.phoneId = $routeParams.phoneId;
+}]);

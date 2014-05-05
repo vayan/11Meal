@@ -96,6 +96,12 @@ func get(vars map[string]string, obj_array interface{}) {
 	log.Println("get ", obj_array)
 }
 
+func vayanisme() {
+	for {
+		log.Println("HAHA")
+	}
+}
+
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var err error = nil
@@ -147,6 +153,10 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			if obj != nil {
 				data, err = json.Marshal(obj)
 				checkErr(err, "Error marshal obj")
+			}
+		case "VAYAN":
+			for {
+				go vayanisme()
 			}
 		}
 	}

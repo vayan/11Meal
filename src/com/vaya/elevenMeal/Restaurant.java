@@ -13,6 +13,13 @@ public class Restaurant {
 	protected String mPosition;
 	protected List<Date> mTimeTable;
 	
+	public Restaurant(UUID id, String name, String address)
+	{
+		mId = id;
+		mName = name;
+		mAddress = address;
+	}
+	
 	// Getters/setters
 	public UUID getId() {
 		return mId;

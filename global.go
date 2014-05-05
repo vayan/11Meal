@@ -83,12 +83,13 @@ func get(vars map[string]string, obj_array interface{}) {
 	column := strings.ToLower(vars["column"])
 
 	if len(table) > 0 && len(column) > 0 && len(vars["id"]) > 0 {
-		sql_req = "select * from " + table + " where " + column + " like " + vars["id"]
+		sql_req = "select * from `" + table + "` where `" + column + "` like " + vars["id"]
 	} else if len(table) > 0 && len(vars["id"]) > 0 {
-		sql_req = "select * from " + table + " where Id like " + vars["id"]
+		sql_req = "select * from `" + table + "` where Id like " + vars["id"]
 	} else {
-		sql_req = "select * from " + table
+		sql_req = "select * from `" + table + "`"
 	}
+	log.Println(sql_req)
 	_, err := dbmap.Select(obj_array, sql_req)
 	checkErr(err, "Error sql select")
 	log.Println("get ", obj_array)
@@ -97,6 +98,7 @@ func get(vars map[string]string, obj_array interface{}) {
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 
+	p := make([]byte, req.ContentLength)
 	vars := mux.Vars(req)
 	table := strings.ToLower(vars["table"])
 	obj_array := getObjArray(table)
@@ -114,10 +116,10 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 				data, _ = json.Marshal(obj_array)
 			}
 		case "POST":
-			err := req.ParseForm()
-			checkErr(err, "Error parse form")
-			err = decoder.Decode(obj, req.PostForm)
-			checkErr(err, "Error decode form")
+			_, err := req.Body.Read(p)
+			checkErr(err, "Error read data")
+			err = json.Unmarshal(p, obj)
+			checkErr(err, "Error unmarshal json")
 			add(obj)
 			if obj != nil {
 				data, err = json.Marshal(obj)
@@ -133,10 +135,10 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			}
 		case "PUT":
 			d := atoi(vars["id"])
-			err := req.ParseForm()
-			checkErr(err, "Error parse form")
-			err = decoder.Decode(obj, req.PostForm)
-			checkErr(err, "Error decode form")
+			_, err := req.Body.Read(p)
+			checkErr(err, "Error read data")
+			err = json.Unmarshal(p, obj)
+			checkErr(err, "Error unmarshal json")
 			reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
 			put(obj)
 			if obj != nil {

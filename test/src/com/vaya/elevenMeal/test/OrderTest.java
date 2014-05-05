@@ -2,8 +2,6 @@ package com.vaya.elevenMeal.test;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 import com.vaya.elevenMeal.Meal;
 import com.vaya.elevenMeal.Order;
 
@@ -30,7 +28,7 @@ public class OrderTest extends TestCase {
 		mOrder.addMeal(mMeal1);
 		mOrder.addMeal(mMeal2);
 		float price = mMeal1.getPrice() + mMeal2.getPrice();
-		assertTrue(mOrder.getTotalPrice() == price);
+		assertEquals(price, mOrder.getTotalPrice());
 	}
 
 	public void testAddMeal() {
@@ -45,10 +43,13 @@ public class OrderTest extends TestCase {
 	public void testRemoveMeal() {
 		mOrder.addMeal(mMeal1);
 		mOrder.addMeal(mMeal2);
-		Log.d("removeMeal", "coucou");
 		mOrder.removeMeal(mMeal2);
 		ArrayList<Meal> meals = (ArrayList<Meal>) mOrder.getMealList();
-		Log.d("removeMeal", "" + meals.size());
-		fail("to be continued...");
+		if (meals.size() != 1
+		 || meals.get(0).getName().equals(mMeal1.getName()))
+			fail();
+		mOrder.removeMeal(mMeal1);
+		meals = (ArrayList<Meal>) mOrder.getMealList();
+		assertEquals(0, meals.size());
 	}
 }

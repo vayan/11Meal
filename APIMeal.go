@@ -52,7 +52,6 @@ func init_db() *gorp.DbMap {
 
 func start_web_server() {
 	r := mux.NewRouter()
-	r.Headers("Content-Type", "application/json; charset=utf-8")
 
 	r.HandleFunc("/{table}/{column}/{id}", handleglobal)
 	r.HandleFunc("/{table}/{id}", handleglobal)

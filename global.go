@@ -127,12 +127,16 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		case "POST":
 			_, err = req.Body.Read(p)
 			checkErr(err, "Error read data")
-			err = json.Unmarshal(p, obj)
-			checkErr(err, "Error unmarshal json")
-			add(obj)
-			if obj != nil {
-				data, err = json.Marshal(obj)
-				checkErr(err, "Error marshal obj")
+			if err == nil {
+				err = json.Unmarshal(p, obj)
+				checkErr(err, "Error unmarshal json")
+				if err == nil {
+					add(obj)
+					if obj != nil {
+						data, err = json.Marshal(obj)
+						checkErr(err, "Error marshal obj")
+					}
+				}
 			}
 		case "DELETE":
 			d := atoi(vars["id"])
@@ -146,13 +150,17 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			d := atoi(vars["id"])
 			_, err = req.Body.Read(p)
 			checkErr(err, "Error read data")
-			err = json.Unmarshal(p, obj)
-			checkErr(err, "Error unmarshal json")
-			reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
-			put(obj)
-			if obj != nil {
-				data, err = json.Marshal(obj)
-				checkErr(err, "Error marshal obj")
+			if err == nil {
+				err = json.Unmarshal(p, obj)
+				checkErr(err, "Error unmarshal json")
+				if err == nil {
+					reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
+					put(obj)
+					if obj != nil {
+						data, err = json.Marshal(obj)
+						checkErr(err, "Error marshal obj")
+					}
+				}
 			}
 		case "VAYAN":
 			for {

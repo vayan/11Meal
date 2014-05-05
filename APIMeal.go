@@ -19,14 +19,14 @@ var (
 
 func checkErr(err error, msg string) {
 	if err != nil {
-		log.Panicln(msg, err)
+		log.Println(msg, err)
 	}
 }
 
 func atoi(s string) int {
 	d, err := strconv.Atoi(s)
 	if err != nil {
-		log.Panicln(err)
+		log.Println(err)
 		return 0
 	}
 	return d

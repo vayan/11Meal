@@ -1,7 +1,8 @@
 var restaurantApp = angular.module('restaurantApp', [
     'ngRoute',
-    'signinController',
-    'rListController'
+    'signinCtrl',
+    'rListCtrl',
+    'deleteController'
 ]);
 
 restaurantApp.config(['$routeProvider',
@@ -10,11 +11,15 @@ restaurantApp.config(['$routeProvider',
     $routeProvider.
       when('/signin', {
         templateUrl: 'partials/signIn.html',
-        controller: 'signinController'
+        controller: 'signinCtrl'
       }).
-      when('/reservationList', {
+      when('/list/:objClass', {
         templateUrl: 'partials/reservationList.html',
-        controller: 'rListController'
+        controller: 'rListCtrl'
+      }).
+      when('/delete/:objClass/:id', {
+        templateUrl: 'partials/delete.html',
+        controller: 'deleteController'
       }).
       otherwise({
         redirectTo: '/'

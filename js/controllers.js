@@ -1,33 +1,32 @@
-var signinController = angular.module('signinController', []);
-var rListController = angular.module('rListController', []);
+var signinCtrl = angular.module('signinCtrl', []);
 
-signinController.controller('signinCtrl', function ($scope, $http) {
-    
+signinCtrl.controller('signinCtrl', ['$scope', '$http', function($scope, $http) {
     $http.get('data/signIn.json').success(function(data) {
 	$scope.langs = data;
-   console.log($scope.langs);
-
-    });
-
-    
-});
-
-signinController.controller('signinController', ['$scope', '$routeParams', function($scope, $routeParams) {
-    $scope.phoneId = $routeParams.phoneId;
+    });    
 }]);
 
-//
+var rListCtrl = angular.module('rListCtrl', []);
 
-rListController.controller('rListCtrl', function ($scope, $http) {
-    console.log("toto");
-    $http({method: 'GET', url: 'http://localhost:8181/restaurant'}).success(function(data) {
-//    $http.get('http://localhost:8181/restaurant').success(function(data) {
-	$scope.resList = data;
-	console.log($scope.resList);
+rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $routeParams) {
+    API.get($routeParams.objClass, null, null).done(function(data) {
+	var arraytmp = [];
+	
+	angular.forEach(data, function(value, key){
+	    if ($routeParams.objClass == "restaurant") {
+		console.log($routeParams.objClass);
+		arraytmp[key] = new Restaurant(value);
+	    }
+	});
+	$scope.List = arraytmp;
+	$scope.$apply();
     });
-});
+}]);
 
+var deleteController = angular.module('deleteController', []);
 
-rListController.controller('rListController', ['$scope', '$routeParams', function($scope, $routeParams) {
-    $scope.phoneId = $routeParams.phoneId;
+deleteController.controller('deleteController', ['$scope', '$routeParams', function($scope, $routeParams) {
+    API.remove($routeParams.objClass, $routeParams.id).done(function(data) {
+	location.assign("index.html#/list/"+$routeParams.objClass);
+    });
 }]);

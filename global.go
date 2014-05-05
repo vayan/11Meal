@@ -104,6 +104,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	data, _ = json.Marshal("{success:false}")
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN")
 	if obj_array == nil || obj == nil {
 	} else {
 		switch req.Method {

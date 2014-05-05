@@ -1,11 +1,10 @@
 package com.vaya.elevenMeal;
 
 import java.util.List;
-import java.util.UUID;
 
 public class User {
 	// Attributes
-	protected UUID mId;
+	protected int mId;
 	protected String mLogin;
 	protected String mFirstName;
 	protected String mLastName;
@@ -13,7 +12,7 @@ public class User {
 	protected String mPhone;
 	
 	// Getters/setters
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 

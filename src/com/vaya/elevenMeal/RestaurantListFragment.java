@@ -1,7 +1,5 @@
 package com.vaya.elevenMeal;
 
-import java.util.UUID;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -48,7 +46,7 @@ public class RestaurantListFragment extends ListFragment {
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onItemSelected(UUID id);
+		public void onItemSelected(int id);
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class RestaurantListFragment extends ListFragment {
 	 */
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
-		public void onItemSelected(UUID id) {
+		public void onItemSelected(int id) {
 		}
 	};
 

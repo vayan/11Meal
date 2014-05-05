@@ -3,11 +3,10 @@ package com.vaya.elevenMeal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 public class Order {
 	// Attributes
-	protected UUID mId;
+	protected int mId;
 	protected List<Meal> mMealList;
 
 	public Order() {
@@ -15,7 +14,7 @@ public class Order {
 	}
 
 	// Getters/setters
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 
@@ -35,7 +34,7 @@ public class Order {
 	public void removeMeal(Meal meal) {
 		Iterator<Meal> it = mMealList.iterator();
 		while (it.hasNext()) {
-			if (it.next().getId().equals(meal.getId())) {
+			if (it.next().getId() == meal.getId()) {
 				it.remove();
 				break;
 			}

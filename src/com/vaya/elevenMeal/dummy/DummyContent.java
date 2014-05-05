@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import com.vaya.elevenMeal.Restaurant;
 
@@ -28,9 +27,9 @@ public class DummyContent {
 
 	static {
 		// Add 3 sample items.
-		addItem(new Restaurant(UUID.randomUUID(), "resto 1", "add"));
-		addItem(new Restaurant(UUID.randomUUID(), "resto 2", "add"));
-		addItem(new Restaurant(UUID.randomUUID(), "resto 3", "add"));
+		addItem(new Restaurant(1, "resto 1", "add"));
+		addItem(new Restaurant(2, "resto 2", "add"));
+		addItem(new Restaurant(3, "resto 3", "add"));
 	}
 
 	private static void addItem(Restaurant item) {

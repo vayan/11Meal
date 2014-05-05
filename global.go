@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -15,7 +16,7 @@ func add(r interface{}) {
 		checkErr(err, "new failed")
 		log.Println("new ", r)
 	} else {
-		log.Fatalln("Add : r is nil")
+		log.Panicln("Add : r is nil")
 	}
 }
 
@@ -25,7 +26,7 @@ func del(r interface{}) {
 		checkErr(err, "del failed")
 		log.Println("del ", r)
 	} else {
-		log.Fatalln("Del : r is nil")
+		log.Panicln("Del : r is nil")
 	}
 }
 
@@ -35,7 +36,7 @@ func put(r interface{}) {
 		checkErr(err, "Update failed")
 		log.Println("put ", r)
 	} else {
-		log.Fatalln("Put : r is nil")
+		log.Panicln("Put : r is nil")
 	}
 }
 
@@ -54,7 +55,7 @@ func getObjArray(t string) interface{} {
 	case "user":
 		return (new([]User))
 	}
-	log.Fatalln("getObjArray : didn't find type")
+	log.Println("getObjArray : didn't find type")
 	return nil
 }
 
@@ -73,7 +74,7 @@ func getObj(t string) interface{} {
 	case "user":
 		return (new(User))
 	}
-	log.Fatalln("getObj : didn't find type")
+	log.Println("getObj : didn't find type")
 	return nil
 }
 
@@ -97,17 +98,19 @@ func get(vars map[string]string, obj_array interface{}) {
 
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
+	var err error = nil
 
 	p := make([]byte, req.ContentLength)
 	vars := mux.Vars(req)
 	table := strings.ToLower(vars["table"])
 	obj_array := getObjArray(table)
 	obj := getObj(table)
-	data, _ = json.Marshal("{success:false}")
+
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN")
 	if obj_array == nil || obj == nil {
+		err = errors.New("nil object")
 	} else {
 		switch req.Method {
 		case "GET":
@@ -116,7 +119,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 				data, _ = json.Marshal(obj_array)
 			}
 		case "POST":
-			_, err := req.Body.Read(p)
+			_, err = req.Body.Read(p)
 			checkErr(err, "Error read data")
 			err = json.Unmarshal(p, obj)
 			checkErr(err, "Error unmarshal json")
@@ -135,7 +138,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			}
 		case "PUT":
 			d := atoi(vars["id"])
-			_, err := req.Body.Read(p)
+			_, err = req.Body.Read(p)
 			checkErr(err, "Error read data")
 			err = json.Unmarshal(p, obj)
 			checkErr(err, "Error unmarshal json")
@@ -147,5 +150,9 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
-	res.Write(data)
+	if err != nil {
+		http.Error(res, err.Error(), 400)
+	} else {
+		res.Write(data)
+	}
 }

@@ -1,8 +1,5 @@
 package main
 
-//todo error 400 si error
-//et 200 si vide tout va bien
-
 import ()
 
 type Reservation struct {

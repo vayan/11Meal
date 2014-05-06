@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Order {
+public class Order implements IRestaurantObject {
 	// Attributes
 	protected int mId;
 	protected List<Meal> mMealList;

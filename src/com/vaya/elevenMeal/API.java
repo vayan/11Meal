@@ -14,6 +14,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.vaya.elevenMeal.restaurant.IRestaurantObject;
 import com.vaya.elevenMeal.restaurant.User;
 
 import android.os.AsyncTask;
@@ -28,21 +29,21 @@ public class API {
 
 	protected String mUrl;
 
-	public Object create(Object object) {
+	public IRestaurantObject create(IRestaurantObject object) {
 		//TODO: use from.getClass()
 		return null; //TODO: complete stub
 	}
-	public Object get(Object from, String column, int id) {
+	public IRestaurantObject get(IRestaurantObject from, String column, int id) {
 		return null; //TODO: complete stub
 	}
 	
-	public Object update(Object object) {
+	public IRestaurantObject update(IRestaurantObject object) {
 		return null; //TODO: complete stub
 	}
 
-	public boolean delete(Object object) {
+	public boolean delete(IRestaurantObject object) {
 		String oClass  = object.getClass().toString();
-		String oId     = object.getId();
+		String oId     = String.valueOf(object.getId());
 		String request = "/" + oClass + "/" + oId;
 		new RequestTask(RequestType.DELETE).execute(request);
 		return false; //TODO: complete stub

@@ -1,6 +1,6 @@
 package com.vaya.elevenMeal.restaurant;
 
-public class Meal {
+public class Meal implements IRestaurantObject {
 	public static enum Type {
 		STARTER,
 		MAIN,

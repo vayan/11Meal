@@ -1,5 +1,6 @@
 package com.vaya.elevenMeal;
 
+import android.R;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -80,7 +81,7 @@ public class GcmIntentService  extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_plusone_small_off_client)
+                        .setSmallIcon(R.drawable.ic_menu_edit)
                         .setContentTitle("GCM Notification")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))

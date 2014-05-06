@@ -9,19 +9,24 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
 public class LoginActivity extends Activity {
-	/**
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    /**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
@@ -85,7 +90,26 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
-	}
+        if (checkPlayServices()) {
+           //check if gplay service
+        }
+
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("GPLAY_SERVICE", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

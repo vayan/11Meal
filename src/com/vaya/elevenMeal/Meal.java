@@ -2,9 +2,12 @@ package com.vaya.elevenMeal;
 
 public class Meal {
 	public static enum Type {
-		SALAD,
-		SPICY,
-		SOUR,
+		STARTER,
+		MAIN,
+		DESSERT,
+		DRINK,
+		SOUP,
+		UNDEFINED,
 	}
 
 	// Attributes

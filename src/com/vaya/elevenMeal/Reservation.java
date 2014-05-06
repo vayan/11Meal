@@ -8,6 +8,8 @@ public class Reservation {
 	public static enum State {
 		OPENED, // Reservation can be modified by users
 		CONFIRMED, // Confirmed by restaurant, read-only for user
+		QUEUED,
+		DONE,
 		CANCELED, // Canceled, read-only
 	}
 	public static enum Payment {

@@ -117,7 +117,7 @@ public class RestaurantListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).mId);
+		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).getId());
 	}
 
 	@Override

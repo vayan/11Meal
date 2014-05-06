@@ -56,7 +56,7 @@ public class RestaurantDetailFragment extends Fragment {
 		// Show the dummy content as text in a TextView.
 		if (mItem != null) {
 			((TextView) rootView.findViewById(R.id.restaurant_detail))
-					.setText(mItem.mAddress);
+					.setText(mItem.getAddress());
 		}
 
 		return rootView;

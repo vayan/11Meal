@@ -6,9 +6,17 @@ signinCtrl.controller('signinCtrl', ['$scope', '$http', function($scope, $http) 
     });    
 }]);
 
-var rListCtrl = angular.module('rListCtrl', []);
+var rListCtrl = angular.module('rListCtrl', ['ngSanitize']);
 
 rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $routeParams) {
+
+// do this to show the menu on the left
+    showMenu().done(function(data) {
+	$scope.leftMenu = data;
+	$scope.$apply();
+	console.log($scope.leftMenu);
+    });
+
     API.get($routeParams.objClass, null, null).done(function(data) {
 	var arraytmp = [];
 	
@@ -20,7 +28,9 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 	});
 	$scope.List = arraytmp;
 	$scope.$apply();
+	console.log($scope.leftMenu);
     });
+
 }]);
 
 var deleteController = angular.module('deleteController', []);
@@ -30,3 +40,10 @@ deleteController.controller('deleteController', ['$scope', '$routeParams', funct
 	location.assign("index.html#/list/"+$routeParams.objClass);
     });
 }]);
+
+
+// AFF MENU ON THE LEFT
+
+function showMenu() {
+    return $.get( "partials/leftMenu.html");
+}

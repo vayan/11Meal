@@ -1,0 +1,70 @@
+
+<div ng-controller="rListCtrl">
+
+  <!-- THE TWO FOLLOWING LINE ARE FOR THE MENU ON THE LEFT -->
+  <div ng-bind-html="leftMenu"></div>
+  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+    <h1 class="page-header">Dashboard</h1>
+
+    <!-- this is supposed to be some graph -->
+    <div class="row placeholders">
+      <div class="col-xs-6 col-sm-3 placeholder">
+	<img data-src="js/holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+	<h4>Label</h4>
+	<span class="text-muted">Something else</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 placeholder">
+	<img data-src="js/holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+	<h4>Label</h4>
+	<span class="text-muted">Something else</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 placeholder">
+	<img data-src="js/holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+	<h4>Label</h4>
+	<span class="text-muted">Something else</span>
+      </div>
+      <div class="col-xs-6 col-sm-3 placeholder">
+	<img data-src="js/holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+	<h4>Label</h4>
+	<span class="text-muted">Something else</span>
+      </div>
+    </div>
+
+    <h2 class="sub-header">Section title</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+	<thead>
+	  <tr>
+            <!--<th ng-repat="value in List[0]">#</th>-->
+            <th>id</th>
+            <th>name</th>
+            <th>adress</th>
+            <th>position</th>
+	    <th>delete</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="item in List">
+	    <span ng-if="item.type == 'Restaurant'">
+              <td>{{item.id}}</td>
+	      <td>{{item.name}}</td>
+	      <td>{{item.address}}</td>
+	      <td>{{item.position}}</td>
+	    </span>
+	    <td>
+	      <a class="btn btn-default btn-lg"
+		 href="index.html#/delete/{{item.type}}/{{item.id}}" >
+		<span class="glyphicon glyphicon-remove"></span>
+	      </a>
+	    </td>
+	  </tr>
+	</tbody>
+      </table>
+    </div>
+
+    <!-- close the two for the menu on the left -->
+  </div>
+</div>
+
+</div> <!-- <div ng-controller="rListCtrl"> -->

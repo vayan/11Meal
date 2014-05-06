@@ -14,7 +14,7 @@ restaurantApp.config(['$routeProvider',
         controller: 'signinCtrl'
       }).
       when('/list/:objClass', {
-        templateUrl: 'partials/reservationList.html',
+        templateUrl: 'partials/list.html',
         controller: 'rListCtrl'
       }).
       when('/delete/:objClass/:id', {

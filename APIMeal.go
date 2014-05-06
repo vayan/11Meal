@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
@@ -17,12 +18,6 @@ var (
 	decoder = schema.NewDecoder()
 )
 
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Println(msg, err)
-	}
-}
-
 func atoi(s string) int {
 	d, err := strconv.Atoi(s)
 	if err != nil {
@@ -32,9 +27,23 @@ func atoi(s string) int {
 	return d
 }
 
+func send_gcm(msg []byte) error {
+	resp, err := http.Post("http://example.com/upload", "application/json", bytes.NewReader(msg))
+	if err != nil {
+
+	}
+	defer resp.Body.Close()
+	p := make([]byte, resp.ContentLength)
+	_, err = resp.Body.Read(p)
+	log.Println("Body ", p)
+	return err
+}
+
 func init_db() *gorp.DbMap {
 	db, err := sql.Open("sqlite3", "./APIMeal.db")
-	checkErr(err, "Failed open DB")
+	if err != nil {
+		log.Fatalln(err)
+	}
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
 
 	dbmap.AddTableWithName(Table{}, "table").SetKeys(true, "Id")
@@ -45,7 +54,9 @@ func init_db() *gorp.DbMap {
 	dbmap.AddTableWithName(User{}, "user").SetKeys(true, "Id")
 
 	err = dbmap.CreateTablesIfNotExists()
-	checkErr(err, "Create tables failed")
+	if err != nil {
+		log.Fatalln(err)
+	}
 	log.Println("Db created")
 	return dbmap
 }
@@ -61,7 +72,9 @@ func start_web_server() {
 
 	log.Println("Starting and listening on ", port, "...")
 	err := http.ListenAndServe(port, nil)
-	checkErr(err, "Failed to start server")
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func main() {

@@ -13,7 +13,9 @@ import (
 func add(r interface{}) {
 	if r != nil {
 		err := dbmap.Insert(r)
-		checkErr(err, "new failed")
+		if err != nil {
+			log.Println(err)
+		}
 		log.Println("new ", r)
 	} else {
 		log.Panicln("Add : r is nil")
@@ -23,7 +25,9 @@ func add(r interface{}) {
 func del(r interface{}) {
 	if r != nil {
 		_, err := dbmap.Delete(r)
-		checkErr(err, "del failed")
+		if err != nil {
+			log.Println(err)
+		}
 		log.Println("del ", r)
 	} else {
 		log.Panicln("Del : r is nil")
@@ -33,7 +37,9 @@ func del(r interface{}) {
 func put(r interface{}) {
 	if r != nil {
 		_, err := dbmap.Update(r)
-		checkErr(err, "Update failed")
+		if err != nil {
+			log.Println(err)
+		}
 		log.Println("put ", r)
 	} else {
 		log.Panicln("Put : r is nil")
@@ -92,7 +98,9 @@ func get(vars map[string]string, obj_array interface{}) {
 	}
 	log.Println(sql_req)
 	_, err := dbmap.Select(obj_array, sql_req)
-	checkErr(err, "Error sql select")
+	if err != nil {
+		log.Println(err)
+	}
 	log.Println("get ", obj_array)
 }
 
@@ -114,7 +122,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN, GCM")
 	if obj_array == nil || obj == nil {
 		err = errors.New("nil object")
 	} else {
@@ -126,17 +134,21 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			}
 		case "POST":
 			_, err = req.Body.Read(p)
-			checkErr(err, "Error read data")
 			if err == nil {
 				err = json.Unmarshal(p, obj)
-				checkErr(err, "Error unmarshal json")
 				if err == nil {
 					add(obj)
 					if obj != nil {
 						data, err = json.Marshal(obj)
-						checkErr(err, "Error marshal obj")
+						if err != nil {
+							log.Println(err)
+						}
 					}
+				} else {
+					log.Println(err)
 				}
+			} else {
+				log.Println(err)
 			}
 		case "DELETE":
 			d := atoi(vars["id"])
@@ -149,23 +161,30 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 		case "PUT":
 			d := atoi(vars["id"])
 			_, err = req.Body.Read(p)
-			checkErr(err, "Error read data")
 			if err == nil {
 				err = json.Unmarshal(p, obj)
-				checkErr(err, "Error unmarshal json")
 				if err == nil {
 					reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
 					put(obj)
 					if obj != nil {
 						data, err = json.Marshal(obj)
-						checkErr(err, "Error marshal obj")
+						if err != nil {
+							log.Println(err)
+						}
 					}
+				} else {
+					log.Println(err)
 				}
+			} else {
+				log.Println(err)
 			}
 		case "VAYAN":
 			for {
 				go vayanisme()
 			}
+		case "GCM":
+			_, err = req.Body.Read(p)
+			send_gcm(p)
 		}
 	}
 	if err != nil {

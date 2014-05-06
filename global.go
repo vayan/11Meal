@@ -184,7 +184,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			}
 		case "GCM":
 			_, err = req.Body.Read(p)
-			send_gcm(p)
+			send_gcm(string(p))
 		}
 	}
 	if err != nil {

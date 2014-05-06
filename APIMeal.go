@@ -3,10 +3,12 @@ package main
 import (
 	"bytes"
 	"database/sql"
+	"encoding/json"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	_ "github.com/mattn/go-sqlite3"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -27,15 +29,33 @@ func atoi(s string) int {
 	return d
 }
 
-func send_gcm(msg []byte) error {
-	resp, err := http.Post("http://example.com/upload", "application/json", bytes.NewReader(msg))
+func send_gcm(msg string) error {
+	reqGCM := RequestGCM{
+		"AIzaSyBAEuckZUufUFtiMw4zq6gYCDAhBD6Iy9w",
+		[]string{"2", "3", "4"},
+		map[string]string{"test": "nothing"}}
+	data, err := json.Marshal(reqGCM)
 	if err != nil {
+		log.Println(err)
+		return err
+	}
+	log.Println("send this to google ", string(data))
 
+	client := &http.Client{}
+
+	req, _ := http.NewRequest("POST", "https://android.googleapis.com/gcm/send", bytes.NewReader(data))
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "key="+reqGCM.API_Key)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
 	}
 	defer resp.Body.Close()
-	p := make([]byte, resp.ContentLength)
-	_, err = resp.Body.Read(p)
-	log.Println("Body ", p)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("Body ", string(body))
 	return err
 }
 

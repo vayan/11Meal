@@ -54,3 +54,9 @@ type Restaurant struct {
 	Phone       string `db:"phone"`
 	Description string `db:"description"`
 }
+
+type RequestGCM struct {
+	API_Key          string            `json:"-"`
+	Registration_ids []string          `json:"registration_ids"`
+	Data             map[string]string `json:"data"`
+}

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Reservation;;;
 
 /**
  * A list fragment representing a list of Reservations. This fragment also
@@ -116,7 +117,7 @@ public class ReservationListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEM_MAP_BOOKS.get(position).mId);
+		mCallbacks.onItemSelected(DummyContent.ITEM_MAP_BOOKS.get(position).getId());
 	}
 
 	@Override

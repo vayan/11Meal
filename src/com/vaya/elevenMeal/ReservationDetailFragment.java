@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Reservation;
 
 /**
  * A fragment representing a single Reservation detail screen. This fragment is
@@ -55,7 +56,7 @@ public class ReservationDetailFragment extends Fragment {
 		// Show the dummy content as text in a TextView.
 		if (mItem != null) {
 			((TextView) rootView.findViewById(R.id.reservation_detail))
-					.setText(mItem.mId);
+					.setText(mItem.getId());
 		}
 
 		return rootView;

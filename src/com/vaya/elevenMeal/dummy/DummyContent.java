@@ -37,6 +37,6 @@ public class DummyContent {
 
 	private static void addItem(Restaurant item) {
 		ITEMS.add(item);
-		ITEM_MAP.put(item.getName(), item);
+		ITEM_MAP.put(item.getId(), item);
 	}
 }

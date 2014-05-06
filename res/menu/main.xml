@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/action_nfc" android:title="@string/nfc" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/action_events" android:title="@string/events" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_recent_history"></item>
+    
+
+</menu>

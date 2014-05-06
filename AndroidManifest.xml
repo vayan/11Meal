@@ -14,16 +14,20 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:name="com.example.gcm.permission.C2D_MESSAGE"
-                android:protectionLevel="signature" />
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+    <permission
+        android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
-        <meta-data android:name="com.google.android.gms.version"
-                   android:value="@integer/google_play_services_version" />
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light" >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name="com.vaya.elevenMeal.LoginActivity"
             android:label="@string/title_activity_login"
@@ -46,16 +50,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vaya.elevenMeal.RestaurantListActivity" />
         </activity>
+
         <receiver
-                android:name=".GcmBroadcastReceiver"
-                android:permission="com.google.android.c2dm.permission.SEND" >
+            android:name="com.vaya.elevenMeal.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
-        <service android:name=".GcmIntentService" />
 
+        <service android:name="com.vaya.elevenMeal.GcmIntentService" />
+
+        <activity
+            android:name="com.vaya.elevenMeal.ReservationListActivity"
+            android:label="@string/title_reservation_list" >
+        </activity>
+        <activity
+            android:name="com.vaya.elevenMeal.ReservationDetailActivity"
+            android:label="@string/title_reservation_detail"
+            android:parentActivityName="com.vaya.elevenMeal.ReservationListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vaya.elevenMeal.ReservationListActivity" />
+        </activity>
     </application>
 
 </manifest>

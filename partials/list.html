@@ -1,4 +1,3 @@
-
 <div ng-controller="rListCtrl">
 
   <!-- THE TWO FOLLOWING LINE ARE FOR THE MENU ON THE LEFT -->
@@ -32,26 +31,47 @@
     </div>
 
     <h2 class="sub-header">Section title</h2>
+    <div ng-if="Type == 'meal'">
+      <a class="btn btn-default btn-lg"
+	 href="index.html#/create/{{Type}}" >
+	<span class="glyphicon glyphicon-plus"></span>
+      </a>
+    </div>
     <div class="table-responsive">
       <table class="table table-striped">
 	<thead>
-	  <tr>
-            <!--<th ng-repat="value in List[0]">#</th>-->
-            <th>id</th>
-            <th>name</th>
-            <th>adress</th>
-            <th>position</th>
-	    <th>delete</th>
+	  <tr ng-if="Type == 'restaurant'">
+              <th>id</th>
+              <th>name</th>
+              <th>adress</th>
+              <th>position</th>
+	      <th>delete</th>
+	    </tr>
+            <tr ng-if="Type == 'meal'">
+              <th>id</th>
+              <th>name</th>
+              <th>price</th>
+              <th>cat</th>
 	  </tr>
 	</thead>
 	<tbody>
-	  <tr ng-repeat="item in List">
-	    <span ng-if="item.type == 'Restaurant'">
+	  <tr ng-repeat="item in List" ng-if="Type == 'restaurant'">
               <td>{{item.id}}</td>
 	      <td>{{item.name}}</td>
 	      <td>{{item.address}}</td>
 	      <td>{{item.position}}</td>
-	    </span>
+	      <td>
+		<a class="btn btn-default btn-lg"
+		   href="index.html#/delete/{{item.type}}/{{item.id}}" >
+		<span class="glyphicon glyphicon-remove"></span>
+		</a>
+	      </td>
+	  </tr>
+	  <tr ng-repeat="item in List" ng-if="Type == 'meal'">
+            <td>{{item.id}}</td>
+	    <td>{{item.name}}</td>
+	    <td>{{item.price}}</td>
+	    <td>{{item.cat}}</td>
 	    <td>
 	      <a class="btn btn-default btn-lg"
 		 href="index.html#/delete/{{item.type}}/{{item.id}}" >

@@ -3,7 +3,7 @@ var signinCtrl = angular.module('signinCtrl', []);
 signinCtrl.controller('signinCtrl', ['$scope', '$http', function($scope, $http) {
     $http.get('data/signIn.json').success(function(data) {
 	$scope.langs = data;
-    });    
+    });
 }]);
 
 var rListCtrl = angular.module('rListCtrl', ['ngSanitize']);
@@ -14,7 +14,6 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
     showMenu().done(function(data) {
 	$scope.leftMenu = data;
 	$scope.$apply();
-	console.log($scope.leftMenu);
     });
 
     API.get($routeParams.objClass, null, null).done(function(data) {
@@ -25,12 +24,16 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 		console.log($routeParams.objClass);
 		arraytmp[key] = new Restaurant(value);
 	    }
+	    else if ($routeParams.objClass == "meal") {
+		console.log($routeParams.objClass);
+		arraytmp[key] = new Meal(value);	
+	    }
 	});
 	$scope.List = arraytmp;
 	$scope.$apply();
-	console.log($scope.leftMenu);
     });
-
+	$scope.Type = $routeParams.objClass;
+	console.log($scope.Type);
 }]);
 
 var deleteController = angular.module('deleteController', []);
@@ -41,6 +44,27 @@ deleteController.controller('deleteController', ['$scope', '$routeParams', funct
     });
 }]);
 
+
+var createFormController = angular.module('createFormController', ['ngSanitize']);
+
+createFormController.controller('createFormController', ['$scope', '$routeParams', function($scope, $routeParams){
+    // do this to show the menu on the left
+    showMenu().done(function(data) {
+	$scope.leftMenu = data;
+	$scope.$apply();
+    });
+    
+    $scope.createIt = function (name, price, cat) {
+	location.assign('index.html#/create/meal/'+name+'/'+price+'/'+cat);
+    }
+
+}]);
+
+var createController = angular.module('createController', []);
+
+createController.controller('createController', ['$scope', '$routeParams', function($scope, $routeParams) {
+    
+}]);
 
 // AFF MENU ON THE LEFT
 

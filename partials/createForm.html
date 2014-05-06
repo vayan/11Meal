@@ -1,0 +1,41 @@
+<div ng-controller="createFormController">
+
+  <!-- THE TWO FOLLOWING LINE ARE FOR THE MENU ON THE LEFT -->
+  <div ng-bind-html="leftMenu"></div>
+  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+    <form role="form" name="createForm">
+      <div class="form-group">
+	<label for="name">Name</label>
+	<input type="text" class="form-control" id="name"
+	       placeholder="Enter name" ng-model="meal.name" required>
+      </div>
+      <div class="form-group">
+	<label for="price">Price</label>
+	<input type="number" class="form-control" id="price" 
+	       placeholder="Enter price" ng-model="meal.price" required>
+      </div>
+      <div class="form-group">
+	<label for="cat">Category</label>
+	<select class="form-control" id="cat" ng-model="meal.cat" required>
+	  <option selected="selected">UNDEFINED</option>
+	  <option>STARTER</option>
+	  <option>MAIN</option>
+	  <option>DESSERT</option>
+	  <option>DRINK</option>
+	  <option>SOUP</option>
+	</select>
+      </div>
+      <button 
+	 class="btn btn-default" 
+	 ng-disabled="createForm.$invalid"
+	 ng-click="createIt(meal.name,meal.price,meal.cat)">
+	Submit
+      </button>
+    </form>
+
+    <!-- close the two for the menu on the left -->
+  </div>
+</div>
+
+</div>

@@ -21,11 +21,12 @@ var API = {
 	})
 	return res;
     },
-    create : function (object) {return true},
+    create : function (objClass, json) {return true},
     authenticate : function (login, password) 
     {
 	//TODO: if server return true, change 1234 to real uuid
 	createCookie("session", 1234, 100);
+	location.assign("index.html#/");
 	return true;
     }
 }
@@ -85,7 +86,7 @@ function Meal (tmp) {
     this.restaurant = tmp.Restaurant;
     this.name = tmp.Name;
     this.price = tmp.Price;
-    this.cat = FoodCat.UNDEFINED;
+    this.cat = tmp.Type;
 
     this.update = function () {
 	//TODO: update into API
@@ -116,13 +117,15 @@ function Order (tmp) {
     var ReservationState = {
 	OPENED : 0,
 	CONFIRMED : 1,
-	CANCELED : 2
+	QUEUED : 2,
+	DONE : 3,
+	CANCELED : 4
     }
 
     var PayMethod = {
 	CASH : 0,
-	CARD : 1,
-	CHECK : 2
+	CHECK : 1,
+	CARD : 2
     }
 
     var FoodCat = {

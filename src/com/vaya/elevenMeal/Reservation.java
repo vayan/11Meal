@@ -1,6 +1,8 @@
 package com.vaya.elevenMeal;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 public class Reservation {
 	public static enum State {
@@ -16,6 +18,8 @@ public class Reservation {
 
 	// Attributes
 	protected int mId;
+	protected User mOwner;
+	protected ArrayList<User> mGuests;
 	protected Date mDate;
 	protected State mState;
 	protected Payment mPayMethod;
@@ -27,6 +31,18 @@ public class Reservation {
 
 	public Date getDate() {
 		return mDate;
+	}
+
+	public User getOwner() {
+		return mOwner;
+	}
+	
+	public ArrayList<User> getGuests() {
+		return mGuests;
+	}
+
+	public void setOwner(User owner) {
+		mOwner = owner;
 	}
 
 	public void setDate(Date date) {
@@ -50,10 +66,21 @@ public class Reservation {
 	}
 
 	// Methods
-	public void sendInvitation(User user) {
-		//TODO: complete stub
+	public void addGuest(User user) {
+		mGuests.add(user);
+	}
+	
+	public void removeGuest(User user) {
+		Iterator<User> it = mGuests.iterator();
+		while (it.hasNext()) {
+			if (it.next().getId() == user.getId()) {
+				it.remove();
+				break;
+			}
+		}
 	}
 
+	// FIXME: Do we really need theses methods?
 	public boolean delete() {
 		return false; //TODO: complete stub
 	}

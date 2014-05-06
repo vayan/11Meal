@@ -1,7 +1,5 @@
 package com.vaya.elevenMeal;
 
-import java.util.UUID;
-
 public class Meal {
 	public static enum Type {
 		SALAD,
@@ -10,7 +8,7 @@ public class Meal {
 	}
 
 	// Attributes
-	protected UUID mId;
+	protected int mId;
 	protected String mName;
 	protected float mPrice;
 	protected Type mType;
@@ -20,7 +18,7 @@ public class Meal {
 		return mName;
 	}
 
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 

@@ -1,7 +1,6 @@
 package com.vaya.elevenMeal;
 
 import java.util.Date;
-import java.util.UUID;
 
 public class Reservation {
 	public static enum State {
@@ -16,13 +15,13 @@ public class Reservation {
 	}
 
 	// Attributes
-	protected UUID mId;
+	protected int mId;
 	protected Date mDate;
 	protected State mState;
 	protected Payment mPayMethod;
 	
 	// Getters/setters
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 

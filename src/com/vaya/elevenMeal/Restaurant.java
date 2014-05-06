@@ -2,19 +2,25 @@ package com.vaya.elevenMeal;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class Restaurant {
 	//Attributes
-	protected UUID mId;
+	protected int mId;
 	protected String mName;
 	protected String mAddress;
 	protected String mPhone;
 	protected String mPosition;
 	protected List<Date> mTimeTable;
 	
+	public Restaurant(int id, String name, String address)
+	{
+		mId = id;
+		mName = name;
+		mAddress = address;
+	}
+	
 	// Getters/setters
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 

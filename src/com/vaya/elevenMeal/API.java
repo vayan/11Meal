@@ -1,7 +1,6 @@
 package com.vaya.elevenMeal;
 
 import java.net.URL;
-import java.util.UUID;
 
 public class API {
 	protected URL url;
@@ -10,7 +9,7 @@ public class API {
 		//TODO: use from.getClass()
 		return null; //TODO: complete stub
 	}
-	public Object get(Object from, String column, UUID id) {
+	public Object get(Object from, String column, int id) {
 		return null; //TODO: complete stub
 	}
 	

@@ -1,15 +1,20 @@
 package com.vaya.elevenMeal;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 public class Order {
 	// Attributes
-	protected UUID mId;
+	protected int mId;
 	protected List<Meal> mMealList;
 
+	public Order() {
+		mMealList = new ArrayList<Meal>();
+	}
+
 	// Getters/setters
-	public UUID getId() {
+	public int getId() {
 		return mId;
 	}
 
@@ -23,14 +28,23 @@ public class Order {
 
 	// Methods
 	public void addMeal(Meal meal) {
-		//TODO: complete stub
+		mMealList.add(meal);
 	}
 
 	public void removeMeal(Meal meal) {
-		//TODO: complete stub
+		Iterator<Meal> it = mMealList.iterator();
+		while (it.hasNext()) {
+			if (it.next().getId() == meal.getId()) {
+				it.remove();
+				break;
+			}
+		}
 	}
 
 	public float getTotalPrice() {
-		return 0; //TODO: complete stub
+		float totalPrice = 0;
+		for (Meal m: mMealList)
+			totalPrice += m.getPrice();
+		return totalPrice;
 	}
 }

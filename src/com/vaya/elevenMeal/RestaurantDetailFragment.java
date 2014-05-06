@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Restaurant;
 
 /**
  * A fragment representing a single Restaurant detail screen. This fragment is

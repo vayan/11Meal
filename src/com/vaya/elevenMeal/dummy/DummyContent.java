@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vaya.elevenMeal.Restaurant;
+import com.vaya.elevenMeal.restaurant.Restaurant;
 
 /**
  * Helper class for providing sample content for user interfaces created by

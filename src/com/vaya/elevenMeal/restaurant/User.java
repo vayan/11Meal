@@ -1,4 +1,4 @@
-package com.vaya.elevenMeal;
+package com.vaya.elevenMeal.restaurant;
 
 import java.util.List;
 

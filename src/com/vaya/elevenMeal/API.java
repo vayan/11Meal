@@ -27,7 +27,8 @@ public class API {
 		DELETE,
 	}
 
-	protected String mUrl;
+	// TODO: Put it in settings?
+	protected String mUrl = "http://localhost:8181";
 
 	public IRestaurantObject create(IRestaurantObject object) {
 		//TODO: use from.getClass()

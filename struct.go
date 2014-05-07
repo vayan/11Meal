@@ -27,6 +27,7 @@ type Order struct {
 	Id          int `db:"id"`
 	Total_price int `db:"total_price"`
 	User        int `db:"user"`
+	Restaurant  int `db:"restaurant"`
 	Reservation int `db:"reservation"`
 }
 

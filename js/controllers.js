@@ -156,8 +156,8 @@ createController.controller('createFormController', ['$scope', '$routeParams', f
         obj["Description"] = description;
 
         API.create($routeParams.objClass, obj).done(function(data) {
-    location.assign("index.html#/list/"+$routeParams.objClass);
-    });
+	    location.assign("index.html#/list/"+$routeParams.objClass);
+	});
     }
 
     $scope.createIt = function (name, price, cat) {
@@ -184,11 +184,47 @@ createController.controller('createController', ['$scope', '$routeParams', funct
 var restaurantDetailsController = angular.module('restaurantDetailsController',[]);
 
 restaurantDetailsController.controller('restaurantDetailsController', ['$scope', '$routeParams', function($scope, $routeParams) {
+    var id = utils.readCookie("session");
+
     // do this to show the menu on the left
     showMenu().done(function(data) {
 	$scope.leftMenu = data;
 	$scope.$apply();
     });
+
+    API.get("restaurant", "Id", id).done(function(data) {
+	var arraytmp = [];
+
+	angular.forEach(data, function(value, key){
+	    arraytmp[key] = new Restaurant(value);
+	});
+	console.log(arraytmp[0].name);
+	$scope.List = arraytmp;
+	$scope.restaurant.name = arraytmp[0].name;
+	$scope.restaurant.address = arraytmp[0].address;
+	$scope.restaurant.position = arraytmp[0].position;
+	$scope.restaurant.schedule = arraytmp[0].schedule;
+	$scope.restaurant.phone = arraytmp[0].phone;
+	$scope.restaurant.description = arraytmp[0].description;
+	$scope.$apply();
+    });
+    console.log($scope.Type);
+
+    $scope.updateIt = function (restaurant) {
+        console.log("in create resto");
+        var obj = {};
+        obj["Name"] = restaurant.name;
+        obj["Address"] = restaurant.address;
+        obj["Position"] = restaurant.position ;
+        obj["Schedule"] = restaurant.schedule;
+        obj["Phone"] = restaurant.phone;
+        obj["Description"] = restaurant.description;
+
+        API.update("restaurant", obj, id).done(function(data) {
+	    location.reload();
+	});
+    }
+
 }]);
 
 // AFF MENU ON THE LEFT

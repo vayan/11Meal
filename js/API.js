@@ -16,13 +16,23 @@ var API = {
 	console.log(res);
 	return res;
     },
-    update : function (object) {return true},
+    update : function (objClass, obj, id) {
+    	var updateUrl = this.url+objClass+'/'+id;
+	console.log(updateUrl);
+	console.log(JSON.stringify(obj));
+	var res = $.ajax({
+	    type : "PUT",
+	    url : updateUrl,
+	    data : JSON.stringify(obj)
+	});
+	return res;
+    },
     remove : function (objClass, id) {
 	var deleteUrl = this.url + objClass + "/" + id;
 	var res = $.ajax({
 	    type : "DELETE",
 	    url : deleteUrl
-	})
+	});
 	return res;
     },
     create : function (objClass, obj) {

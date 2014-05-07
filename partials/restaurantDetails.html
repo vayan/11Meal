@@ -4,11 +4,11 @@
   <div ng-bind-html="leftMenu"></div>
   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-    <form role="form" name="restaurantDetails">
+    <form role="form" name="restaurant">
     	  <div class="form-group">
     	<label for="name">Name</label>
     	<input type="text" class="form-control" id="name"
-	       ng-model="restaurant.name" required>
+	       ng-model="restaurant.name"  required>
 	      </div>
 	      <div class="form-group">
 	    <label for="name">Address</label>
@@ -39,7 +39,7 @@
     <button 
 	 class="btn btn-default" 
 	 ng-disabled="restaurantDetails.$invalid"
-	 ng-click="createIt(restaurant.name,restaurant.address,restaurant.position,restaurant.schedule,restaurant.phone,restaurant.description)">
+	 ng-click="updateIt(restaurant)">
 	Submit
       </button>
     </form>

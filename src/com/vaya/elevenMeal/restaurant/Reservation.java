@@ -19,66 +19,67 @@ public class Reservation implements IRestaurantObject {
 	}
 
 	// Attributes
-	protected int mId;
-	protected User mOwner;
-	protected ArrayList<User> mGuests;
-	protected Date mDate;
-	protected State mState;
-	protected Payment mPayMethod;
+	protected int id;
+	protected User user;
+	protected ArrayList<User> guests;
+	protected int restaurant;
+	protected Date date;
+	protected State state;
+	protected Payment payementMethod;
 	
 	public Reservation(int id)
 	{
-		mId = id;
+		this.id = id;
 	}
 	
 	// Getters/setters
 	public int getId() {
-		return mId;
+		return id;
 	}
 
 	public Date getDate() {
-		return mDate;
+		return date;
 	}
 
 	public User getOwner() {
-		return mOwner;
+		return user;
 	}
 	
 	public ArrayList<User> getGuests() {
-		return mGuests;
+		return guests;
 	}
 
 	public void setOwner(User owner) {
-		mOwner = owner;
+		this.user = owner;
 	}
 
 	public void setDate(Date date) {
-		mDate = date;
+		this.date = date;
 	}
 
 	public State getState() {
-		return mState;
+		return state;
 	}
 
 	public void setState(State state) {
-		mState = state;
+		this.state = state;
 	}
 
 	public Payment getPayMethod() {
-		return mPayMethod;
+		return payementMethod;
 	}
 
 	public void setPayMethod(Payment payMethod) {
-		mPayMethod = payMethod;
+		this.payementMethod = payMethod;
 	}
 
 	// Methods
 	public void addGuest(User user) {
-		mGuests.add(user);
+		guests.add(user);
 	}
 	
 	public void removeGuest(User user) {
-		Iterator<User> it = mGuests.iterator();
+		Iterator<User> it = guests.iterator();
 		while (it.hasNext()) {
 			if (it.next().getId() == user.getId()) {
 				it.remove();

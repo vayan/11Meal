@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.vaya.elevenMeal.restaurant.Restaurant;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,7 +39,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * well.
  */
 public class LoginActivity extends Activity {
-
 
     //for GCM
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -94,6 +94,8 @@ public class LoginActivity extends Activity {
 
         context = getApplicationContext();
 
+        API api = new API();
+        api.create(new Restaurant(42, "Le toto engouti", "plop"));
         UpdatePref();
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {

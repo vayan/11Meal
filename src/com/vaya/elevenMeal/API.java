@@ -16,7 +16,9 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.vaya.elevenMeal.restaurant.*;
 
@@ -26,7 +28,14 @@ import android.util.Log;
 public class API {
 
 	// TODO: Put it in settings?
-	protected String mUrl = "http://192.168.0.101:8181";
+	protected String mUrl;
+	protected Gson mGson;
+
+	public API() {
+		mUrl = "http://galan.im:8181";
+		mGson = new GsonBuilder()
+		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+	}
 
 	public IRestaurantObject create(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
@@ -71,7 +80,7 @@ public class API {
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
 		try {
-			String json = new Gson().toJson(object);
+			String json = mGson.toJson(object);
 			Log.d("API.makeJSONObjectEntity", json);
 			return new StringEntity(json);
 		} catch (UnsupportedEncodingException e) {
@@ -81,7 +90,7 @@ public class API {
 		return null;
 
 	}
-	
+
 	private Type getType(String objectName) {
 		Type type = null;
 		switch (objectName) {
@@ -146,7 +155,7 @@ public class API {
 			if (result == null)
 				return ;
 			Log.d("API.onPostExecute", result);
-			new Gson().fromJson(result, mType);
+			mGson.fromJson(result, mType);
 		}
 	}
 }

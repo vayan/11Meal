@@ -5,62 +5,71 @@ import java.util.List;
 
 public class Restaurant implements IRestaurantObject {
 	//Attributes
-	protected int mId;
-	protected String mName;
-	protected String mAddress;
-	protected String mPhone;
-	protected String mPosition;
-	protected List<Date> mTimeTable;
+	protected int id;
+	protected String name;
+	protected String address;
+	protected String phone;
+	protected String position;
+	protected String schedule;
+	protected String description;
 	
 	public Restaurant(int id, String name, String address)
 	{
-		mId = id;
-		mName = name;
-		mAddress = address;
+		this.id = id;
+		this.name = name;
+		this.address = address;
 	}
 	
 	// Getters/setters
 	public int getId() {
-		return mId;
+		return id;
 	}
 
 	public String getName() {
-		return mName;
+		return name;
 	}
 
 	public void setName(String name) {
-		mName = name;
+		this.name = name;
 	}
 
 	public String getAddress() {
-		return mAddress;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		mAddress = address;
+		this.address = address;
 	}
 
 	public String getPhone() {
-		return mPhone;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
-		mPhone = phone;
+		this.phone = phone;
 	}
 
 	public String getPosition() {
-		return mPosition;
+		return position;
 	}
 
 	public void setPosition(String position) {
-		mPosition = position;
+		this.position = position;
 	}
 
-	public List<Date> getTimeTable() {
-		return mTimeTable;
+	public String getSchedule() {
+		return schedule;
 	}
 
-	public void setTimeTable(List<Date> timeTable) {
-		mTimeTable = timeTable;
+	public void setSchedule(String schedule) {
+		this.schedule = schedule;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

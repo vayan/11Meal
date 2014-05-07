@@ -28,7 +28,13 @@ type Order struct {
 	Total_price int `db:"total_price"`
 	User        int `db:"user"`
 	Reservation int `db:"reservation"`
-	//Meals       []Meal `db:"meals"`
+}
+
+type UserMeal struct {
+	Id       int `db:"id"`
+	Order    int `db:"order"`
+	Meal     int `db:"meal"`
+	Quantity int `db:"quantity"`
 }
 
 type Meal struct {

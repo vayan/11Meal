@@ -46,46 +46,25 @@ func put(r interface{}) {
 	}
 }
 
-func getObjArray(t string) interface{} {
+func getObj(t string) (interface{}, interface{}) {
 	switch t {
 	case "restaurant":
-		return (new([]Restaurant))
+		return new(Restaurant), new([]Restaurant)
 	case "table":
-		return (new([]Table))
+		return new(Table), new([]Table)
 	case "reservation":
-		return (new([]Reservation))
+		return new(Reservation), new([]Reservation)
 	case "order":
-		return (new([]Order))
+		return new(Order), new([]Order)
 	case "meal":
-		return (new([]Meal))
+		return new(Meal), new([]Meal)
 	case "user":
-		return (new([]User))
+		return new(User), new([]User)
 	case "usermeal":
-		return (new([]UserMeal))
+		return new(UserMeal), new([]UserMeal)
 	}
 	log.Println("getObjArray : didn't find type")
-	return nil
-}
-
-func getObj(t string) interface{} {
-	switch t {
-	case "restaurant":
-		return (new(Restaurant))
-	case "table":
-		return (new(Table))
-	case "reservation":
-		return (new(Reservation))
-	case "order":
-		return (new(Order))
-	case "meal":
-		return (new(Meal))
-	case "user":
-		return (new(User))
-	case "usermeal":
-		return (new(UserMeal))
-	}
-	log.Println("getObj : didn't find type")
-	return nil
+	return nil, nil
 }
 
 func get(vars map[string]string, obj_array interface{}) {
@@ -144,8 +123,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	p := make([]byte, req.ContentLength)
 	vars := mux.Vars(req)
 	table := strings.ToLower(vars["table"])
-	obj_array := getObjArray(table)
-	obj := getObj(table)
+	obj, obj_array := getObj(table)
 
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")

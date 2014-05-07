@@ -5,5 +5,5 @@
     <string name="title_restaurant_list">Restaurants</string>
     <string name="explanation">NFC_Error</string>
     <string name="title_restaurant_detail">Restaurant Detail</string>
-
+	<string name="action_settings">Settings</string>
 </resources>

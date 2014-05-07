@@ -7,19 +7,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -45,6 +51,7 @@ public class LoginActivity extends Activity {
     SharedPreferences prefs;
     String regid;
 
+    private OnSharedPreferenceChangeListener listener = null;
 
     static final String TAG = "Mainacti";
 
@@ -81,13 +88,27 @@ public class LoginActivity extends Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_login);
 
         context = getApplicationContext();
 
+        UpdatePref();
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			public void onSharedPreferenceChanged(SharedPreferences prefs,
+					String key) {
+				UpdatePref();
+			}
+		};
+		prefs.registerOnSharedPreferenceChangeListener(listener);
 
+		/*if (savedInstanceState == null) {
+			getFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}*/
+		
         // Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
@@ -131,7 +152,12 @@ public class LoginActivity extends Activity {
         Log.i(TAG, "No valid Google Play Services APK found.");
     }
 }
+	
 
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+	
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
@@ -224,13 +250,6 @@ public class LoginActivity extends Activity {
             Log.i("ASYNC", msg);
         }
     }
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
-	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -382,4 +401,32 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.login, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.settings) {
+			showUserSettings();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void showUserSettings() {
+		startActivity(new Intent(LoginActivity.this, UserSettingsActivity.class));
+		Log.d(TAG, "Open settings");
+	}
+	
+	public void UpdatePref() {
+		// get latest settings from the xml config file
+		SharedPreferences sharedPref = PreferenceManager
+				.getDefaultSharedPreferences(this);
+	}
+
 }

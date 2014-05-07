@@ -6,5 +6,10 @@
         android:id="@+id/action_forgot_password"
         android:showAsAction="never"
         android:title="@string/action_forgot_password"/>
+    <item
+  	 	android:title="@string/action_settings"
+   		android:showAsAction="never"
+   		android:id="@+id/settings" >
+	</item>
 
 </menu>

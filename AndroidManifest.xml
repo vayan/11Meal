@@ -77,6 +77,10 @@
         </receiver>
         <service android:name=".GcmIntentService" />
 
+         
+         <activity android:name=".UserSettingsActivity"
+                  android:parentActivityName="LoginActivity"/>
+         
     </application>
 
 </manifest>

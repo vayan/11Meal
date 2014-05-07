@@ -18,10 +18,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.vaya.elevenMeal.restaurant.IRestaurantObject;
-import com.vaya.elevenMeal.restaurant.User;
+import com.vaya.elevenMeal.restaurant.*;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class API {
 
@@ -30,17 +30,16 @@ public class API {
 
 	public IRestaurantObject create(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
-		HttpPost request = new HttpPost("/" + oClass);
+		HttpPost request = new HttpPost(mUrl + "/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
-		Type type = TypeToken.get(object.getClass().getDeclaringClass()).getType();
-		new RequestTask(type).execute(request);
+		new RequestTask(object.getClass()).execute(request);
 		return null;
 	}
 
 	public IRestaurantObject get(IRestaurantObject from, String column, int id) {
 		String oClass  = from.getClass().toString();
 		String sId     = String.valueOf(id);
-		HttpGet request = new HttpGet("/" + oClass + "/" + column + "/" + sId);
+		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + sId);
 		//Type type = TypeToken.get(ArrayList<from.getClass()>).getType();
 		//new RequestTask(type).execute(request);
 		return null; //TODO: complete stub
@@ -50,7 +49,7 @@ public class API {
 		String oClass  = object.getClass().toString();
 		HttpPut request = new HttpPut("/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
-		//new RequestTask().execute(request);
+		new RequestTask(getType(oClass)).execute(request);
 		return null;
 	}
 
@@ -58,8 +57,7 @@ public class API {
 		String oClass  = object.getClass().toString();
 		String oId     = String.valueOf(object.getId());
 		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
-		Type type = TypeToken.get(object.getClass()).getType();
-		new RequestTask(type).execute(request);
+		new RequestTask(getType(oClass)).execute(request);
 		return false;
 	}
 
@@ -73,7 +71,8 @@ public class API {
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
 		try {
-			return new StringEntity("{TODO}");
+			String json = new Gson().toJson(object);
+			return new StringEntity(json);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,12 +80,34 @@ public class API {
 		return null;
 
 	}
+	
+	private Type getType(String objectName) {
+		Type type = null;
+		switch (objectName) {
+		case "Meal":
+			type = new TypeToken<Meal>(){}.getType();
+			break ;
+		case "Order":
+			type = new TypeToken<Order>(){}.getType();
+			break ;
+		case "Reservation":
+			type = new TypeToken<Reservation>(){}.getType();
+			break ;
+		case "Restaurant":
+			type = new TypeToken<Restaurant>(){}.getType();
+			break ;
+		case "User":
+			type = new TypeToken<User>(){}.getType();
+			break ;
+		}
+		return type;
+	}
 
 	private class RequestTask extends AsyncTask<HttpRequestBase, String, String>{
 		Type mType;
 
 		public RequestTask(Type type) {
-			// TODO Auto-generated constructor stub
+			mType = type;
 		}
 
 		@Override
@@ -121,6 +142,7 @@ public class API {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+			Log.d("API postexecute", result);
 			new Gson().fromJson(result, mType);
 		}
 	}

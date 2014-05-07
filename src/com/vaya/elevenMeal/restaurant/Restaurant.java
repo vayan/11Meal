@@ -1,8 +1,5 @@
 package com.vaya.elevenMeal.restaurant;
 
-import java.util.Date;
-import java.util.List;
-
 public class Restaurant implements IRestaurantObject {
 	//Attributes
 	protected int id;
@@ -13,6 +10,11 @@ public class Restaurant implements IRestaurantObject {
 	protected String schedule;
 	protected String description;
 	
+	
+	public Restaurant() {
+		
+	}
+
 	public Restaurant(int id, String name, String address)
 	{
 		this.id = id;

@@ -36,7 +36,7 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
     
     API.get($routeParams.objClass, column, value).done(function(data) {
 	var arraytmp = [];
-	var arraymeals = 
+	var arraymeals = [];
 	angular.forEach(data, function(value, key){
 	    if ($routeParams.objClass == "restaurant") {
 		console.log($routeParams.objClass);

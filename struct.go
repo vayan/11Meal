@@ -31,10 +31,14 @@ type Order struct {
 }
 
 type UserMeal struct {
-	Id       int `db:"id"`
-	Order    int `db:"order"`
-	Meal     int `db:"meal"`
-	Quantity int `db:"quantity"`
+	Id         int    `db:"id"`
+	Order      int    `db:"order"`
+	Meal       int    `db:"meal"`
+	Restaurant int    `db:"restaurant"`
+	Name       string `db:"name"`
+	Type       int    `db:"type"`
+	Price      int    `db:"price"`
+	Quantity   int    `db:"quantity"`
 }
 
 type Meal struct {

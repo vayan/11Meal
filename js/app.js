@@ -4,7 +4,8 @@ var restaurantApp = angular.module('restaurantApp', [
     'rListCtrl',
     'deleteController',
     'createFormController',
-    'createController'
+    'createController',
+    'restaurantDetailsController'
 ]);
 
 restaurantApp.config(['$routeProvider',function($routeProvider) {
@@ -30,6 +31,10 @@ restaurantApp.config(['$routeProvider',function($routeProvider) {
             templateUrl: 'partials/create.html',
             controller: 'createController'
 	}).
+    when('/restaurant'), {
+            templateUrl: 'partials/restaurantDetails.html',
+            controller: 'restaurantDetailsController'
+    }
 	otherwise({
             redirectTo: '/'
 	});

@@ -66,6 +66,18 @@ createController.controller('createController', ['$scope', '$routeParams', funct
     
 }]);
 
+//added by Seven
+var restaurantDetailsController = angular.module('restaurantDetailsController',[]);
+
+restaurantDetailsController.controller('restaurantDetailsController', ['$scope', '$routeParams', function($scope, $routeParams) {
+    // do this to show the menu on the left
+    showMenu().done(function(data) {
+	$scope.leftMenu = data;
+	$scope.$apply();
+    });
+}]);
+
+
 // AFF MENU ON THE LEFT
 
 function showMenu() {

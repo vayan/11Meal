@@ -1,5 +1,7 @@
 package com.vaya.elevenMeal;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +78,17 @@ public class RestaurantDetailActivity extends FragmentActivity {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				Log.i("Moi", "Clock");
+//				final AlertDialog.Builder dialog = new DiaAlertDialog.Builderlog(getApplicationContext());
+//				dialog.setView(R.layout.dialog_restaurant_contact);
+//				dialog.setTitle(R.string.contact);
+//				dialog.findViewById(R.id.dialogDismiss).setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View arg0) {
+//						dialog.dismiss();
+//					}
+//				});
+//				dialog.show();
 				return false;
 			}
 		});

@@ -20,6 +20,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.vaya.elevenMeal.dummy.OnTaskCompleted;
 import com.vaya.elevenMeal.restaurant.*;
 
 import android.os.AsyncTask;
@@ -30,11 +31,22 @@ public class API {
 	// TODO: Put it in settings?
 	protected String mUrl;
 	protected Gson mGson;
+	protected OnTaskCompleted mListener;
 
 	public API() {
+		init();
+	}
+	
+	public API(OnTaskCompleted listener) {
+		init();
+		this.mListener = listener;
+	}
+	
+	private void init() {
 		mUrl = "http://galan.im:8181";
 		mGson = new GsonBuilder()
 		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+		mListener = null;
 	}
 
 	public IRestaurantObject create(IRestaurantObject object) {
@@ -45,17 +57,22 @@ public class API {
 		return null;
 	}
 
-	public IRestaurantObject get(IRestaurantObject from, String column, int id) {
-		String oClass  = from.getClass().toString();
-		String sId     = String.valueOf(id);
-		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + sId);
-		//Type type = TypeToken.get(ArrayList<from.getClass()>).getType();
-		//new RequestTask(type).execute(request);
+	public IRestaurantObject get(IRestaurantObject from, String column, String search) {
+		String oClass  = from.getClass().getSimpleName();
+		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + search);
+		new RequestTask(getType(oClass)).execute(request);
+		return null; //TODO: complete stub
+	}
+
+	public IRestaurantObject getAll(IRestaurantObject from) {
+		String oClass  = from.getClass().getSimpleName();
+		HttpGet request = new HttpGet(mUrl + "/" + oClass);
+		new RequestTask(getType(oClass)).execute(request);
 		return null; //TODO: complete stub
 	}
 
 	public IRestaurantObject update(IRestaurantObject object) {
-		String oClass  = object.getClass().toString();
+		String oClass  = object.getClass().getSimpleName();
 		HttpPut request = new HttpPut("/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
 		new RequestTask(getType(oClass)).execute(request);
@@ -63,7 +80,7 @@ public class API {
 	}
 
 	public boolean delete(IRestaurantObject object) {
-		String oClass  = object.getClass().toString();
+		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
 		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
 		new RequestTask(getType(oClass)).execute(request);
@@ -95,19 +112,19 @@ public class API {
 		Type type = null;
 		switch (objectName) {
 		case "Meal":
-			type = new TypeToken<Meal>(){}.getType();
+			type = new TypeToken<ArrayList<Meal>>(){}.getType();
 			break ;
 		case "Order":
-			type = new TypeToken<Order>(){}.getType();
+			type = new TypeToken<ArrayList<Order>>(){}.getType();
 			break ;
 		case "Reservation":
-			type = new TypeToken<Reservation>(){}.getType();
+			type = new TypeToken<ArrayList<Reservation>>(){}.getType();
 			break ;
 		case "Restaurant":
-			type = new TypeToken<Restaurant>(){}.getType();
+			type = new TypeToken<ArrayList<Restaurant>>(){}.getType();
 			break ;
 		case "User":
-			type = new TypeToken<User>(){}.getType();
+			type = new TypeToken<ArrayList<User>>(){}.getType();
 			break ;
 		}
 		return type;
@@ -155,7 +172,8 @@ public class API {
 			if (result == null)
 				return ;
 			Log.d("API.onPostExecute", result);
-			mGson.fromJson(result, mType);
+			if (mListener != null)
+				mListener.onTaskCompleted(mGson.fromJson(result, mType));
 		}
 	}
 }

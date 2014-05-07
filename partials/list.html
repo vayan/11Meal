@@ -107,6 +107,12 @@
 	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.date}}</td>
 	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.state}}</td>
 	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.payMethod}}</td>
+        <td>
+          <button class="btn btn-default btn-lg"
+              ng-click="">
+        <span class="glyphicon glyphicon-ok"></span>
+          </button>
+        </td>
 	    <td>
 	      <button class="btn btn-default btn-lg"
 		      ng-click="deleteIt(item.type, item.id)">

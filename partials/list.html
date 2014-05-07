@@ -52,18 +52,21 @@
             <th>name</th>
             <th>price</th>
             <th>cat</th>
+	    <th>delete</th>
 	  </tr>
           <tr ng-if="Type == 'reservation'">
             <th>id</th>
             <th>Date</th>
             <th>State</th>
-            <th>Payment</th>
+            <th>Payment</th
+	    <th>delete</th>>
 	  </tr>
           <tr ng-if="Type == 'order'">
             <th>id</th>
             <th>Reservation</th>
             <th>Total Price</th>
             <th>User</th>
+	    <th>delete</th>
 	  </tr>
           <tr ng-if="Type == 'usermeal'">
             <th>id</th>
@@ -71,6 +74,7 @@
             <th>Meal</th>
             <th>Quantity</th>
 	    <th>Price</th>
+	    <th>delete</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -115,6 +119,7 @@
 	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.reservation}}</td>
 	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.totalPrice}}</td>
 	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.user}}</td>
+	    <td>
 	      <button class="btn btn-default btn-lg"
 		      ng-click="deleteIt(item.type, item.id)">
 		<span class="glyphicon glyphicon-remove"></span>

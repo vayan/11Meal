@@ -20,7 +20,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.vaya.elevenMeal.dummy.OnTaskCompleted;
 import com.vaya.elevenMeal.restaurant.*;
 
 import android.os.AsyncTask;
@@ -64,11 +63,11 @@ public class API {
 		return null; //TODO: complete stub
 	}
 
-	public IRestaurantObject getAll(IRestaurantObject from) {
+	public void getAll(IRestaurantObject from) {
 		String oClass  = from.getClass().getSimpleName();
 		HttpGet request = new HttpGet(mUrl + "/" + oClass);
 		new RequestTask(getType(oClass)).execute(request);
-		return null; //TODO: complete stub
+		//TODO: complete stub
 	}
 
 	public IRestaurantObject update(IRestaurantObject object) {

@@ -1,5 +1,7 @@
 package com.vaya.elevenMeal;
 
+import com.vaya.elevenMeal.restaurant.Restaurant;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -59,13 +61,13 @@ public class RestaurantListActivity extends FragmentActivity implements
 	 * that the item with the given ID was selected.
 	 */
 	@Override
-	public void onItemSelected(int id) {
+	public void onItemSelected(Restaurant resto) {
 		if (mTwoPane) {
 			// In two-pane mode, show the detail view in this activity by
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putLong(RestaurantDetailFragment.ARG_ITEM_ID, id);
+			arguments.putLong(RestaurantDetailFragment.ARG_ITEM_ID, resto.getId());
 			RestaurantDetailFragment fragment = new RestaurantDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
@@ -77,7 +79,7 @@ public class RestaurantListActivity extends FragmentActivity implements
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this,
 					RestaurantDetailActivity.class);
-			detailIntent.putExtra(RestaurantDetailFragment.ARG_ITEM_ID, id);
+			detailIntent.putExtra(RestaurantDetailFragment.ARG_ITEM_ID, resto.getId());
 			startActivity(detailIntent);
 		}
 	}

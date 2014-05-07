@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -32,7 +33,7 @@ import com.vaya.elevenMeal.restaurant.Restaurant;
  * either contained in a {@link RestaurantListActivity} in two-pane mode (on
  * tablets) or a {@link RestaurantDetailActivity} on handsets.
  */
-public class RestaurantDetailFragment extends Fragment {
+public class RestaurantDetailFragment extends Fragment implements OnTaskCompleted{
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -48,7 +49,8 @@ public class RestaurantDetailFragment extends Fragment {
 	private TextView mMenu;
 	private TextView mCall;
 	private TextView mPosition;
-
+	private TextView mName;
+	private TextView mText;
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -65,8 +67,9 @@ public class RestaurantDetailFragment extends Fragment {
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
 			int i = getArguments().getInt(ARG_ITEM_ID);
-			mItem = DummyContent.ITEM_MAP.get(getArguments()
-					.getInt(ARG_ITEM_ID));
+			new API(this).get(new Restaurant(), "Id", String.valueOf(i));
+			/*mItem = DummyContent.ITEM_MAP.get(getArguments()
+					.getInt(ARG_ITEM_ID));*/
 		}
 	}
 
@@ -87,10 +90,8 @@ public class RestaurantDetailFragment extends Fragment {
 		 * .setImageDrawable(this.getResources().getDrawable(
 		 * R.drawable.dummy));
 		 */
-		((TextView) rootView.findViewById(R.id.restaurantDetailsName))
-				.setText(mItem.getName());
-		((TextView) rootView.findViewById(R.id.restaurantDetailsText))
-				.setText(mItem.getAddress());
+		mName = ((TextView) rootView.findViewById(R.id.restaurantDetailsName));
+		mText = ((TextView) rootView.findViewById(R.id.restaurantDetailsText));
 		// }
 		return rootView;
 	}
@@ -156,5 +157,13 @@ public class RestaurantDetailFragment extends Fragment {
 		if (mCall != null)
 			mCall.setOnTouchListener(null);
 		super.onPause();
+	}
+
+	@Override
+	public void onTaskCompleted(Object res) {
+		// TODO Auto-generated method stub
+		mItem = ((List<Restaurant>) res).get(0);
+		mName.setText(mItem.getName());
+		mText.setText(mItem.getAddress());
 	}
 }

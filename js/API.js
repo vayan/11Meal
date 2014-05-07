@@ -48,22 +48,25 @@ var API = {
     }
 }
 
-function User () {
-    this.id = 0;
+function User (tmp) {
+    this.id = tmp.Id;
     this.type = "user";
-    this.firstName = "";
-    this.lastName = "";
-    this.email = "";
-    this.phone = "";
-    this.login = "";
+    this.firstName = tmp.First_name;
+    this.lastName = tmp.Last_name;
+    this.email = tmp.Email;
+    this.phone = tmp.Phone;
+    this.phoneUID = tmp.PhoneUID;
+    this.login = tmp.Login;
 }
 
 function Reservation (tmp) {
     this.id = tmp.Id;
     this.type = "reservation";
+    this.user = tmp.User;
+    this.restaurant = tmp.Restaurant;
     this.date = tmp.Date;
     this.state = tmp.State;
-    this.payMethod = tmp.PaymentMethod;
+    this.payMethod = tmp.PayementMethod;
 
     this.changeState = function (newState) {
 	this.state = newState;
@@ -71,12 +74,6 @@ function Reservation (tmp) {
 	//TODO: update reservation in API
 	API.update(this);
     };
-    //cannot be called delete, it already exist in JS
-    this.remove = function () {
-	//TODO: delete reservation in API
-	API.delete(this);
-    };
-    
 }
 
 function Restaurant (tmp) {
@@ -85,15 +82,9 @@ function Restaurant (tmp) {
     this.address = tmp.Address;
     this.position = tmp.Position;
     this.name = tmp.Name;
-    this.timetable = "";
-    this.phone = "";
-
-    this.update = function () {
-	//TODO: update into API
-    };
-    this.remove = function () {
-	//TODO: remove into API
-    };
+    this.schedule = tmp.Schedule;
+    this.phone = tmp.Phone;
+    this.description = tmp.Description;
 }
 
 function Meal (tmp) {
@@ -103,29 +94,26 @@ function Meal (tmp) {
     this.name = tmp.Name;
     this.price = tmp.Price;
     this.cat = tmp.Type;
-
-    this.update = function () {
-	//TODO: update into API
-    };
-    this.remove = function () {
-	//TODO: remove into API
-    };
 }
 
-function Order (tmp) {
+function Order (tmp, meal) {
     this.id = tmp.Id;
     this.type = "Order";
     this.totalPrice = tmp.Total_price;
-    this.ser = tmp.User;
+    this.user = tmp.User;
     this.reservation = tmp.Reservation;
-    this.meals = tmp.Meals;
-    //TODO:update orders ? addMeal ? deleteMeal ?
-
-    this.getTotalPrice = function () {
-	return 12;
-    }
 }
 
+function UserMeal (tmp) {
+    this.id = tmp.Id;
+    this.type = "Meal";
+    this.order = tmp.Order;
+    this.meal = tmp.Meal;
+    this.restaurant = tmp.Restaurant;
+    this.name = tmp.Name;
+    this.price = tmp.Price;
+    this.quantity = tmp.Quantity;
+}
 
 
 // usefull fonctions, they should be in another file (><)

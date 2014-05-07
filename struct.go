@@ -19,6 +19,7 @@ type User struct {
 	Email      string `db:"email"`
 	Phone      string `db:"phone"`
 	PhoneUID   string `db:"phoneuid"`
+	GCM_ID     string `db:"gcmid"`
 	Login      string `db:"login"`
 }
 

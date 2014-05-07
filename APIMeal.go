@@ -32,7 +32,7 @@ func atoi(s string) int {
 func send_gcm(msg string) error {
 	reqGCM := RequestGCM{
 		"AIzaSyBAEuckZUufUFtiMw4zq6gYCDAhBD6Iy9w",
-		[]string{"2", "3", "4"},
+		[]string{"APA91bEdfxCFNZCYdmHmQbO2EgUSfZcFdKtQWf9zp7uVw2DekZQKGevqvvNV_z-9iGi_wtvYEELMXVK6Ac-0-yPJ9UeFfBYbmhxcx2lCB2Zqbhq79qYGYw7QMYoHZuYYXpZwpljOVILbPwRwzBBKypDPFxZnCyrlkw", "3", "4"},
 		map[string]string{"test": "nothing"}}
 	data, err := json.Marshal(reqGCM)
 	if err != nil {
@@ -43,7 +43,10 @@ func send_gcm(msg string) error {
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("POST", "https://android.googleapis.com/gcm/send", bytes.NewReader(data))
+	req, _ := http.NewRequest(
+		"POST",
+		"https://android.googleapis.com/gcm/send",
+		bytes.NewReader(data))
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "key="+reqGCM.API_Key)
 	resp, err := client.Do(req)
@@ -87,6 +90,7 @@ func start_web_server() {
 	r.HandleFunc("/{table}/{column}/{id}", handleglobal)
 	r.HandleFunc("/{table}/{id}", handleglobal)
 	r.HandleFunc("/{table}", handleglobal)
+	r.HandleFunc("/gcm", handleGCM)
 
 	http.Handle("/", r)
 

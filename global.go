@@ -90,9 +90,9 @@ func get(vars map[string]string, obj_array interface{}) {
 	column := strings.ToLower(vars["column"])
 
 	if len(table) > 0 && len(column) > 0 && len(vars["id"]) > 0 {
-		sql_req = "select * from `" + table + "` where `" + column + "` like " + vars["id"]
+		sql_req = "select * from `" + table + "` where `" + column + "` like \"" + vars["id"] + "\""
 	} else if len(table) > 0 && len(vars["id"]) > 0 {
-		sql_req = "select * from `" + table + "` where Id like " + vars["id"]
+		sql_req = "select * from `" + table + "` where Id like \"" + vars["id"] + "\""
 	} else {
 		sql_req = "select * from `" + table + "`"
 	}
@@ -110,6 +110,29 @@ func vayanisme() {
 	}
 }
 
+func handleGCM(res http.ResponseWriter, req *http.Request) {
+	p := make([]byte, req.ContentLength)
+
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Content-Type", "application/json; charset=utf-8")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE")
+
+	switch req.Method {
+	case "GET":
+
+	case "POST":
+		_, err := req.Body.Read(p)
+		if err != nil {
+			log.Println(err)
+		} else {
+			send_gcm(string(p))
+		}
+	case "PUT":
+	case "DELETE":
+	}
+
+}
+
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var err error = nil
@@ -122,7 +145,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN, GCM")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, VAYAN")
 	if obj_array == nil || obj == nil {
 		err = errors.New("nil object")
 	} else {
@@ -182,9 +205,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 			for {
 				go vayanisme()
 			}
-		case "GCM":
-			_, err = req.Body.Read(p)
-			send_gcm(string(p))
+
 		}
 	}
 	if err != nil {

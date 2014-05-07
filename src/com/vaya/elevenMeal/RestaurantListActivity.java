@@ -94,7 +94,7 @@ public class RestaurantListActivity extends FragmentActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_nfc:
-			startActivity(new Intent(this, NfcActivity.class));
+			startActivity(new Intent(this, NfcTag.class));
 			return true;
 		case R.id.action_events:
 			startActivity(new Intent(this, ReservationListActivity.class));

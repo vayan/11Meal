@@ -26,6 +26,11 @@ public class Reservation implements IRestaurantObject {
 	protected State mState;
 	protected Payment mPayMethod;
 	
+	public Reservation(int id)
+	{
+		mId = id;
+	}
+	
 	// Getters/setters
 	public int getId() {
 		return mId;

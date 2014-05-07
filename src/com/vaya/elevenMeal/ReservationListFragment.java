@@ -71,10 +71,7 @@ public class ReservationListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO: replace with a real list adapter.
-		setListAdapter(new ArrayAdapter<Reservation>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, DummyContent.ITEMS_BOOKS));
+		setListAdapter(new ReservationListAdapter(getActivity(), R.layout.adapter_reservation_list, DummyContent.ITEMS_BOOKS));
 	}
 
 	@Override

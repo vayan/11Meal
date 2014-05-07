@@ -21,5 +21,9 @@
     <string name="friends">Friends</string>
     <string name="order">Order</string>
     <string name="validate">Validate</string>
+    <string name="viewOnMap">View on a map</string>
+    <string name="date">Date</string>
+    <string name="hour">Hour</string>
+    <string name="payMethod">Payment Method</string>
 
 </resources>

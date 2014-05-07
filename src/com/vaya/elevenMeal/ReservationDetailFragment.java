@@ -42,7 +42,7 @@ public class ReservationDetailFragment extends Fragment {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			mItem = DummyContent.ITEM_MAP_BOOKS.get(getArguments().getString(
+			mItem = DummyContent.ITEM_MAP_BOOKS.get(getArguments().getInt(
 					ARG_ITEM_ID));
 		}
 	}
@@ -55,8 +55,8 @@ public class ReservationDetailFragment extends Fragment {
 
 		// Show the dummy content as text in a TextView.
 		if (mItem != null) {
-			((TextView) rootView.findViewById(R.id.reservation_detail))
-					.setText(mItem.getId());
+			((TextView) rootView.findViewById(R.id.reservationResName))
+					.setText(mItem.getOwner().getLogin());
 		}
 
 		return rootView;

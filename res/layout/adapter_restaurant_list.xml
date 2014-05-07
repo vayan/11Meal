@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/restaurantPreview"
+        android:lines="1"
         android:padding="5dp"
         android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/restaurantTitle"
         android:layout_below="@+id/restaurantTitle"
+        android:lines="1"
         android:padding="5dp"
         android:text="Details"
         android:textAppearance="?android:attr/textAppearanceSmall" />

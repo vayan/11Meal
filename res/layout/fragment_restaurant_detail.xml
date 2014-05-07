@@ -10,40 +10,41 @@
         android:layout_height="175dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:background="@drawable/shadow_bottom"
         android:scaleType="centerCrop"
-        android:background="@drawable/shadow"
         android:src="@drawable/dummy" />
-    
+
     <TextView
         android:id="@+id/restaurantDetailsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/restaurantDetailsPreview"
- 		android:paddingLeft="25dp"
- 		android:paddingRight="10dp"
- 		android:paddingTop="5dp"
- 		android:paddingBottom="5dp"
+        android:layout_alignParentLeft="true"
         android:layout_marginBottom="25dp"
+        android:background="#BB000000"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:background="#BB000000"
         android:textColor="@android:color/white" />
-    
-    <View 
+
+    <View
         android:id="@+id/shadowRDP"
-        android:layout_below="@+id/restaurantDetailsPreview"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@drawable/shadow" />
+        android:layout_below="@+id/restaurantDetailsPreview"
+        android:background="@drawable/shadow_bottom" />
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
         android:layout_above="@+id/restaurantDetailsReservation"
-        android:layout_below="@+id/shadowRDP" >
+        android:layout_below="@+id/shadowRDP"
+        android:layout_marginTop="-5dp"
+        android:fillViewport="true" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -72,10 +73,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/separation1"
+                android:background="@drawable/selector"
+                android:clickable="true"
                 android:padding="10dp"
                 android:text="@string/menu"
-                android:clickable="true"
-                android:background="@drawable/selector"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <View
@@ -91,10 +92,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/separation2"
+                android:background="@drawable/selector"
+                android:clickable="true"
                 android:padding="10dp"
                 android:text="@string/call"
-                android:clickable="true"
-                android:background="@drawable/selector"
                 android:textAppearance="?android:attr/textAppearanceMedium" >
             </TextView>
 
@@ -105,8 +106,28 @@
                 android:layout_below="@+id/restaurantDetailsCall"
                 android:background="@android:color/darker_gray" />
 
+            <TextView
+                android:id="@+id/restaurantDetailsPosition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/separation3"
+                android:background="@drawable/selector"
+                android:clickable="true"
+                android:padding="10dp"
+                android:text="@string/viewOnMap"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <View
+                android:id="@+id/separation4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/restaurantDetailsPosition"
+                android:background="@android:color/darker_gray" />
+
             <ImageView
-                android:id="@+id/ImageView01"
+                android:id="@+id/bla1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -114,24 +135,38 @@
                 android:src="@android:drawable/ic_menu_info_details" />
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/bla2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/separation2"
                 android:src="@android:drawable/ic_menu_info_details" />
+
+            <ImageView
+                android:id="@+id/bla3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/separation3"
+                android:src="@android:drawable/ic_menu_info_details" />
         </RelativeLayout>
     </ScrollView>
-	
-    
+
+    <View
+        android:id="@+id/shadowRDP2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_above="@+id/restaurantDetailsReservation"
+        android:background="@drawable/shadow_top" />
+
+
     <Button
         android:id="@+id/restaurantDetailsReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:background="@drawable/button"
         android:text="@string/book" />
-
-
 
 </RelativeLayout>

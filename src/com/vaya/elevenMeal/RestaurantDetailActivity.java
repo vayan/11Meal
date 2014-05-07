@@ -25,8 +25,7 @@ import android.widget.Toast;
  * a {@link RestaurantDetailFragment}.
  */
 public class RestaurantDetailActivity extends FragmentActivity {
-	private TextView mMenu;
-	private TextView mCall;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,49 +61,9 @@ public class RestaurantDetailActivity extends FragmentActivity {
 	
 	@Override
 	protected void onResume() {
-		mMenu = (TextView) findViewById(R.id.restaurantDetailsMenu);
-		mCall = (TextView) findViewById(R.id.restaurantDetailsCall);
-		
-		mMenu.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Log.i("Moi", "Click");
-				return false;
-			}
-		});
-		
-		mCall.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-//				final AlertDialog.Builder dialog = new DiaAlertDialog.Builderlog(getApplicationContext());
-//				dialog.setView(R.layout.dialog_restaurant_contact);
-//				dialog.setTitle(R.string.contact);
-//				dialog.findViewById(R.id.dialogDismiss).setOnClickListener(new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(View arg0) {
-//						dialog.dismiss();
-//					}
-//				});
-//				dialog.show();
-				return false;
-			}
-		});
+
 		
 		super.onResume();
-	}
-	
-	@Override
-	protected void onPause() {
-		if (mMenu != null)
-			mMenu.setOnTouchListener(null);
-		if (mCall != null)
-			mCall.setOnTouchListener(null);
-		mMenu = null;
-		mCall = null;
-		super.onPause();
 	}
 	
 	@Override

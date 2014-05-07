@@ -70,10 +70,6 @@ public class RestaurantListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO: replace with a real list adapter.
-		/*setListAdapter(new ArrayAdapter<Restaurant>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, DummyContent.ITEMS));*/
 		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, DummyContent.ITEMS));
 	}
 

@@ -2,52 +2,65 @@ package com.vaya.elevenMeal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.vaya.elevenMeal.restaurant.IRestaurantObject;
 import com.vaya.elevenMeal.restaurant.User;
 
 import android.os.AsyncTask;
 
 public class API {
-	public static enum RequestType {
-		GET,
-		PUT,
-		POST,
-		DELETE,
-	}
 
 	// TODO: Put it in settings?
-	protected String mUrl = "http://localhost:8181";
+	protected String mUrl = "http://192.168.0.101:8181";
 
 	public IRestaurantObject create(IRestaurantObject object) {
-		//TODO: use from.getClass()
-		return null; //TODO: complete stub
+		String oClass  = object.getClass().getSimpleName();
+		HttpPost request = new HttpPost("/" + oClass);
+		request.setEntity(makeJSONObjectEntity(object));
+		Type type = TypeToken.get(object.getClass().getDeclaringClass()).getType();
+		new RequestTask(type).execute(request);
+		return null;
 	}
+
 	public IRestaurantObject get(IRestaurantObject from, String column, int id) {
+		String oClass  = from.getClass().toString();
+		String sId     = String.valueOf(id);
+		HttpGet request = new HttpGet("/" + oClass + "/" + column + "/" + sId);
+		//Type type = TypeToken.get(ArrayList<from.getClass()>).getType();
+		//new RequestTask(type).execute(request);
 		return null; //TODO: complete stub
 	}
-	
+
 	public IRestaurantObject update(IRestaurantObject object) {
-		return null; //TODO: complete stub
+		String oClass  = object.getClass().toString();
+		HttpPut request = new HttpPut("/" + oClass);
+		request.setEntity(makeJSONObjectEntity(object));
+		//new RequestTask().execute(request);
+		return null;
 	}
 
 	public boolean delete(IRestaurantObject object) {
 		String oClass  = object.getClass().toString();
 		String oId     = String.valueOf(object.getId());
-		String request = "/" + oClass + "/" + oId;
-		new RequestTask(RequestType.DELETE).execute(request);
-		return false; //TODO: complete stub
+		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
+		Type type = TypeToken.get(object.getClass()).getType();
+		new RequestTask(type).execute(request);
+		return false;
 	}
 
 	public boolean createUser(User user, String password) {
@@ -57,37 +70,35 @@ public class API {
 	public boolean authenticate(String login, String password) {
 		return false; //TODO: complete stub
 	}
-	
-	private class RequestTask extends AsyncTask<String, String, String>{
-		private URL mURL;
-		private HttpRequestBase mRequest;
-		
-		public RequestTask(RequestType type) {
-			HttpRequestBase request[] = {
-					new HttpGet(),
-					new HttpPut(),
-					new HttpPost(),
-					new HttpDelete(),
-			};
-			mRequest = request[type.ordinal()];
-			
+
+	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
+		try {
+			return new StringEntity("{TODO}");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	private class RequestTask extends AsyncTask<HttpRequestBase, String, String>{
+		Type mType;
+
+		public RequestTask(Type type) {
+			// TODO Auto-generated constructor stub
 		}
 
 		@Override
-		protected String doInBackground(String... path) {
-			try {
-				mURL = new URL(mUrl + path[0]);
-			} catch (MalformedURLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				return null;
-			}
+		protected String doInBackground(HttpRequestBase... requests) {
+			HttpRequestBase request = requests[0];
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpResponse response;
 			String responseString = null;
 			try {
-				mRequest.setURI(mURL.toURI());
-				response = httpclient.execute(mRequest);
+				request.addHeader("Accept", "application/json");
+				request.addHeader("Content-type", "application/json");
+				response = httpclient.execute(request);
 				StatusLine statusLine = response.getStatusLine();
 				if(statusLine.getStatusCode() == HttpStatus.SC_OK){
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -103,9 +114,6 @@ public class API {
 				//TODO Handle problems..
 			} catch (IOException e) {
 				//TODO Handle problems..
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			return responseString;
 		}
@@ -113,7 +121,7 @@ public class API {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			//Do anything with response..
+			new Gson().fromJson(result, mType);
 		}
 	}
 }

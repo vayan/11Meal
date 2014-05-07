@@ -86,12 +86,10 @@
 	    </td>
 	  </tr>
 	  <tr ng-repeat="item in List" ng-if="Type == 'reservation'">
-	    <td><a href="index.html#/list/order/Reservation/{{item.id}}">
-		{{item.id}}</a></td>
+            <td>{{item.id}}</td>
 	    <td>{{item.date}}</td>
 	    <td>{{item.state}}</td>
 	    <td>{{item.payMethod}}</td>
-	    </div>
 	    <td>
 	      <a class="btn btn-default btn-lg"
 		 href="index.html#/delete/{{item.type}}/{{item.id}}" >

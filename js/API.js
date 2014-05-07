@@ -1,13 +1,17 @@
 var API = {
     url : "http://localhost:8181/",
-    
+    id : null,
     get : function (objClass, column, id) {
+
+	console.log(objClass+"|"+column+"|"+id);
+
 	var geturl = this.url + objClass;
 
 	if (column != null)
 	    geturl = geturl + "/" + column;
 	if (id != null)
 	    geturl = geturl + "/" + id;
+	console.log(geturl);
 	var res = $.getJSON(geturl);//.done(function( data ) {this.res = data;return res});
 	console.log(res);
 	return res;
@@ -21,12 +25,25 @@ var API = {
 	})
 	return res;
     },
-    create : function (objClass, json) {return true},
-    authenticate : function (login, password) 
-    {
+    create : function (objClass, obj) {
+	var createUrl = this.url + objClass;
+	console.log(createUrl);
+	console.log(JSON.stringify(obj));
+	var res = $.post(createUrl, JSON.stringify(obj),function( data ) {}, "json");
+	return res;
+    },
+    authenticate : function (login, password) {
 	//TODO: if server return true, change 1234 to real uuid
-	createCookie("session", 1234, 100);
-	location.assign("index.html#/");
+	API.get("restaurant","Id",password).done(function (data){
+	    console.log(data[0].Name);
+	    if (data[0].Name == login) {   
+		utils.createCookie("session",data[0].Id, 100);
+		this.id = data[0].Id;
+		console.log(this.id);
+		location.assign("index.html#/");
+	    }
+	    return true;
+	});
 	return true;
     }
 }
@@ -44,10 +61,9 @@ function User () {
 function Reservation (tmp) {
     this.id = tmp.Id;
     this.type = "reservation";
-    this.date = date.now();
-    this.state = ReservationState.OPENED;
-    this.isFinished = tmp.Is_finished;
-    this.payMethod = PayMethod.CASH;
+    this.date = tmp.Date;
+    this.state = tmp.State;
+    this.payMethod = tmp.PaymentMethod;
 
     this.changeState = function (newState) {
 	this.state = newState;
@@ -112,32 +128,33 @@ function Order (tmp) {
 
 
 
-    // usefull fonctions, they should be in another file (><)
+// usefull fonctions, they should be in another file (><)
 
-    var ReservationState = {
-	OPENED : 0,
-	CONFIRMED : 1,
-	QUEUED : 2,
-	DONE : 3,
-	CANCELED : 4
+var ReservationState = {
+    OPENED : 0,
+    CONFIRMED : 1,
+    QUEUED : 2,
+    DONE : 3,
+    CANCELED : 4
+}
+
+var PayMethod = {
+    CASH : 0,
+    CHECK : 1,
+    CARD : 2
     }
 
-    var PayMethod = {
-	CASH : 0,
-	CHECK : 1,
-	CARD : 2
-    }
+var FoodCat = {
+    STARTER : 0,
+    MAIN : 1,
+    DESSERT : 2,
+    DRINK : 3,
+    SOUP : 4,
+    UNDEFINED : 5
+}
 
-    var FoodCat = {
-	STARTER : 0,
-	MAIN : 1,
-	DESSERT : 2,
-	DRINK : 3,
-	SOUP : 4,
-	UNDEFINED : 5
-    }
-
-    function createCookie(name,value,days) {
+var utils = {
+    createCookie : function(name,value,days) {
 	if (days) {
             var date = new Date();
             date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -145,8 +162,8 @@ function Order (tmp) {
 	}
 	else var expires = "";
 	document.cookie = name+"="+value+expires+"; path=/";
-    }
-    function readCookie(name) {
+    },
+    readCookie : function(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
 	for(var i=0;i < ca.length;i++) {
@@ -155,13 +172,14 @@ function Order (tmp) {
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 	}
 	return null;
-    }
-    function eraseCookie(name) {
+    },
+    eraseCookie : function(name) {
 	createCookie(name,"",-1);
-    }
-    function genUuid() {
+    },
+    genUuid : function() {
 	return ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 	    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 	    return v.toString(16);
 	}));
     }
+}

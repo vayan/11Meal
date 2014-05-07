@@ -13,13 +13,17 @@ import com.vaya.elevenMeal.restaurant.Reservation;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
+//Callback for android
+
+
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class DummyContent implements OnTaskCompleted{
+	
 	
 	/**
 	 * An array of sample (dummy) items.
@@ -53,5 +57,11 @@ public class DummyContent {
 		item.setOwner(user);
 		ITEMS_BOOKS.add(item);
 		ITEM_MAP_BOOKS.put(item.getId(), item);
+	}
+
+	@Override
+	public void onTaskCompleted() {
+		// TODO Auto-generated method stub
+		
 	}
 }

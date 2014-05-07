@@ -2,8 +2,8 @@ package com.vaya.elevenMeal.test;
 
 import java.util.ArrayList;
 
-import com.vaya.elevenMeal.Meal;
-import com.vaya.elevenMeal.Order;
+import com.vaya.elevenMeal.restaurant.Meal;
+import com.vaya.elevenMeal.restaurant.Order;
 
 import junit.framework.TestCase;
 

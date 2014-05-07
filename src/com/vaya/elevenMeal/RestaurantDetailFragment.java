@@ -1,13 +1,24 @@
 package com.vaya.elevenMeal;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Iterator;
+
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Restaurant;
 
 /**
  * A fragment representing a single Restaurant detail screen. This fragment is
@@ -41,7 +52,8 @@ public class RestaurantDetailFragment extends Fragment {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			mItem = DummyContent.ITEM_MAP.get(getArguments().getString(
+			int i = getArguments().getInt(ARG_ITEM_ID);
+			mItem = DummyContent.ITEM_MAP.get(getArguments().getInt(
 					ARG_ITEM_ID));
 		}
 	}
@@ -53,11 +65,15 @@ public class RestaurantDetailFragment extends Fragment {
 				container, false);
 
 		// Show the dummy content as text in a TextView.
-		if (mItem != null) {
-			((TextView) rootView.findViewById(R.id.restaurant_detail))
-					.setText(mItem.mAddress);
-		}
-
+		// if (mItem != null) {
+		/*((ImageView) rootView.findViewById(R.id.restaurantDetailsPreview))
+				.setImageDrawable(this.getResources().getDrawable(
+						R.drawable.dummy));*/
+		((TextView) rootView.findViewById(R.id.restaurantDetailsName))
+				.setText(mItem.getName());
+		((TextView) rootView.findViewById(R.id.restaurantDetailsText))
+				.setText(mItem.getAddress());
+		// }
 		return rootView;
 	}
 }

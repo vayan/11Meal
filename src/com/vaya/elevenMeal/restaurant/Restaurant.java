@@ -1,9 +1,9 @@
-package com.vaya.elevenMeal;
+package com.vaya.elevenMeal.restaurant;
 
 import java.util.Date;
 import java.util.List;
 
-public class Restaurant {
+public class Restaurant implements IRestaurantObject {
 	//Attributes
 	protected int mId;
 	protected String mName;

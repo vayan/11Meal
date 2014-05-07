@@ -8,17 +8,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Reservation;;;
 
 /**
- * A list fragment representing a list of Restaurants. This fragment also
+ * A list fragment representing a list of Reservations. This fragment also
  * supports tablet devices by allowing list items to be given an 'activated'
  * state upon selection. This helps indicate which item is currently being
- * viewed in a {@link RestaurantDetailFragment}.
+ * viewed in a {@link ReservationDetailFragment}.
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class RestaurantListFragment extends ListFragment {
+public class ReservationListFragment extends ListFragment {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -63,7 +64,7 @@ public class RestaurantListFragment extends ListFragment {
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public RestaurantListFragment() {
+	public ReservationListFragment() {
 	}
 
 	@Override
@@ -71,10 +72,9 @@ public class RestaurantListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		// TODO: replace with a real list adapter.
-		/*setListAdapter(new ArrayAdapter<Restaurant>(getActivity(),
+		setListAdapter(new ArrayAdapter<Reservation>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, DummyContent.ITEMS));*/
-		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, DummyContent.ITEMS));
+				android.R.id.text1, DummyContent.ITEMS_BOOKS));
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class RestaurantListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).getId());
+		mCallbacks.onItemSelected(DummyContent.ITEM_MAP_BOOKS.get(position).getId());
 	}
 
 	@Override

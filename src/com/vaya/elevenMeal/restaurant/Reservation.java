@@ -1,10 +1,10 @@
-package com.vaya.elevenMeal;
+package com.vaya.elevenMeal.restaurant;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-public class Reservation {
+public class Reservation implements IRestaurantObject {
 	public static enum State {
 		OPENED, // Reservation can be modified by users
 		CONFIRMED, // Confirmed by restaurant, read-only for user

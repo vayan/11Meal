@@ -1,11 +1,11 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
-      <ul class="nav nav-sidebar">
-        <li class="active"><a href="#">Overview</a></li>
-        <li><a href="#/list/reservation/null/null">Reservations</a></li>
-	<li><a href="#/list/order/null/null">Orders</a></li>
-	<li><a href="#/list/meal/null/null">Meals</a></li>
-        <li><a href="#">Statistics</a></li>
+      <ul class="nav nav-sidebar"  ng-init="partial = 'main'">
+        <li ng-class="{selected:partial=='active'}" ng-click=""><a href="#">Overview</a></li>
+        <li ng-class="{selected:partial=='active'}"><a href="#/list/reservation/null/null">Reservations</a></li>
+	<li ng-class="{selected:partial=='active'}"><a href="#/list/order/null/null">Orders</a></li>
+	<li ng-class="{selected:partial=='active'}"><a href="#/list/meal/null/null">Meals</a></li>
+        <li ng-class="{selected:partial=='active'}"><a href="#">Statistics</a></li>
       </ul>
     </div>

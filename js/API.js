@@ -18,7 +18,7 @@ var API = {
     },
     update : function (objClass, obj, id) {
     	var updateUrl = this.url+objClass+'/'+id;
-	console.log(updateUrl);
+	console.log(">>>>"+updateUrl);
 	console.log(JSON.stringify(obj));
 	var res = $.ajax({
 	    type : "PUT",
@@ -151,6 +151,29 @@ var FoodCat = {
     UNDEFINED : 5
 }
 
+var ReservationStateString = [
+    "OPENED",
+    "CONFIRMED",
+    "QUEUED",
+    "DONE",
+    "CANCELED"
+];
+
+var PayMethodString = [
+    "CASH",
+    "CHECK",
+    "CARD"
+];
+
+var FoodCatString = [
+    "STARTER",
+    "MAIN",
+    "DESSERT",
+    "DRINK",
+    "SOUP",
+    "UNDEFINED"
+];
+
 var utils = {
     createCookie : function(name,value,days) {
 	if (days) {
@@ -179,5 +202,19 @@ var utils = {
 	    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 	    return v.toString(16);
 	}));
+    },
+    showTime : function(timestamp) {
+	timestamp = new Date(parseInt(timestamp)*1000);
+	var weekday = new Array(7);
+	weekday[0]=  "Sunday";
+	weekday[1] = "Monday";
+	weekday[2] = "Tuesday";
+	weekday[3] = "Wednesday";
+	weekday[4] = "Thursday";
+	weekday[5] = "Friday";
+	weekday[6] = "Saturday";
+
+	var timeString = timestamp.getMonth()+"/"+timestamp.getDate()+"/"+timestamp.getFullYear()+" "+timestamp.getHours()+":"+timestamp.getMinutes();
+	return timeString;
     }
 }

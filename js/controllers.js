@@ -29,15 +29,20 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 	$scope.$apply();
     });
 
-    if ($routeParams.objClass == "reservation") {
+    if ($routeParams.objClass == "reservation" 
+	|| $routeParams.objClass == "meal"
+	|| ($routeParams.objClass == "order" 
+	    && $routeParams.column == "null")) {
 	column = "Restaurant";
 	value = id;
     }
 
     API.get($routeParams.objClass, column, value).done(function(data) {
 	var arraytmp = [];
-
-	var arraymeals = [];
+	$scope.resState = ReservationStateString; 
+	$scope.payMethod = PayMethodString; 
+	$scope.foodCat = FoodCatString; 
+	$scope.showTime = utils.showTime;
 	angular.forEach(data, function(value, key){
 	    if ($routeParams.objClass == "restaurant") {
 		console.log($routeParams.objClass);
@@ -62,7 +67,8 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 	    }
 	});
 	$scope.List = arraytmp;
-	$scope.$apply();
+	$scope.$apply()
+	$scope.colorState();
     });
     $scope.Type = $routeParams.objClass;
     console.log($scope.Type);
@@ -72,10 +78,31 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 	location.assign('#/delete/'+type+'/'+id);
     }
 
-    $scope.showRelated = function (objClass, type, id) {
-	location.assign('#/list/'+objClass+'/'+type+'/'+id);
+    $scope.showRelated = function (objClass, type, item) {
+	if (item.state != ReservationState.CANCELED 
+	    && item.state != ReservationState.OPENED)
+	location.assign('#/list/'+objClass+'/'+type+'/'+item.id);
     }
 
+    $scope.updateState = function (item, state) {
+        var obj = {};
+        obj["User"] = item.user;
+	obj["Restaurant"] = item.restaurant;
+	obj["Date"] = item.date;
+	obj["State"] = parseInt(state);
+	obj["PayementMethod"] = item.payMethod;
+        API.update("reservation", obj, item.id).done(function(data) {
+	    //location.reload();
+	});
+    }
+
+    $scope.colorState = function (state) {
+	$scope.CANCELED = "danger";
+	$scope.CONFIRMED = "warning";
+	$scope.QUEUED = "info";
+	$scope.DONE = "success";
+	return $scope.resState[state];
+    }
 
 }]);
 

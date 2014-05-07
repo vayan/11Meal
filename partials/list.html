@@ -58,8 +58,9 @@
             <th>id</th>
             <th>Date</th>
             <th>State</th>
-            <th>Payment</th
-	    <th>delete</th>
+            <th>Payment</th>
+	    <th>Ready</th>
+	    <th>Delete</th>
 	  </tr>
           <tr ng-if="Type == 'order'">
             <th>id</th>
@@ -94,7 +95,7 @@
             <td>{{item.id}}</td>
 	    <td>{{item.name}}</td>
 	    <td>{{item.price}}</td>
-	    <td>{{item.cat}}</td>
+	    <td>{{foodCat[item.cat]}}</td>
 	    <td>
 	      <button class="btn btn-default btn-lg"
 		      ng-click="deleteIt(item.type, item.id)">
@@ -102,30 +103,31 @@
 	      </button>
 	    </td>
 	  </tr>
-	  <tr ng-repeat="item in List" ng-if="Type == 'reservation'">
-	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.id}}</td>
-	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.date}}</td>
-	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.state}}</td>
-	    <td ng-click="showRelated('order', 'Reservation', item.id)">{{item.payMethod}}</td>
+	  <tr ng-repeat="item in List | orderBy:'date'" ng-if="Type == 'reservation'" ng-class="{{resState[item.state]}}">
+	    <td ng-click="showRelated('order', 'Reservation', item)">{{item.id}}</td>
+	    <td ng-click="showRelated('order', 'Reservation', item)">{{showTime(item.date)}}</td>
+	    <td ng-click="showRelated('order', 'Reservation', item)">{{colorState(item.state)}}</td>
+	    <td ng-click="showRelated('order', 'Reservation', item)">{{payMethod[item.payMethod]}}</td>
 
-        <td ng-if="item.state == 2">
+        <td>
           <button class="btn btn-default btn-lg"
-              ng-click="">
+		  ng-click="updateState(item, 3)"
+		  ng-if="item.state == 2">
         <span class="glyphicon glyphicon-ok"></span>
           </button>
         </td>
 	    <td>
 	      <button class="btn btn-default btn-lg"
-		      ng-click="deleteIt(item.type, item.id)">
+		      ng-click="updateState(item, 4)">
 		<span class="glyphicon glyphicon-remove"></span>
 	      </button>
 	    </td>
 	  </tr>
 	  <tr ng-repeat="item in List" ng-if="Type == 'order'">
-	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.id}}</td>
-	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.reservation}}</td>
-	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.totalPrice}}</td>
-	    <td ng-click="showRelated('usermeal', 'Order', item.id)">{{item.user}}</td>
+	    <td ng-click="showRelated('usermeal', 'Order', item.)">{{item.id}}</td>
+	    <td ng-click="showRelated('usermeal', 'Order', item)">{{item.reservation}}</td>
+	    <td ng-click="showRelated('usermeal', 'Order', item)">{{item.totalPrice}}</td>
+	    <td ng-click="showRelated('usermeal', 'Order', item)">{{item.user}}</td>
 	    <td>
 	      <button class="btn btn-default btn-lg"
 		      ng-click="deleteIt(item.type, item.id)">

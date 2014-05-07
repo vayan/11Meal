@@ -17,9 +17,9 @@ var rListCtrl = angular.module('rListCtrl', ['ngSanitize']);
 rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $routeParams) {
     var column = $routeParams.column;
     var value = $routeParams.value;
-    if ($routeParams.column == null)
+    if ($routeParams.column == "null")
 	column = null;
-    if ($routeParams.value == null)
+    if ($routeParams.value == "null")
 	value = null;
     var id = utils.readCookie("session");
 
@@ -37,6 +37,7 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
     API.get($routeParams.objClass, column, value).done(function(data) {
 	var arraytmp = [];
 
+	var arraymeals =
 	angular.forEach(data, function(value, key){
 	    if ($routeParams.objClass == "restaurant") {
 		console.log($routeParams.objClass);
@@ -50,12 +51,32 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 		console.log($routeParams.objClass);
 		arraytmp[key] = new Reservation(value);
 	    }
+	    else if ($routeParams.objClass == "order") {
+		console.log($routeParams.objClass);
+		arraytmp[key] = new Order(value);
+	    }
+	    else if ($routeParams.objClass == "usermeal") {
+		console.log($routeParams.objClass);
+		console.log(value);
+		arraytmp[key] = new UserMeal(value);
+	    }
 	});
 	$scope.List = arraytmp;
 	$scope.$apply();
     });
     $scope.Type = $routeParams.objClass;
     console.log($scope.Type);
+
+
+    $scope.deleteIt = function (type, id) {
+	location.assign('#/delete/'+type+'/'+id);
+    }
+
+    $scope.showRelated = function (objClass, type, id) {
+	location.assign('#/list/'+objClass+'/'+type+'/'+id);
+    }
+
+
 }]);
 
 var rDetailCtrl = angular.module('rDetailCtrl',[]);
@@ -107,7 +128,7 @@ var deleteController = angular.module('deleteController', []);
 
 deleteController.controller('deleteController', ['$scope', '$routeParams', function($scope, $routeParams) {
     API.remove($routeParams.objClass, $routeParams.id).done(function(data) {
-	location.assign("index.html#/list/"+$routeParams.objClass);
+	location.assign("index.html#/list/"+$routeParams.objClass+"/null/null");
     });
 
 }]);
@@ -152,9 +173,10 @@ createController.controller('createController', ['$scope', '$routeParams', funct
 	obj["Name"] = $routeParams.param1;
 	obj["Price"] = parseInt($routeParams.param2);  // integer.
 	obj["Type"] = parseInt($routeParams.param3);
+	obj["Restaurant"] = parseInt(utils.readCookie("session"));
     }
     API.create($routeParams.objClass, obj).done(function(data) {
-	location.assign("index.html#/list/"+$routeParams.objClass);
+	location.assign("index.html#/list/"+$routeParams.objClass+"/null/null");
     });
 }]);
 

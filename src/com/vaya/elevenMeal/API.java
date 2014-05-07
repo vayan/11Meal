@@ -72,6 +72,7 @@ public class API {
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
 		try {
 			String json = new Gson().toJson(object);
+			Log.d("API.makeJSONObjectEntity", json);
 			return new StringEntity(json);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -142,7 +143,9 @@ public class API {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			Log.d("API postexecute", result);
+			if (result == null)
+				return ;
+			Log.d("API.onPostExecute", result);
 			new Gson().fromJson(result, mType);
 		}
 	}

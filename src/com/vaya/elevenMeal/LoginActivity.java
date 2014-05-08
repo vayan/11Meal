@@ -94,8 +94,6 @@ public class LoginActivity extends Activity {
 
         context = getApplicationContext();
 
-        API api = new API();
-        api.create(new Restaurant(42, "Le toto engouti", "plop"));
         UpdatePref();
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {

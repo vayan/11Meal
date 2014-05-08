@@ -4,60 +4,78 @@ import java.util.List;
 
 public class User implements IRestaurantObject {
 	// Attributes
-	protected int mId;
-	protected String mLogin;
-	protected String mFirstName;
-	protected String mLastName;
-	protected String mEmail;
-	protected String mPhone;
+	protected int id;
+	protected String login;
+	protected String first_Name;
+	protected String last_Name;
+	protected String email;
+	protected String phone;
+	protected String phoneUID;
+	protected String gCM_ID;
 	
 	// Getters/setters
 	public int getId() {
-		return mId;
+		return id;
 	}
 
 	public String getLogin() {
-		return mLogin;
+		return login;
 	}
 
 	public void setLogin(String login) {
-		mLogin = login;
+		this.login = login;
 	}
 
 	public String getFirstName() {
-		return mFirstName;
+		return first_Name;
 	}
 
 	public void setFirstName(String firstName) {
-		mFirstName = firstName;
+		first_Name = firstName;
 	}
 
 	public String getLastName() {
-		return mLastName;
+		return last_Name;
 	}
 
 	public void setLastName(String lastName) {
-		mLastName = lastName;
+		last_Name = lastName;
 	}
 
 	public String getEmail() {
-		return mEmail;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		mEmail = email;
+		this.email = email;
 	}
 
 	public String getPhone() {
-		return mPhone;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
-		mPhone = phone;
+		this.phone = phone;
+	}
+
+	public String getGcmId() {
+		return gCM_ID;
+	}
+
+	public void setGcmId(String gcmId) {
+		this.gCM_ID = gcmId;
 	}
 
 	// Methods
 	public List<Reservation> getReservations() {
 		return null; //TODO: complete stub
+	}
+
+	public String getPhoneUID() {
+		return phoneUID;
+	}
+
+	public void setPhoneUID(String phoneUID) {
+		this.phoneUID = phoneUID;
 	}
 }

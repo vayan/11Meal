@@ -23,8 +23,8 @@ local.properties
 proguard/
 
 .idea/
+.classpath
+.settings
 /project.properties
 11Meal.rar
 Thumbs.db
-Thumbs.db
-.classpath

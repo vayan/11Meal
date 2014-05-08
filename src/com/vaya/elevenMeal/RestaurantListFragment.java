@@ -1,5 +1,7 @@
 package com.vaya.elevenMeal;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Restaurant;
+import com.vaya.elevenMeal.OnTaskCompleted;
 
 /**
  * A list fragment representing a list of Restaurants. This fragment also
@@ -18,7 +22,7 @@ import com.vaya.elevenMeal.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class RestaurantListFragment extends ListFragment {
+public class RestaurantListFragment extends ListFragment implements OnTaskCompleted{
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -37,6 +41,8 @@ public class RestaurantListFragment extends ListFragment {
 	 */
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
+	
+	private List<Restaurant> listResto;
 	/**
 	 * A callback interface that all activities containing this fragment must
 	 * implement. This mechanism allows activities to be notified of item
@@ -46,7 +52,7 @@ public class RestaurantListFragment extends ListFragment {
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onItemSelected(int id);
+		public void onItemSelected(Restaurant resto);
 	}
 
 	/**
@@ -55,7 +61,7 @@ public class RestaurantListFragment extends ListFragment {
 	 */
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
-		public void onItemSelected(int id) {
+		public void onItemSelected(Restaurant resto) {
 		}
 	};
 
@@ -70,7 +76,7 @@ public class RestaurantListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, DummyContent.ITEMS));
+		new API(this).getAll(new Restaurant());
 	}
 
 	@Override
@@ -113,7 +119,7 @@ public class RestaurantListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).getId());
+		mCallbacks.onItemSelected(listResto.get(position));
 	}
 
 	@Override
@@ -145,5 +151,12 @@ public class RestaurantListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+
+	@Override
+	public void onTaskCompleted(Object res) {
+		// TODO Auto-generated method stub
+		listResto = (List<Restaurant>)res;
+		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, listResto));
 	}
 }

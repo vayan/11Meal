@@ -16,50 +16,73 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.vaya.elevenMeal.restaurant.IRestaurantObject;
-import com.vaya.elevenMeal.restaurant.User;
+import com.vaya.elevenMeal.restaurant.*;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class API {
 
 	// TODO: Put it in settings?
-	protected String mUrl = "http://192.168.0.101:8181";
+	protected String mUrl;
+	protected Gson mGson;
+	protected OnTaskCompleted mListener;
+
+	public API() {
+		init();
+	}
+	
+	public API(OnTaskCompleted listener) {
+		init();
+		this.mListener = listener;
+	}
+	
+	private void init() {
+		mUrl = "http://galan.im:8181";
+		mGson = new GsonBuilder()
+		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+		mListener = null;
+	}
 
 	public IRestaurantObject create(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
-		HttpPost request = new HttpPost("/" + oClass);
+		HttpPost request = new HttpPost(mUrl + "/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
-		Type type = TypeToken.get(object.getClass().getDeclaringClass()).getType();
-		new RequestTask(type).execute(request);
+		new RequestTask(object.getClass()).execute(request);
 		return null;
 	}
 
-	public IRestaurantObject get(IRestaurantObject from, String column, int id) {
-		String oClass  = from.getClass().toString();
-		String sId     = String.valueOf(id);
-		HttpGet request = new HttpGet("/" + oClass + "/" + column + "/" + sId);
-		//Type type = TypeToken.get(ArrayList<from.getClass()>).getType();
-		//new RequestTask(type).execute(request);
+	public IRestaurantObject get(IRestaurantObject from, String column, String search) {
+		String oClass  = from.getClass().getSimpleName();
+		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + search);
+		new RequestTask(getType(oClass)).execute(request);
 		return null; //TODO: complete stub
 	}
 
+	public void getAll(IRestaurantObject from) {
+		String oClass  = from.getClass().getSimpleName();
+		HttpGet request = new HttpGet(mUrl + "/" + oClass);
+		new RequestTask(getType(oClass)).execute(request);
+		//TODO: complete stub
+	}
+
 	public IRestaurantObject update(IRestaurantObject object) {
-		String oClass  = object.getClass().toString();
+		String oClass  = object.getClass().getSimpleName();
 		HttpPut request = new HttpPut("/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
-		//new RequestTask().execute(request);
+		new RequestTask(getType(oClass)).execute(request);
 		return null;
 	}
 
 	public boolean delete(IRestaurantObject object) {
-		String oClass  = object.getClass().toString();
+		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
 		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
-		Type type = TypeToken.get(object.getClass()).getType();
-		new RequestTask(type).execute(request);
+		new RequestTask(getType(oClass)).execute(request);
 		return false;
 	}
 
@@ -73,7 +96,9 @@ public class API {
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
 		try {
-			return new StringEntity("{TODO}");
+			String json = mGson.toJson(object);
+			Log.d("API.makeJSONObjectEntity", json);
+			return new StringEntity(json);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,11 +107,33 @@ public class API {
 
 	}
 
+	private Type getType(String objectName) {
+		Type type = null;
+		switch (objectName) {
+		case "Meal":
+			type = new TypeToken<ArrayList<Meal>>(){}.getType();
+			break ;
+		case "Order":
+			type = new TypeToken<ArrayList<Order>>(){}.getType();
+			break ;
+		case "Reservation":
+			type = new TypeToken<ArrayList<Reservation>>(){}.getType();
+			break ;
+		case "Restaurant":
+			type = new TypeToken<ArrayList<Restaurant>>(){}.getType();
+			break ;
+		case "User":
+			type = new TypeToken<ArrayList<User>>(){}.getType();
+			break ;
+		}
+		return type;
+	}
+
 	private class RequestTask extends AsyncTask<HttpRequestBase, String, String>{
 		Type mType;
 
 		public RequestTask(Type type) {
-			// TODO Auto-generated constructor stub
+			mType = type;
 		}
 
 		@Override
@@ -121,7 +168,11 @@ public class API {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			new Gson().fromJson(result, mType);
+			if (result == null)
+				return ;
+			Log.d("API.onPostExecute", result);
+			if (mListener != null)
+				mListener.onTaskCompleted(mGson.fromJson(result, mType));
 		}
 	}
 }

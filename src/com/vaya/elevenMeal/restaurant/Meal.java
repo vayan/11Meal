@@ -11,37 +11,38 @@ public class Meal implements IRestaurantObject {
 	}
 
 	// Attributes
-	protected int mId;
-	protected String mName;
-	protected float mPrice;
-	protected Type mType;
+	protected int id;
+	protected int restaurant;
+	protected String name;
+	protected float price;
+	protected Type type;
 
 	// Getter/setters
-	public String getName() {
-		return mName;
+	public int getId() {
+		return id;
 	}
 
-	public int getId() {
-		return mId;
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {
-		this.mName = name;
+		this.name = name;
 	}
 
 	public float getPrice() {
-		return mPrice;
+		return price;
 	}
 
 	public void setPrice(float price) {
-		mPrice = price;
+		this.price = price;
 	}
 
 	public Type getType() {
-		return mType;
+		return type;
 	}
 
 	public void setType(Type type) {
-		mType = type;
+		this.type = type;
 	}
 }

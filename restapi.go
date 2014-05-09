@@ -16,7 +16,7 @@ func add(r interface{}) {
 		if err != nil {
 			log.Println(err)
 		}
-		log.Println("new ", r)
+		//log.Println("new ", r)
 	} else {
 		log.Panicln("Add : r is nil")
 	}

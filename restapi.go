@@ -46,27 +46,6 @@ func put(r interface{}) {
 	}
 }
 
-func getObj(t string) (interface{}, interface{}) {
-	switch t {
-	case "restaurant":
-		return new(Restaurant), new([]Restaurant)
-	case "table":
-		return new(Table), new([]Table)
-	case "reservation":
-		return new(Reservation), new([]Reservation)
-	case "order":
-		return new(Order), new([]Order)
-	case "meal":
-		return new(Meal), new([]Meal)
-	case "user":
-		return new(User), new([]User)
-	case "usermeal":
-		return new(UserMeal), new([]UserMeal)
-	}
-	log.Println("getObjArray : didn't find type")
-	return nil, nil
-}
-
 func get(vars map[string]string, obj_array interface{}) {
 	var sql_req string
 	table := strings.ToLower(vars["table"])
@@ -87,40 +66,42 @@ func get(vars map[string]string, obj_array interface{}) {
 	log.Println("get ", obj_array)
 }
 
-func vayanisme() {
-	for {
-		log.Println("HAHA")
-	}
-}
-
-func handleGCM(res http.ResponseWriter, req *http.Request) {
+func incomingJson(req *http.Request, obj interface{}) (error, []byte) {
+	var data []byte
+	var err error = nil
+	vars := mux.Vars(req)
 	p := make([]byte, req.ContentLength)
+	d := atoi(vars["id"])
 
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE")
-
-	switch req.Method {
-	case "GET":
-
-	case "POST":
-		_, err := req.Body.Read(p)
-		if err != nil {
-			log.Println(err)
+	_, err = req.Body.Read(p)
+	if err == nil {
+		err = json.Unmarshal(p, obj)
+		if err == nil {
+			if d != 0 && req.Method == "PUT" {
+				reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
+				put(obj)
+			} else if req.Method == "POST" {
+				add(obj)
+			}
+			if obj != nil {
+				data, err = json.Marshal(obj)
+				if err != nil {
+					log.Println(err)
+				}
+			}
 		} else {
-			send_gcm(string(p))
+			log.Println(err)
 		}
-	case "PUT":
-	case "DELETE":
+	} else {
+		log.Println(err)
 	}
-
+	return err, data
 }
 
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var err error = nil
 
-	p := make([]byte, req.ContentLength)
 	vars := mux.Vars(req)
 	table := strings.ToLower(vars["table"])
 	obj, obj_array := getObj(table)
@@ -138,23 +119,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 				data, _ = json.Marshal(obj_array)
 			}
 		case "POST":
-			_, err = req.Body.Read(p)
-			if err == nil {
-				err = json.Unmarshal(p, obj)
-				if err == nil {
-					add(obj)
-					if obj != nil {
-						data, err = json.Marshal(obj)
-						if err != nil {
-							log.Println(err)
-						}
-					}
-				} else {
-					log.Println(err)
-				}
-			} else {
-				log.Println(err)
-			}
+			err, data = incomingJson(req, obj)
 		case "DELETE":
 			d := atoi(vars["id"])
 
@@ -164,25 +129,7 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 				data, _ = json.Marshal("{success:true}")
 			}
 		case "PUT":
-			d := atoi(vars["id"])
-			_, err = req.Body.Read(p)
-			if err == nil {
-				err = json.Unmarshal(p, obj)
-				if err == nil {
-					reflect.ValueOf(obj).Elem().FieldByName("Id").SetInt(int64(d))
-					put(obj)
-					if obj != nil {
-						data, err = json.Marshal(obj)
-						if err != nil {
-							log.Println(err)
-						}
-					}
-				} else {
-					log.Println(err)
-				}
-			} else {
-				log.Println(err)
-			}
+			err, data = incomingJson(req, obj)
 		case "VAYAN":
 			for {
 				go vayanisme()

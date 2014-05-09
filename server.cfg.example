@@ -1,5 +1,8 @@
 # conf for the APIMeal server
 
+#hello ? I'm listening
+port=8181
+
 # API KEY FOR GCM
 gcm_api=awesomeapikey
 

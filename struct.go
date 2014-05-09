@@ -62,6 +62,7 @@ type Table struct {
 type Restaurant struct {
 	Id          int    `db:"id"`
 	Id_request  string `db:"id_request"`
+	UID         string `db:"uid"`
 	Name        string `db:"name"`
 	Address     string `db:"address"`
 	Position    string `db:"position"`
@@ -78,6 +79,7 @@ type RequestGCM struct {
 
 type RestaurantGoogle struct {
 	Formatted_address string      `json:"formatted_address"`
+	Vicinity          string      `json:"vicinity"`
 	Geometry          interface{} `json:"geometry"`
 	Icon              string      `json:"icon"`
 	Id                string      `json:"id"`

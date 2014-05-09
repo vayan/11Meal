@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -24,8 +25,6 @@ func is_cached(hash string) bool {
 	return false
 }
 
-// TODO : go func something to upload in DB and handle multiple page of result
-
 func get_data() {
 	log.Println("=== Start getting data...")
 	location := "39.9075000,116.3972300"
@@ -43,12 +42,22 @@ func get_data() {
 func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 	log.Println("Adding", len(restos), "restaurants in db")
 	for _, resto := range restos {
-		// use resto.Geometry for location
+		loc := resto.Geometry.(map[string]interface{})["location"].(map[string]interface{})
+		latlong := ""
+		if loc != nil {
+			if loc["lat"] != nil && loc["long"] != nil {
+				lat := loc["lat"].(float64)
+				long := loc["long"].(float64)
+				latlong = strconv.FormatFloat(lat, 'f', 6, 64) + "," + strconv.FormatFloat(long, 'f', 6, 64)
+			}
+		}
 		descr := strings.Join(resto.Types, ", ")
 		r := Restaurant{
 			Name:        resto.Name,
-			Address:     resto.Formatted_address,
+			Address:     resto.Vicinity,
+			Position:    latlong,
 			Id_request:  h,
+			UID:         resto.Id,
 			Description: descr}
 		add(&r)
 	}
@@ -60,7 +69,7 @@ func get_place_nearby(location string, h string, pagetoken string) error {
 	var data []byte
 
 	client := &http.Client{}
-	url := "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location + "&radius=50000&types=restaurant&sensor=false&key=" + GPLACES_API_KEY
+	url := "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location + "&types=restaurant&rankby=distance&sensor=false&key=" + GPLACES_API_KEY
 
 	if len(pagetoken) > 1 {
 		log.Println("loading new result page")

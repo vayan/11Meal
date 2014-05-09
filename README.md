@@ -27,3 +27,5 @@
 `go get github.com/gorilla/schema`
 
 `go get github.com/mattn/go-sqlite3`
+
+`go get github.com/jimlawless/cfg`

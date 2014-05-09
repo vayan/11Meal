@@ -1,7 +1,7 @@
 # conf for the APIMeal server
 
 # API KEY FOR GCM
-gcm_api=
+gcm_api=awesomeapikey
 
 # API KEY FOR GOOGLE PLACE
-place_api=
+place_api=awesomeapikey

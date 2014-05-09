@@ -74,3 +74,14 @@ type RequestGCM struct {
 	Registration_ids []string          `json:"registration_ids"`
 	Data             map[string]string `json:"data"`
 }
+
+type RestaurantGoogle struct {
+	Formatted_address string      `json:"formatted_address"`
+	Geometry          interface{} `json:"geometry"`
+	Icon              string      `json:"icon"`
+	Id                string      `json:"id"`
+	Name              string      `json:"name"`
+	Rating            float32     `json:"rating"`
+	Reference         string      `json:"reference"`
+	Types             []string    `json:"types"`
+}

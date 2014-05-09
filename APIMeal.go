@@ -49,7 +49,7 @@ func load_conf() {
 	if len(os.Args) < 2 {
 		log.Fatalln("Usage :", os.Args[0], "path/server.cfg")
 	}
-	log.Println("Start loading conf files")
+	log.Println("=== Start loading conf files")
 	conf := make(map[string]string)
 	err := cfg.Load(os.Args[1], conf)
 	checkFatal(err)
@@ -58,12 +58,14 @@ func load_conf() {
 	}
 	GCM_API_KEY = conf["gcm_api"]
 	GPLACES_API_KEY = conf["place_api"]
-	log.Println("Conf loaded", conf)
+	log.Println("=== Conf loaded, contain : \n", conf)
 }
 
 func main() {
 	load_conf()
 	dbmap = init_db()
 	defer dbmap.Db.Close()
+	go get_data()
 	start_web_server()
+
 }

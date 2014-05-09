@@ -9,6 +9,11 @@ import (
 )
 
 var (
+	ErrorAPI = map[string]string{
+		"ZERO_RESULTS":     "Search was successful but returned no results.",
+		"OVER_QUERY_LIMIT": "You are over your quota.",
+		"REQUEST_DENIED":   "Your request was denied, check sensor parameter.",
+		"INVALID_REQUEST":  "Required query parameter (eg : location or radius) is missing."}
 	GCM_API_KEY     string
 	GPLACES_API_KEY string
 	port            = ":8181"

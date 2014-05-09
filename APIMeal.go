@@ -26,7 +26,7 @@ func init_db() *gorp.DbMap {
 
 	err = dbmap.CreateTablesIfNotExists()
 	checkFatal(err)
-	log.Println("Db created")
+	log.Println("=== Db init")
 	return dbmap
 }
 
@@ -40,7 +40,7 @@ func start_web_server() {
 
 	http.Handle("/", r)
 
-	log.Println("Starting and listening on ", port, "...")
+	log.Println("=== Starting and listening on", port, "...")
 	err := http.ListenAndServe(port, nil)
 	checkFatal(err)
 }
@@ -58,6 +58,9 @@ func load_conf() {
 	}
 	GCM_API_KEY = conf["gcm_api"]
 	GPLACES_API_KEY = conf["place_api"]
+	if len(conf["port"]) > 0 {
+		port = ":" + conf["port"]
+	}
 	log.Println("=== Conf loaded, contain : \n", conf)
 }
 
@@ -67,5 +70,4 @@ func main() {
 	defer dbmap.Db.Close()
 	go get_data()
 	start_web_server()
-
 }

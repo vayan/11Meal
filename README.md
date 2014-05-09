@@ -14,7 +14,8 @@
  * `cd 11Meal`
  * `git checkout backend-master`
  * `cd $GOPATH`
- * `go install github.com/vayan/11Meal && ./bin/11Meal`
+ * Create a config file (see server.cfg.example)
+ * `go install github.com/vayan/11Meal && ./bin/11Meal path/to/config/file.cfg`
 
  and bravo the project is running :)
 

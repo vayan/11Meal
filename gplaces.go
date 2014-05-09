@@ -6,24 +6,37 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // https://developers.google.com/places/documentation/search#PlaceSearchRequests
 
 func get_data() {
 	log.Println("=== Start getting data...")
-	_, err := get_place_nearby()
+	location := "39.9075000,116.3972300"
+	h := GetMD5Hash(location)
+	log.Println("hash for request is", h)
+	restos, err := get_place_nearby(location, h)
 	if err != nil {
 		log.Panicln(err)
+	}
+	for _, resto := range restos {
+		descr := strings.Join(resto.Types, ", ")
+		log.Println(resto.Formatted_address)
+		r := Restaurant{
+			Name:        resto.Name,
+			Address:     resto.Formatted_address,
+			Id_request:  h,
+			Description: descr}
+		add(&r)
 	}
 	log.Println("=== Data restored")
 }
 
-func get_place_nearby() ([]RestaurantGoogle, error) {
+func get_place_nearby(location string, h string) ([]RestaurantGoogle, error) {
 	var restos []RestaurantGoogle
 	var res interface{}
 	var data []byte
-	location := "-33.8670522,151.1957362"
 
 	client := &http.Client{}
 	url := "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location + "&radius=50000&types=restaurant&sensor=false&key=" + GPLACES_API_KEY

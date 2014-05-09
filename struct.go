@@ -61,6 +61,7 @@ type Table struct {
 
 type Restaurant struct {
 	Id          int    `db:"id"`
+	Id_request  string `db:"id_request"`
 	Name        string `db:"name"`
 	Address     string `db:"address"`
 	Position    string `db:"position"`

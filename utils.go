@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/schema"
 	_ "github.com/mattn/go-sqlite3"
@@ -61,4 +63,10 @@ func checkFatal(err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func GetMD5Hash(text string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(text))
+	return hex.EncodeToString(hasher.Sum(nil))
 }

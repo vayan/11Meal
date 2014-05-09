@@ -9,9 +9,11 @@ import (
 )
 
 var (
-	port    = ":8181"
-	dbmap   *gorp.DbMap
-	decoder = schema.NewDecoder()
+	GCM_API_KEY     string
+	GPLACES_API_KEY string
+	port            = ":8181"
+	dbmap           *gorp.DbMap
+	decoder         = schema.NewDecoder()
 )
 
 func getObj(t string) (interface{}, interface{}) {

@@ -20,7 +20,9 @@ type User struct {
 	Phone      string `db:"phone"`
 	PhoneUID   string `db:"phoneuid"`
 	GCM_ID     string `db:"gcmid"`
+	GPS        string `db:"gps"`
 	Login      string `db:"login"`
+	Password   string `db:"password"`
 }
 
 type Order struct {

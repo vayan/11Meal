@@ -11,7 +11,7 @@ import (
 
 func send_gcm(msg string) error {
 	reqGCM := RequestGCM{
-		"AIzaSyBAEuckZUufUFtiMw4zq6gYCDAhBD6Iy9w",
+		GCM_API_KEY,
 		[]string{"APA91bEdfxCFNZCYdmHmQbO2EgUSfZcFdKtQWf9zp7uVw2DekZQKGevqvvNV_z-9iGi_wtvYEELMXVK6Ac-0-yPJ9UeFfBYbmhxcx2lCB2Zqbhq79qYGYw7QMYoHZuYYXpZwpljOVILbPwRwzBBKypDPFxZnCyrlkw", "3", "4"},
 		map[string]string{"test": "nothing"}}
 	data, err := json.Marshal(reqGCM)

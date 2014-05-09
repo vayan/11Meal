@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"github.com/coopernurse/gorp"
 	"github.com/gorilla/mux"
+	"github.com/jimlawless/cfg"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
+	"os"
 )
 
 func init_db() *gorp.DbMap {
@@ -43,7 +45,24 @@ func start_web_server() {
 	checkFatal(err)
 }
 
+func load_conf() {
+	if len(os.Args) < 2 {
+		log.Fatalln("Usage :", os.Args[0], "path/server.cfg")
+	}
+	log.Println("Start loading conf files")
+	conf := make(map[string]string)
+	err := cfg.Load(os.Args[1], conf)
+	checkFatal(err)
+	if conf["gcm_api"] == "" || conf["place_api"] == "" {
+		log.Fatalln("Please put the API key in the config file")
+	}
+	GCM_API_KEY = conf["gcm_api"]
+	GPLACES_API_KEY = conf["place_api"]
+	log.Println("Conf loaded", conf)
+}
+
 func main() {
+	load_conf()
 	dbmap = init_db()
 	defer dbmap.Db.Close()
 	start_web_server()

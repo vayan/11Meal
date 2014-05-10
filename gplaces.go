@@ -64,7 +64,7 @@ func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
 	lat, _ := strconv.ParseFloat(coord[0], 64)
 	lng, _ := strconv.ParseFloat(coord[1], 64)
 	var _, err = dbmap.Select(&resto,
-		"select * from restaurant where lat between ?-? and ?+? and lng between ?-? and ?+?", lat, lat_distance, lat, lat_distance, lng, long_distance, lng, long_distance)
+		"select * from restaurant where lat between ? and ? and lng between ? and ?", lat-lat_distance, lat+lat_distance, lng-long_distance, lng+long_distance)
 	if err != nil {
 		log.Println(err)
 	}

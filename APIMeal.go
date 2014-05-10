@@ -68,6 +68,8 @@ func main() {
 	load_conf()
 	dbmap = init_db()
 	defer dbmap.Db.Close()
-	go get_data("39.9075000,116.3972300")
+	//Beijing "39.9075000,116.3972300"
+	//Lyon "45.767299,4.834329"
+	go get_data("39.9075000,116.3972300", 150)
 	start_web_server()
 }

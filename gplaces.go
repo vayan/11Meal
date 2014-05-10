@@ -36,12 +36,28 @@ func isInDB(UID string) bool {
 	return false
 }
 
-func get_restaurant_nearby(loc string) []Restaurant {
-	//TODO get nearby Restaurant from local DB
-	return nil
+func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
+	var resto []Restaurant
+	coord := strings.Split(loc, ",")
+
+	///////////// NOT PRECISE
+	long_deg_per_m := 0.00010406 //degrees per meter
+	lat_deg_per_m := 0.000008999 //degrees per meter
+
+	long_distance := long_deg_per_m * m_distance
+	lat_distance := lat_deg_per_m * m_distance
+
+	lat, _ := strconv.ParseFloat(coord[0], 64)
+	lng, _ := strconv.ParseFloat(coord[1], 64)
+	var _, err = dbmap.Select(&resto,
+		"select * from restaurant where lat between ?-? and ?+? and lng between ?-? and ?+?", lat, lat_distance, lat, lat_distance, lng, long_distance, lng, long_distance)
+	if err != nil {
+		log.Println(err)
+	}
+	return resto
 }
 
-func get_data(loc string) {
+func get_data(loc string, m_distance float64) {
 	log.Println("=== Start getting data...")
 	h := GetMD5Hash(loc)
 	if !is_cached(h) {
@@ -51,7 +67,7 @@ func get_data(loc string) {
 			log.Panicln(err)
 		}
 	}
-	get_restaurant_nearby(loc)
+	get_restaurant_nearby(loc, m_distance)
 	log.Println("=== Data get")
 }
 
@@ -62,15 +78,21 @@ func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 			continue
 		}
 		loc := resto.Geometry.(map[string]interface{})["location"].(map[string]interface{})
+		var lat float64 = -1
+		var lng float64 = -1
 		latlong := ""
 		if loc != nil && loc["lat"] != nil && loc["lng"] != nil {
-			latlong = strconv.FormatFloat(loc["lat"].(float64), 'f', 6, 64) + "," + strconv.FormatFloat(loc["lng"].(float64), 'f', 6, 64)
+			lat = loc["lat"].(float64)
+			lng = loc["lng"].(float64)
+			latlong = strconv.FormatFloat(lat, 'f', 6, 64) + "," + strconv.FormatFloat(lng, 'f', 6, 64)
 		}
 		descr := strings.Join(resto.Types, ", ")
 		r := Restaurant{
 			Name:        resto.Name,
 			Address:     resto.Vicinity,
 			Position:    latlong,
+			Lat:         lat,
+			Lng:         lng,
 			Id_request:  h,
 			UID:         resto.Id,
 			Description: descr}

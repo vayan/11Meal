@@ -60,15 +60,17 @@ type Table struct {
 }
 
 type Restaurant struct {
-	Id          int    `db:"id"`
-	Id_request  string `db:"id_request"`
-	UID         string `db:"uid"`
-	Name        string `db:"name"`
-	Address     string `db:"address"`
-	Position    string `db:"position"`
-	Schedule    string `db:"schedule"`
-	Phone       string `db:"phone"`
-	Description string `db:"description"`
+	Id          int     `db:"id"`
+	Id_request  string  `db:"id_request"`
+	UID         string  `db:"uid"`
+	Name        string  `db:"name"`
+	Address     string  `db:"address"`
+	Position    string  `db:"position"`
+	Lat         float64 `db:"lat"`
+	Lng         float64 `db:"lng"`
+	Schedule    string  `db:"schedule"`
+	Phone       string  `db:"phone"`
+	Description string  `db:"description"`
 }
 
 type RequestGCM struct {

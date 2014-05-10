@@ -72,7 +72,8 @@ public class API {
 
 	public IRestaurantObject update(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
-		HttpPut request = new HttpPut("/" + oClass);
+		String oId     = String.valueOf(object.getId());
+		HttpPut request = new HttpPut("/" + oClass + "/" + oId);
 		request.setEntity(makeJSONObjectEntity(object));
 		new RequestTask(getType(oClass)).execute(request);
 		return null;

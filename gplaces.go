@@ -36,22 +36,27 @@ func isInDB(UID string) bool {
 	return false
 }
 
-func get_data() {
+func get_restaurant_nearby(loc string) []Restaurant {
+	//TODO get nearby Restaurant from local DB
+	return nil
+}
+
+func get_data(loc string) {
 	log.Println("=== Start getting data...")
-	location := "39.9075000,116.3972300"
-	h := GetMD5Hash(location)
+	h := GetMD5Hash(loc)
 	if !is_cached(h) {
-		log.Println("Get data from google")
-		err := get_place_nearby(location, h, "")
+		log.Println("Get more data from google")
+		err := get_place_nearby(loc, h, "")
 		if err != nil {
 			log.Panicln(err)
 		}
 	}
-	log.Println("=== Data restored")
+	get_restaurant_nearby(loc)
+	log.Println("=== Data get")
 }
 
 func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
-	log.Println("Adding", len(restos), "restaurants in db")
+	i := 0
 	for _, resto := range restos {
 		if isInDB(resto.Id) {
 			continue
@@ -70,7 +75,9 @@ func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 			UID:         resto.Id,
 			Description: descr}
 		add(&r)
+		i++
 	}
+	log.Println("Added", i, "restaurant(s) in db")
 }
 
 func get_place_nearby(location string, h string, pagetoken string) error {

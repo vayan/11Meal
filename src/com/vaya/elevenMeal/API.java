@@ -48,51 +48,38 @@ public class API {
 		mListener = null;
 	}
 
-	public IRestaurantObject create(IRestaurantObject object) {
+	public void create(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		HttpPost request = new HttpPost(mUrl + "/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
 		new RequestTask(object.getClass()).execute(request);
-		return null;
 	}
 
-	public IRestaurantObject get(IRestaurantObject from, String column, String search) {
+	public void get(IRestaurantObject from, String column, String search) {
 		String oClass  = from.getClass().getSimpleName();
 		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + search);
 		new RequestTask(getType(oClass)).execute(request);
-		return null; //TODO: complete stub
 	}
 
 	public void getAll(IRestaurantObject from) {
 		String oClass  = from.getClass().getSimpleName();
 		HttpGet request = new HttpGet(mUrl + "/" + oClass);
 		new RequestTask(getType(oClass)).execute(request);
-		//TODO: complete stub
 	}
 
-	public IRestaurantObject update(IRestaurantObject object) {
+	public void update(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
 		HttpPut request = new HttpPut("/" + oClass + "/" + oId);
 		request.setEntity(makeJSONObjectEntity(object));
 		new RequestTask(getType(oClass)).execute(request);
-		return null;
 	}
 
-	public boolean delete(IRestaurantObject object) {
+	public void delete(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
 		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
 		new RequestTask(getType(oClass)).execute(request);
-		return false;
-	}
-
-	public boolean createUser(User user, String password) {
-		return false; //TODO: complete stub
-	}
-
-	public boolean authenticate(String login, String password) {
-		return false; //TODO: complete stub
 	}
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {

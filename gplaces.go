@@ -44,12 +44,8 @@ func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 	for _, resto := range restos {
 		loc := resto.Geometry.(map[string]interface{})["location"].(map[string]interface{})
 		latlong := ""
-		if loc != nil {
-			if loc["lat"] != nil && loc["long"] != nil {
-				lat := loc["lat"].(float64)
-				long := loc["long"].(float64)
-				latlong = strconv.FormatFloat(lat, 'f', 6, 64) + "," + strconv.FormatFloat(long, 'f', 6, 64)
-			}
+		if loc != nil && loc["lat"] != nil && loc["lng"] != nil {
+			latlong = strconv.FormatFloat(loc["lat"].(float64), 'f', 6, 64) + "," + strconv.FormatFloat(loc["lng"].(float64), 'f', 6, 64)
 		}
 		descr := strings.Join(resto.Types, ", ")
 		r := Restaurant{

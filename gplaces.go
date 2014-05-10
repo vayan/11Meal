@@ -25,6 +25,17 @@ func is_cached(hash string) bool {
 	return false
 }
 
+func isInDB(UID string) bool {
+	count, err := dbmap.SelectInt("select count(*) from restaurant where uid=?", UID)
+	if err != nil {
+		log.Println("isInDB", err)
+	}
+	if count > 0 {
+		return true
+	}
+	return false
+}
+
 func get_data() {
 	log.Println("=== Start getting data...")
 	location := "39.9075000,116.3972300"
@@ -42,6 +53,9 @@ func get_data() {
 func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 	log.Println("Adding", len(restos), "restaurants in db")
 	for _, resto := range restos {
+		if isInDB(resto.Id) {
+			continue
+		}
 		loc := resto.Geometry.(map[string]interface{})["location"].(map[string]interface{})
 		latlong := ""
 		if loc != nil && loc["lat"] != nil && loc["lng"] != nil {

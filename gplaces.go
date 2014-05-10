@@ -23,30 +23,20 @@ func handleGPS(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Access-Control-Allow-Methods", "GET")
 
 	location := vars["coord"]
-	m_distance := 1000.
+	m_distance := 200.
 	if len(vars["distance"]) > 1 {
-		m_distance, _ = strconv.ParseFloat(vars["distance"], 64)
+		m_distance_t, _ := strconv.ParseFloat(vars["distance"], 64)
+		if m_distance_t > 200 {
+			m_distance = m_distance_t
+		}
 	}
-	restos := get_data(location, m_distance)
+	restos := get_close_restaurant(location, m_distance)
 	data, err = json.Marshal(restos)
 	if err != nil {
 		http.Error(res, err.Error(), 400)
 	} else {
 		res.Write(data)
 	}
-}
-
-func is_cached(hash string) bool {
-	i64, err := dbmap.SelectInt("select count(*) from restaurant where id_request=?", hash)
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-	if i64 > 0 {
-		log.Println("data already in DB")
-		return true
-	}
-	return false
 }
 
 func isInDB(UID string) bool {
@@ -81,20 +71,23 @@ func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
 	return resto
 }
 
-func get_data(loc string, m_distance float64) []Restaurant {
-	log.Println("=== Start getting data...")
-	h := GetMD5Hash(loc)
-	if !is_cached(h) {
-		log.Println("Get more data from google")
-		err := get_place_nearby(loc, h, "")
+func get_close_restaurant(loc string, m_distance float64) []Restaurant {
+	log.Println("Start getting restaurant data...")
+	restos := get_restaurant_nearby(loc, m_distance)
+	if len(restos) < 10 {
+		log.Println("Not enough data in DB, let's ask Google API more stuff...")
+		err := get_place_nearby(loc, "")
 		if err != nil {
-			log.Panicln(err)
+			log.Println(err)
+			return []Restaurant{}
 		}
+		return get_restaurant_nearby(loc, m_distance)
 	}
-	return get_restaurant_nearby(loc, m_distance)
+	log.Println("Enough data in DB, we didn't ask Google API.")
+	return restos
 }
 
-func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
+func putGoogleRestaurantInDB(restos []RestaurantGoogle) {
 	i := 0
 	for _, resto := range restos {
 		if isInDB(resto.Id) {
@@ -116,16 +109,15 @@ func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {
 			Position:    latlong,
 			Lat:         lat,
 			Lng:         lng,
-			Id_request:  h,
 			UID:         resto.Id,
 			Description: descr}
 		add(&r)
 		i++
 	}
-	log.Println("Added", i, "restaurant(s) in db")
+	log.Printf("%d/%d restaurant(s) added in DB", i, len(restos))
 }
 
-func get_place_nearby(location string, h string, pagetoken string) error {
+func get_place_nearby(location string, pagetoken string) error {
 	var restos []RestaurantGoogle
 	var res interface{}
 	var data []byte
@@ -157,10 +149,10 @@ func get_place_nearby(location string, h string, pagetoken string) error {
 	}
 	m := res.(map[string]interface{})
 	if m["next_page_token"] != nil {
-		get_place_nearby(location, h, m["next_page_token"].(string))
+		get_place_nearby(location, m["next_page_token"].(string))
 	} else if m["status"].(string) == "INVALID_REQUEST" && len(pagetoken) > 1 {
 		log.Println("Wait between request...")
-		get_place_nearby(location, h, pagetoken)
+		get_place_nearby(location, pagetoken)
 	}
 	if m["status"].(string) == "OK" {
 		data, err = json.Marshal(m["results"])
@@ -173,7 +165,7 @@ func get_place_nearby(location string, h string, pagetoken string) error {
 			log.Println(err)
 			return err
 		}
-		go restaurantGoogleinDB(restos, h)
+		putGoogleRestaurantInDB(restos)
 	} else {
 		return errors.New(ErrorAPI[m["status"].(string)])
 	}

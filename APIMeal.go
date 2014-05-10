@@ -37,6 +37,8 @@ func start_web_server() {
 	r.HandleFunc("/{table}/{id}", handleglobal)
 	r.HandleFunc("/{table}", handleglobal)
 	r.HandleFunc("/gcm", handleGCM)
+	r.HandleFunc("/restaurant/gps/{coord}/{distance}", handleGPS)
+	r.HandleFunc("/restaurant/gps/{coord}", handleGPS)
 
 	http.Handle("/", r)
 
@@ -70,6 +72,6 @@ func main() {
 	defer dbmap.Db.Close()
 	//Beijing "39.9075000,116.3972300"
 	//Lyon "45.767299,4.834329"
-	go get_data("39.9075000,116.3972300", 150)
+	//go get_data("39.9075000,116.3972300", 150)
 	start_web_server()
 }

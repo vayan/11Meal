@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,6 +12,29 @@ import (
 )
 
 // https://developers.google.com/places/documentation/search#PlaceSearchRequests
+
+func handleGPS(res http.ResponseWriter, req *http.Request) {
+	var data []byte
+	var err error = nil
+	vars := mux.Vars(req)
+
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Content-Type", "application/json; charset=utf-8")
+	res.Header().Set("Access-Control-Allow-Methods", "GET")
+
+	location := vars["coord"]
+	m_distance := 1000.
+	if len(vars["distance"]) > 1 {
+		m_distance, _ = strconv.ParseFloat(vars["distance"], 64)
+	}
+	restos := get_data(location, m_distance)
+	data, err = json.Marshal(restos)
+	if err != nil {
+		http.Error(res, err.Error(), 400)
+	} else {
+		res.Write(data)
+	}
+}
 
 func is_cached(hash string) bool {
 	i64, err := dbmap.SelectInt("select count(*) from restaurant where id_request=?", hash)
@@ -57,7 +81,7 @@ func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
 	return resto
 }
 
-func get_data(loc string, m_distance float64) {
+func get_data(loc string, m_distance float64) []Restaurant {
 	log.Println("=== Start getting data...")
 	h := GetMD5Hash(loc)
 	if !is_cached(h) {
@@ -67,8 +91,7 @@ func get_data(loc string, m_distance float64) {
 			log.Panicln(err)
 		}
 	}
-	get_restaurant_nearby(loc, m_distance)
-	log.Println("=== Data get")
+	return get_restaurant_nearby(loc, m_distance)
 }
 
 func restaurantGoogleinDB(restos []RestaurantGoogle, h string) {

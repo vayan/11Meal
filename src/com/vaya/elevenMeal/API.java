@@ -26,33 +26,35 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class API {
-
-	// TODO: Put it in settings?
-	protected String mUrl;
-	protected Gson mGson;
-	protected OnTaskCompleted mListener;
+	private String mUrl;
+	private Gson mGson;
+	private boolean mAsync;
+	private Object mLastResult;
+	private OnTaskCompleted mListener;
 
 	public API() {
 		init();
 	}
-	
+
 	public API(OnTaskCompleted listener) {
 		init();
 		this.mListener = listener;
 	}
-	
+
 	private void init() {
 		mUrl = "http://galan.im:8181";
 		mGson = new GsonBuilder()
 		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+		mAsync = true;
 		mListener = null;
 	}
 
+	// Methods
 	public void create(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		HttpPost request = new HttpPost(mUrl + "/" + oClass);
 		request.setEntity(makeJSONObjectEntity(object));
-		new RequestTask(object.getClass()).execute(request);
+		request(object.getClass(), request);
 	}
 
 	public void get(IRestaurantObject from, String column, String search) {
@@ -64,7 +66,7 @@ public class API {
 	public void getAll(IRestaurantObject from) {
 		String oClass  = from.getClass().getSimpleName();
 		HttpGet request = new HttpGet(mUrl + "/" + oClass);
-		new RequestTask(getType(oClass)).execute(request);
+		request(getType(oClass), request);
 	}
 
 	public void update(IRestaurantObject object) {
@@ -72,14 +74,38 @@ public class API {
 		String oId     = String.valueOf(object.getId());
 		HttpPut request = new HttpPut("/" + oClass + "/" + oId);
 		request.setEntity(makeJSONObjectEntity(object));
-		new RequestTask(getType(oClass)).execute(request);
+		request(getType(oClass), request);
 	}
 
 	public void delete(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
 		HttpDelete request = new HttpDelete(mUrl + "/" + oClass + "/" + oId);
-		new RequestTask(getType(oClass)).execute(request);
+		request(getType(oClass), request);
+	}
+
+	// Getters / setters
+	public Object getLastResult() {
+		return mLastResult;
+	}
+
+	public void setAsync(boolean async) {
+		mAsync = async;
+	}
+
+	public void setUrl(String url) {
+		mUrl = url;
+	}
+	// Private methods
+	private void request(Type objectType, HttpRequestBase request) {
+		if (mAsync) {
+			new RequestTask(objectType).execute(request);
+			return ;
+		} 
+		String result = makeHttpRequest(request);
+		mLastResult = mGson.fromJson(result, objectType);
+		if (result != null && mListener != null)
+			mListener.onTaskCompleted(mLastResult);
 	}
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
@@ -93,6 +119,33 @@ public class API {
 		}
 		return null;
 
+	}
+
+	private String makeHttpRequest(HttpRequestBase request) {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpResponse response;
+		String responseString = null;
+		try {
+			request.addHeader("Accept", "application/json");
+			request.addHeader("Content-type", "application/json");
+			response = httpclient.execute(request);
+			StatusLine statusLine = response.getStatusLine();
+			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				response.getEntity().writeTo(out);
+				out.close();
+				responseString = out.toString();
+			} else{
+				//Closes the connection.
+				response.getEntity().getContent().close();
+				throw new IOException(statusLine.getReasonPhrase());
+			}
+		} catch (ClientProtocolException e) {
+			//TODO Handle problems..
+		} catch (IOException e) {
+			//TODO Handle problems..
+		}
+		return responseString;
 	}
 
 	private Type getType(String objectName) {
@@ -126,31 +179,7 @@ public class API {
 
 		@Override
 		protected String doInBackground(HttpRequestBase... requests) {
-			HttpRequestBase request = requests[0];
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpResponse response;
-			String responseString = null;
-			try {
-				request.addHeader("Accept", "application/json");
-				request.addHeader("Content-type", "application/json");
-				response = httpclient.execute(request);
-				StatusLine statusLine = response.getStatusLine();
-				if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					response.getEntity().writeTo(out);
-					out.close();
-					responseString = out.toString();
-				} else{
-					//Closes the connection.
-					response.getEntity().getContent().close();
-					throw new IOException(statusLine.getReasonPhrase());
-				}
-			} catch (ClientProtocolException e) {
-				//TODO Handle problems..
-			} catch (IOException e) {
-				//TODO Handle problems..
-			}
-			return responseString;
+			return makeHttpRequest(requests[0]);
 		}
 
 		@Override
@@ -159,8 +188,9 @@ public class API {
 			if (result == null)
 				return ;
 			Log.d("API.onPostExecute", result);
+			mLastResult = mGson.fromJson(result, mType);
 			if (mListener != null)
-				mListener.onTaskCompleted(mGson.fromJson(result, mType));
+				mListener.onTaskCompleted(mLastResult);
 		}
 	}
 }

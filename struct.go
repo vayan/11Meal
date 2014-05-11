@@ -27,22 +27,13 @@ type User struct {
 }
 
 type Order struct {
-	Id          int `db:"id"`
-	Total_price int `db:"total_price"`
-	User        int `db:"user"`
-	Restaurant  int `db:"restaurant"`
-	Reservation int `db:"reservation"`
-}
-
-type UserMeal struct {
-	Id         int    `db:"id"`
-	Order      int    `db:"order"`
-	Meal       int    `db:"meal"`
-	Restaurant int    `db:"restaurant"`
-	Name       string `db:"name"`
-	Type       int    `db:"type"`
-	Price      int    `db:"price"`
-	Quantity   int    `db:"quantity"`
+	Id          int    `db:"id"`
+	Total_price int    `db:"total_price"`
+	User        int    `db:"user"`
+	MealCSV     string `db:"meals" json:"-"`
+	Meals       []Meal `db:"-"`
+	Restaurant  int    `db:"restaurant"`
+	Reservation int    `db:"reservation"`
 }
 
 type Meal struct {

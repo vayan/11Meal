@@ -17,7 +17,7 @@ func add(r interface{}) {
 		case *Reservation:
 			r.(*Reservation).GuestSerialize()
 		case *Order:
-			//handle slice Meal in order
+			r.(*Order).MealSerialize()
 		}
 		err := dbmap.Insert(r)
 		if err != nil {
@@ -45,8 +45,8 @@ func put(r interface{}) {
 		switch r.(type) {
 		case *Reservation:
 			r.(*Reservation).GuestSerialize()
-		case Order:
-			//handle slice Meal in order
+		case *Order:
+			r.(*Order).MealSerialize()
 		}
 		_, err := dbmap.Update(r)
 		if err != nil {
@@ -83,8 +83,13 @@ func get(vars map[string]string, obj_array interface{}) interface{} {
 			tmp = append(tmp, obj)
 		}
 		obj_array = tmp
-	case *Order:
-		//handle slice Meal in order
+	case *[]Order:
+		var tmp []Order
+		for _, obj := range *obj_array.(*[]Order) {
+			obj.MealUnserialize()
+			tmp = append(tmp, obj)
+		}
+		obj_array = tmp
 	}
 	log.Println("get ", obj_array)
 	return obj_array
@@ -185,4 +190,25 @@ func (r *Reservation) GuestSerialize() {
 		}
 	}
 	r.GuestCSV = strings.Join(csv_guest, ",")
+}
+
+func (o *Order) MealUnserialize() {
+	var u []Meal
+	sql_req := "select * from `meal` where id in (" + o.MealCSV + ")"
+	log.Println(sql_req)
+	_, err := dbmap.Select(&u, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	o.Meals = u
+}
+
+func (o *Order) MealSerialize() {
+	var csv_meal []string
+	for _, meal := range o.Meals {
+		if meal.Id > 0 {
+			csv_meal = append(csv_meal, strconv.Itoa(meal.Id))
+		}
+	}
+	o.MealCSV = strings.Join(csv_meal, ",")
 }

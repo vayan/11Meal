@@ -37,8 +37,6 @@ func getObj(t string) (interface{}, interface{}) {
 		return new(Meal), new([]Meal)
 	case "user":
 		return new(User), new([]User)
-	case "usermeal":
-		return new(UserMeal), new([]UserMeal)
 	}
 	log.Println("getObjArray : didn't find type")
 	return nil, nil

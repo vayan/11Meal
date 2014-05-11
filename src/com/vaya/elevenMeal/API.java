@@ -42,7 +42,7 @@ public class API {
 	}
 	
 	private void init() {
-		mUrl = "http://galan.im:8181";
+		mUrl = "http://192.168.0.100:8181";
 		mGson = new GsonBuilder()
 		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 		mListener = null;

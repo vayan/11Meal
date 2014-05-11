@@ -53,7 +53,7 @@ func vayanisme() {
 func atoi(s string) int {
 	d, err := strconv.Atoi(s)
 	if err != nil {
-		log.Println(err)
+		log.Println("Atoi()", err)
 		return 0
 	}
 	return d

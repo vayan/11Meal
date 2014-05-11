@@ -3,9 +3,10 @@ package main
 import ()
 
 type Reservation struct {
-	Id   int `db:"id"`
-	User int `db:"user"`
-	//Guest          []User `db:"guest"`
+	Id             int    `db:"id"`
+	User           int    `db:"user"`
+	GuestCSV       string `db:"guest" json:"-"`
+	Guests         []User `db:"-"`
 	Restaurant     int    `db:"restaurant"`
 	Date           string `db:"date"`
 	State          int    `db:"state"`

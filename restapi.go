@@ -7,11 +7,18 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
 func add(r interface{}) {
 	if r != nil {
+		switch r.(type) {
+		case *Reservation:
+			r.(*Reservation).GuestSerialize()
+		case *Order:
+			//handle slice Meal in order
+		}
 		err := dbmap.Insert(r)
 		if err != nil {
 			log.Println(err)
@@ -35,6 +42,12 @@ func del(r interface{}) {
 
 func put(r interface{}) {
 	if r != nil {
+		switch r.(type) {
+		case *Reservation:
+			r.(*Reservation).GuestSerialize()
+		case Order:
+			//handle slice Meal in order
+		}
 		_, err := dbmap.Update(r)
 		if err != nil {
 			log.Println(err)
@@ -45,7 +58,7 @@ func put(r interface{}) {
 	}
 }
 
-func get(vars map[string]string, obj_array interface{}) {
+func get(vars map[string]string, obj_array interface{}) interface{} {
 	var sql_req string
 	table := strings.ToLower(vars["table"])
 	column := strings.ToLower(vars["column"])
@@ -62,7 +75,19 @@ func get(vars map[string]string, obj_array interface{}) {
 	if err != nil {
 		log.Println(err)
 	}
+	switch obj_array.(type) {
+	case *[]Reservation:
+		var tmp []Reservation
+		for _, obj := range *obj_array.(*[]Reservation) {
+			obj.GuestUnserialize()
+			tmp = append(tmp, obj)
+		}
+		obj_array = tmp
+	case *Order:
+		//handle slice Meal in order
+	}
 	log.Println("get ", obj_array)
+	return obj_array
 }
 
 func incomingJson(req *http.Request, obj interface{}) (error, []byte) {
@@ -113,10 +138,8 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	} else {
 		switch req.Method {
 		case "GET":
-			get(vars, obj_array)
-			if reflect.ValueOf(obj_array).Elem().Len() > 0 {
-				data, _ = json.Marshal(obj_array)
-			}
+			obj_array = get(vars, obj_array)
+			data, _ = json.Marshal(obj_array)
 		case "POST":
 			err, data = incomingJson(req, obj)
 		case "DELETE":
@@ -141,4 +164,25 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	} else {
 		res.Write(data)
 	}
+}
+
+func (r *Reservation) GuestUnserialize() {
+	var u []User
+	sql_req := "select * from `user` where id in (" + r.GuestCSV + ")"
+	log.Println(sql_req)
+	_, err := dbmap.Select(&u, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	r.Guests = u
+}
+
+func (r *Reservation) GuestSerialize() {
+	var csv_guest []string
+	for _, user := range r.Guests {
+		if user.Id > 0 {
+			csv_guest = append(csv_guest, strconv.Itoa(user.Id))
+		}
+	}
+	r.GuestCSV = strings.Join(csv_guest, ",")
 }

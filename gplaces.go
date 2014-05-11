@@ -25,8 +25,8 @@ func handleGPS(res http.ResponseWriter, req *http.Request) {
 	location := vars["coord"]
 	m_distance := 200.
 	if len(vars["distance"]) > 1 {
-		m_distance_t, _ := strconv.ParseFloat(vars["distance"], 64)
-		if m_distance_t > 200 {
+		m_distance_t, err := strconv.ParseFloat(vars["distance"], 64)
+		if err == nil && m_distance_t > 200 {
 			m_distance = m_distance_t
 		}
 	}
@@ -50,19 +50,13 @@ func isInDB(UID string) bool {
 	return false
 }
 
-func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
+func get_restaurant_nearby(lat float64, lng float64, m_distance float64) []Restaurant {
 	var resto []Restaurant
-	coord := strings.Split(loc, ",")
 
 	///////////// NOT PRECISE
-	long_deg_per_m := 0.00010406 //degrees per meter
-	lat_deg_per_m := 0.000008999 //degrees per meter
+	long_distance := 0.00010406 * m_distance
+	lat_distance := 0.000008999 * m_distance
 
-	long_distance := long_deg_per_m * m_distance
-	lat_distance := lat_deg_per_m * m_distance
-
-	lat, _ := strconv.ParseFloat(coord[0], 64)
-	lng, _ := strconv.ParseFloat(coord[1], 64)
 	var _, err = dbmap.Select(&resto,
 		"select * from restaurant where lat between ? and ? and lng between ? and ?", lat-lat_distance, lat+lat_distance, lng-long_distance, lng+long_distance)
 	if err != nil {
@@ -73,7 +67,16 @@ func get_restaurant_nearby(loc string, m_distance float64) []Restaurant {
 
 func get_close_restaurant(loc string, m_distance float64) []Restaurant {
 	log.Println("Start getting restaurant data...")
-	restos := get_restaurant_nearby(loc, m_distance)
+	coord := strings.Split(loc, ",")
+	if len(coord) != 2 {
+		return []Restaurant{}
+	}
+	lat, _ := strconv.ParseFloat(coord[0], 64)
+	lng, _ := strconv.ParseFloat(coord[1], 64)
+	if lat == 0 || lng == 0 {
+		return []Restaurant{}
+	}
+	restos := get_restaurant_nearby(lat, lng, m_distance)
 	if len(restos) < 10 {
 		log.Println("Not enough data in DB, let's ask Google API more stuff...")
 		err := get_place_nearby(loc, "")
@@ -81,7 +84,7 @@ func get_close_restaurant(loc string, m_distance float64) []Restaurant {
 			log.Println(err)
 			return []Restaurant{}
 		}
-		return get_restaurant_nearby(loc, m_distance)
+		return get_restaurant_nearby(lat, lng, m_distance)
 	}
 	log.Println("Enough data in DB, we didn't ask Google API.")
 	return restos

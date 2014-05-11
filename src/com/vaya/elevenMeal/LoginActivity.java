@@ -142,6 +142,15 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 						attemptLogin();
 					}
 				});
+		
+		findViewById(R.id.register_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						intentRestaurant = new Intent(getApplicationContext(), RestaurantListActivity.class);
+							startActivity(intentRestaurant);
+					}
+				});
 
 		if (checkPlayServices()) {
 			gcm = GoogleCloudMessaging.getInstance(this);

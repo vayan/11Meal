@@ -90,6 +90,13 @@ func get(vars map[string]string, obj_array interface{}) interface{} {
 			tmp = append(tmp, obj)
 		}
 		obj_array = tmp
+	case *[]Restaurant:
+		var tmp []Restaurant
+		for _, obj := range *obj_array.(*[]Restaurant) {
+			obj.PromoUnserialize()
+			tmp = append(tmp, obj)
+		}
+		obj_array = tmp
 	}
 	log.Println("get ", obj_array)
 	return obj_array
@@ -211,4 +218,15 @@ func (o *Order) MealSerialize() {
 		}
 	}
 	o.MealCSV = strings.Join(csv_meal, ",")
+}
+
+func (o *Restaurant) PromoUnserialize() {
+	var u []Promo
+	sql_req := "select * from `promo` where restaurant =" + strconv.Itoa(o.Id)
+	log.Println(sql_req)
+	_, err := dbmap.Select(&u, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	o.Promos = u
 }

@@ -13,6 +13,14 @@ type Reservation struct {
 	PayementMethod int    `db:"payementmethod"`
 }
 
+type Promo struct {
+	Id          int    `db:"id"`
+	Name        string `db:"name"`
+	Description string `db:"description"`
+	P100_reduc  int    `db:"p100reduc"`
+	Restaurant  int    `db:"restaurant"`
+}
+
 type User struct {
 	Id         int    `db:"id"`
 	First_name string `db:"first_name"`
@@ -62,6 +70,7 @@ type Restaurant struct {
 	Schedule    string  `db:"schedule"`
 	Phone       string  `db:"phone"`
 	Description string  `db:"description"`
+	Promos      []Promo `db:"-"`
 }
 
 type RequestGCM struct {

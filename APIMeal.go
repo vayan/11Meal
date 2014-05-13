@@ -22,6 +22,7 @@ func init_db() *gorp.DbMap {
 	dbmap.AddTableWithName(Order{}, "order").SetKeys(true, "Id")
 	dbmap.AddTableWithName(Meal{}, "meal").SetKeys(true, "Id")
 	dbmap.AddTableWithName(User{}, "user").SetKeys(true, "Id")
+	dbmap.AddTableWithName(Promo{}, "promo").SetKeys(true, "Id")
 	err = dbmap.CreateTablesIfNotExists()
 	checkFatal(err)
 	log.Println("=== Db init")

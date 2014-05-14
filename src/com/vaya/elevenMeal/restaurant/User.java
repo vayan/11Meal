@@ -78,4 +78,9 @@ public class User implements IRestaurantObject {
 	public void setPhoneUID(String phoneUID) {
 		this.phoneUID = phoneUID;
 	}
+	
+	@Override
+	public String toString() {
+		return getLogin();
+	}
 }

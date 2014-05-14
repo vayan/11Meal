@@ -29,7 +29,11 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.vaya.elevenMeal.API;
+import com.vaya.elevenMeal.restaurant.Meal;
+import com.vaya.elevenMeal.restaurant.Meal.Type;
 import com.vaya.elevenMeal.restaurant.Restaurant;
+import com.vaya.elevenMeal.restaurant.User;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -151,6 +155,13 @@ public class LoginActivity extends Activity {
     } else {
         Log.i(TAG, "No valid Google Play Services APK found.");
     }
+        
+        Meal meal = new Meal();
+        meal.setName("cacaburger");
+        meal.setPrice(999);
+        meal.setType(Type.MAIN);
+        meal.setIdRestaurant(1);
+        //new API().create(meal);
 }
 	
 

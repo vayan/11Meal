@@ -87,7 +87,7 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/restaurantDetailsCall"
+                android:id="@+id/restaurantDetailsContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -95,7 +95,7 @@
                 android:background="@drawable/selector"
                 android:clickable="true"
                 android:padding="10dp"
-                android:text="@string/call"
+                android:text="@string/contact"
                 android:textAppearance="?android:attr/textAppearanceMedium" >
             </TextView>
 
@@ -103,7 +103,7 @@
                 android:id="@+id/separation3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/restaurantDetailsCall"
+                android:layout_below="@+id/restaurantDetailsContact"
                 android:background="@android:color/darker_gray" />
 
             <TextView

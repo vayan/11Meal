@@ -81,15 +81,8 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 		mBookButton = ((Button) rootView
 				.findViewById(R.id.restaurantDetailsReservation));
 		mMenu = (TextView) rootView.findViewById(R.id.restaurantDetailsMenu);
-		mCall = (TextView) rootView.findViewById(R.id.restaurantDetailsCall);
+		mCall = (TextView) rootView.findViewById(R.id.restaurantDetailsContact);
 		mPosition = (TextView) rootView.findViewById(R.id.restaurantDetailsPosition);
-		// Show the dummy content as text in a TextView.
-		// if (mItem != null) {
-		/*
-		 * ((ImageView) rootView.findViewById(R.id.restaurantDetailsPreview))
-		 * .setImageDrawable(this.getResources().getDrawable(
-		 * R.drawable.dummy));
-		 */
 		mName = ((TextView) rootView.findViewById(R.id.restaurantDetailsName));
 		mText = ((TextView) rootView.findViewById(R.id.restaurantDetailsText));
 		// }
@@ -112,9 +105,12 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 
 			@Override
 			public void onClick(View v) {
+				if (mItem != null) {
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_restaurant_contact);
 				dialog.setTitle(R.string.contact);
+				((TextView) dialog.findViewById(R.id.dialogRestaurantAddress)).setText(mItem.getAddress());
+				((TextView) dialog.findViewById(R.id.dialogRestaurantTel)).setText(mItem.getPhone());
 				dialog.findViewById(R.id.dialogDismiss).setOnClickListener(
 						new OnClickListener() {
 
@@ -124,6 +120,7 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 							}
 						});
 				dialog.show();
+				}
 			}
 		});
 		
@@ -141,8 +138,9 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getActivity(),
-						ReservationActivity.class));
+				Intent intent = new Intent(getActivity(), ReservationActivity.class);
+				intent.putExtra(ReservationActivity.ARG_ITEM_ID, mItem.getId());
+				startActivity(intent);
 			}
 		});
 		super.onResume();
@@ -150,12 +148,12 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 
 	@Override
 	public void onPause() {
-		if (mBookButton != null)
-			mBookButton.setOnClickListener(null);
-		if (mMenu != null)
-			mMenu.setOnTouchListener(null);
-		if (mCall != null)
-			mCall.setOnTouchListener(null);
+//		if (mBookButton != null)
+//			mBookButton.setOnClickListener(null);
+//		if (mMenu != null)
+//			mMenu.setOnTouchListener(null);
+//		if (mCall != null)
+//			mCall.setOnTouchListener(null);
 		super.onPause();
 	}
 
@@ -164,6 +162,6 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 		// TODO Auto-generated method stub
 		mItem = ((List<Restaurant>) res).get(0);
 		mName.setText(mItem.getName());
-		mText.setText(mItem.getAddress());
+		mText.setText(mItem.getDescription());
 	}
 }

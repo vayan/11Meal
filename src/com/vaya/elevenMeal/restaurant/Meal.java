@@ -38,11 +38,20 @@ public class Meal implements IRestaurantObject {
 		this.price = price;
 	}
 
+	public void setIdRestaurant(int id) {
+		restaurant = id;
+	}
+	
 	public Type getType() {
 		return type;
 	}
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
 	}
 }

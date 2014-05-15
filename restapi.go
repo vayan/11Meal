@@ -87,6 +87,7 @@ func get(vars map[string]string, obj_array interface{}) interface{} {
 		var tmp []Order
 		for _, obj := range *obj_array.(*[]Order) {
 			obj.MealUnserialize()
+			obj.ComputePrice()
 			tmp = append(tmp, obj)
 		}
 		obj_array = tmp
@@ -218,6 +219,14 @@ func (o *Order) MealSerialize() {
 		}
 	}
 	o.MealCSV = strings.Join(csv_meal, ",")
+}
+
+func (o *Order) ComputePrice() {
+	total_price := 0
+	for _, meal := range o.Meals {
+		total_price += meal.Price
+	}
+	o.Total_price = total_price
 }
 
 func (o *Restaurant) PromoUnserialize() {

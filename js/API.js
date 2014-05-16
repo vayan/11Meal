@@ -99,24 +99,34 @@ function Restaurant (tmp) {
 
 function Meal (tmp) {
     this.id = tmp.Id;
-    this.type = "Meal";
+    this.type = "meal";
     this.restaurant = tmp.Restaurant;
     this.name = tmp.Name;
     this.price = tmp.Price;
     this.cat = tmp.Type;
 }
 
-function Order (tmp, meal) {
+function Order (tmp) {
     this.id = tmp.Id;
-    this.type = "Order";
+    this.type = "order";
     this.totalPrice = tmp.Total_price;
     this.user = tmp.User;
     this.reservation = tmp.Reservation;
+    this.meals = tmp.Meals;
+}
+
+function Promo (tmp) {
+    this.id = tmp.Id;
+    this.type = "promo";
+    this.name = tmp.Name;
+    this.description = tmp.Description;
+    this.discount = tmp.P100_reduc;
+    this.restaurant = tmp.Restaurant;
 }
 
 function UserMeal (tmp) {
     this.id = tmp.Id;
-    this.type = "Meal";
+    this.type = "meal";
     this.order = tmp.Order;
     this.meal = tmp.Meal;
     this.restaurant = tmp.Restaurant;

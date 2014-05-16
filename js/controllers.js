@@ -31,6 +31,7 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 
     if ($routeParams.objClass == "reservation" 
 	|| $routeParams.objClass == "meal"
+	|| $routeParams.objClass == "promo"
 	|| ($routeParams.objClass == "order" 
 	    && $routeParams.column == "null")) {
 	column = "Restaurant";
@@ -64,6 +65,11 @@ rListCtrl.controller('rListCtrl', ['$scope', '$routeParams',function($scope, $ro
 		console.log($routeParams.objClass);
 		console.log(value);
 		arraytmp[key] = new UserMeal(value);
+	    }
+	    else if ($routeParams.objClass == "promo") {
+		console.log($routeParams.objClass);
+		console.log(value);
+		arraytmp[key] = new Promo(value);
 	    }
 	});
 	$scope.List = arraytmp;
@@ -183,12 +189,25 @@ createController.controller('createFormController', ['$scope', '$routeParams', f
         obj["Description"] = description;
 
         API.create($routeParams.objClass, obj).done(function(data) {
-	    location.assign("index.html#/list/"+$routeParams.objClass);
+	    location.assign("index.html#/list/"+$routeParams.objClass+"/null/null");
 	});
     }
 
     $scope.createIt = function (name, price, cat) {
 	location.assign('#/create/meal/'+name+'/'+price+'/'+cat);
+    }
+
+    $scope.createPromo = function (promo) {
+        console.log("in create promo");
+        var obj = {};
+        obj["Name"] = promo.name;
+        obj["Description"] = promo.description;
+        obj["P100_reduc"] = parseInt(promo.discount);
+        obj["Restaurant"] =  parseInt(utils.readCookie("session"));
+
+        API.create($routeParams.objClass, obj).done(function(data) {
+	    location.assign("index.html#/list/"+$routeParams.objClass+"/null/null");
+	});
     }
 
 }]);

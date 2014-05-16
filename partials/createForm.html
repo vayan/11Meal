@@ -79,6 +79,30 @@
     Submit
       </button>
   </span>
+      <span ng-if="Type == 'promo'" >
+      <div  class="form-group">
+	<label for="name">Name</label>
+	<input type="text" class="form-control" id="name"
+	       placeholder="Enter name" ng-model="promo.name" required>
+      </div>
+      <div class="form-group">
+	<label for="discount">Discount</label>
+	<input type="number" class="form-control" id="discount"
+	       placeholder="0" ng-model="promo.doscount" required>
+      </div>
+      <div class="form-group">
+	<label for="description">Description</label>
+	<input type="text" class="form-control" id="description"
+	       placeholder="Enter Description" ng-model="promo.description" required>
+      </div>
+
+      <button
+	 class="btn btn-default"
+	 ng-disabled="createForm.$invalid"
+	 ng-click="createPromo(promo)">
+	Submit
+      </button>
+  </span>
     </form>
 
     <!-- close the two for the menu on the left -->

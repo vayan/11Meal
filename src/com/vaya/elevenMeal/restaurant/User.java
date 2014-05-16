@@ -6,12 +6,15 @@ public class User implements IRestaurantObject {
 	// Attributes
 	protected int id;
 	protected String login;
+	protected String password;
 	protected String first_Name;
 	protected String last_Name;
 	protected String email;
 	protected String phone;
 	protected String phoneUID;
-	protected String gCM_ID;
+	protected String GCM_ID;
+	protected String GPS;
+	
 	
 	// Getters/setters
 	public int getId() {
@@ -24,6 +27,14 @@ public class User implements IRestaurantObject {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password= password;
 	}
 
 	public String getFirstName() {
@@ -59,11 +70,19 @@ public class User implements IRestaurantObject {
 	}
 
 	public String getGcmId() {
-		return gCM_ID;
+		return GCM_ID;
 	}
 
 	public void setGcmId(String gcmId) {
-		this.gCM_ID = gcmId;
+		this.GCM_ID = gcmId;
+	}
+
+	public String getLocation() {
+		return GPS;
+	}
+
+	public void setLocation(String location) {
+		this.GPS = location;
 	}
 
 	// Methods
@@ -77,5 +96,10 @@ public class User implements IRestaurantObject {
 
 	public void setPhoneUID(String phoneUID) {
 		this.phoneUID = phoneUID;
+	}
+	
+	@Override
+	public String toString() {
+		return getLogin();
 	}
 }

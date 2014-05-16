@@ -39,7 +39,7 @@ public class DummyContent {
 		addItem(new Restaurant(1, "resto 2", "add"));
 		addItem(new Restaurant(2, "resto 3", "add"));
 		
-		addItem2(new Reservation(0));
+		//addItem2(new Reservation(0));
 	}
 
 	private static void addItem(Restaurant item) {

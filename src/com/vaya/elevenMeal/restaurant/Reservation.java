@@ -1,8 +1,13 @@
 package com.vaya.elevenMeal.restaurant;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+
+import android.util.Log;
 
 public class Reservation implements IRestaurantObject {
 	public static enum State {
@@ -20,16 +25,21 @@ public class Reservation implements IRestaurantObject {
 
 	// Attributes
 	protected int id;
-	protected User user;
+	protected int user;
 	protected ArrayList<User> guests;
 	protected int restaurant;
-	protected Date date;
+	protected String date;
 	protected State state;
 	protected Payment payementMethod;
+
+	public Reservation() {
+		guests = new ArrayList<User>();
+	}
 	
 	public Reservation(int id)
 	{
 		this.id = id;
+		guests = new ArrayList<User>();
 	}
 	
 	// Getters/setters
@@ -38,10 +48,15 @@ public class Reservation implements IRestaurantObject {
 	}
 
 	public Date getDate() {
-		return date;
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+		} catch (ParseException e) {
+			Log.w("Reservation.getdate", e.getMessage());
+		}
+		return null;
 	}
 
-	public User getOwner() {
+	public int getOwnerId() {
 		return user;
 	}
 	
@@ -50,11 +65,19 @@ public class Reservation implements IRestaurantObject {
 	}
 
 	public void setOwner(User owner) {
-		this.user = owner;
+		this.user = owner.getId();
+	}
+
+	public int getRestaurantId() {
+		return restaurant;
+	}
+	
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant.getId();
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 	}
 
 	public State getState() {
@@ -86,6 +109,11 @@ public class Reservation implements IRestaurantObject {
 				break;
 			}
 		}
+	}
+	
+	public void setListGuest(ArrayList<User> users)
+	{
+		this.guests = users;
 	}
 
 	// FIXME: Do we really need theses methods?

@@ -47,7 +47,8 @@
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true" >
+            </EditText>
 
             <EditText
                 android:id="@+id/password"
@@ -60,6 +61,55 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true" />
+            
+            <EditText
+                android:id="@+id/passwordConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/password_confirm"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login"
+                android:maxLines="1"
+                android:ems="10"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/firstname"
+                android:ems="10"
+                android:maxLines="1"
+                android:inputType="textPersonName"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lastname"
+                android:ems="10"
+                android:maxLines="1"
+                android:inputType="textPersonName"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone_number"
+                android:ems="10"
+                android:maxLines="1"
+                android:inputType="phone"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/RelativeLayout1"
@@ -92,3 +142,4 @@
     </ScrollView>
 
 </merge>
+

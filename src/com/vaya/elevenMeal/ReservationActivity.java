@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+// Trop de static, c'est caca
 public class ReservationActivity extends Activity implements
 		ActionBar.TabListener {
 
@@ -430,7 +431,7 @@ public class ReservationActivity extends Activity implements
 		}
 		
 		
-		private void setTotalOrder()
+		public static void setTotalOrder()
 		{
 			float total = 0;
 			Boolean[] checked;

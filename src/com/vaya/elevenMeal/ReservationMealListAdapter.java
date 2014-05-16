@@ -2,6 +2,7 @@ package com.vaya.elevenMeal;
 
 import java.util.List;
 
+import com.vaya.elevenMeal.ReservationActivity.OrderFragment;
 import com.vaya.elevenMeal.restaurant.Meal;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -74,6 +75,7 @@ public class ReservationMealListAdapter extends ArrayAdapter<Meal>{
 			MealRow row = ((MealRow) v.getTag());
 			row.checkbox.setChecked(!row.checkbox.isChecked());
 			mChecked[row.position] = row.checkbox.isChecked();
+			OrderFragment.setTotalOrder();
 		}
 	};
 	

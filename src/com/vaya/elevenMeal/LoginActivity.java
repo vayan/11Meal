@@ -159,10 +159,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						if (register())
-						{
-							startActivity(new Intent(context, RestaurantListActivity.class));
-						}
+						register();
 					}
 				});
 
@@ -196,14 +193,22 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 	public Boolean register() {
 		if (mSwitch) {
+			if (!(mPasswordView.getText().toString().equals(mPassRepeatView.getText().toString()))) {
+				mPasswordView
+						.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.requestFocus();
+				return false;
+			}
 			User user = new User();
 			user.setEmail(mEmailView.getText().toString());
+			user.setPassword(mPasswordView.getText().toString());
 			user.setLogin(mPasswordView.getText().toString());
 			user.setFirstName(mFirstnameView.getText().toString());
 			user.setLastName(mLastnameView.getText().toString());
 			user.setLogin(mUsernameView.getText().toString());
 			user.setPhone(mPhoneView.getText().toString());
-			new API().create(user);
+			new API(this).create(user);
+			showProgress(true);
 			return true;
 		}
 		mSwitch = !mSwitch;
@@ -476,23 +481,35 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
-		// TODO Auto-generated method stub
-		List<User> user = (List<User>) res;
-
 		showProgress(false);
+		intentRestaurant = new Intent(this, RestaurantListActivity.class);
 
-		if (mEmail.equalsIgnoreCase(user.get(0).getEmail())
-				&& mPassword.equals((user.get(0)).getPassword())) {
+		if ((type.toString())
+				.equals("class com.vaya.elevenMeal.restaurant.User")) {
+			User user = (User) res;
+			startActivity(intentRestaurant);
+			SharedPreferences settings = getSharedPreferences("11Meal", 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt("user_id", user.getId());
+			finish();
+			return;
+		}
+
+		List<User> user = (List<User>) res;
+		if (mEmailView.getText().toString()
+				.equalsIgnoreCase(user.get(0).getEmail())
+				&& mPasswordView.getText().toString()
+						.equals((user.get(0)).getPassword())) {
 			Log.d("LOGIN", mEmail + "||" + mPassword + ">>"
 					+ user.get(0).getEmail() + "||" + user.get(0).getPassword());
-			intentRestaurant = new Intent(this, RestaurantListActivity.class);
 			startActivity(intentRestaurant);
 
 			// We need an Editor object to make preference changes.
 			// All objects are from android.context.Context
-			SharedPreferences settings = getSharedPreferences("User", 0);
+			SharedPreferences settings = getSharedPreferences("11Meal",
+					MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putInt("id", user.get(0).getId());
+			editor.putInt("user_id", user.get(0).getId());
 			// Commit the edits!
 			editor.commit();
 

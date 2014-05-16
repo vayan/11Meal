@@ -91,7 +91,32 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 
 	@Override
 	public void onResume() {
+		if (mItem != null)
+			setButtons();
+		super.onResume();
+	}
 
+	@Override
+	public void onPause() {
+//		if (mBookButton != null)
+//			mBookButton.setOnClickListener(null);
+//		if (mMenu != null)
+//			mMenu.setOnTouchListener(null);
+//		if (mCall != null)
+//			mCall.setOnTouchListener(null);
+		super.onPause();
+	}
+
+	@Override
+	public void onTaskCompleted(Object res) {
+		// TODO Auto-generated method stub
+		mItem = ((List<Restaurant>) res).get(0);
+		mName.setText(mItem.getName());
+		mText.setText(mItem.getDescription());
+		setButtons();
+	}
+	
+	private void setButtons(){
 		mMenu.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -143,25 +168,5 @@ public class RestaurantDetailFragment extends Fragment implements OnTaskComplete
 				startActivity(intent);
 			}
 		});
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-//		if (mBookButton != null)
-//			mBookButton.setOnClickListener(null);
-//		if (mMenu != null)
-//			mMenu.setOnTouchListener(null);
-//		if (mCall != null)
-//			mCall.setOnTouchListener(null);
-		super.onPause();
-	}
-
-	@Override
-	public void onTaskCompleted(Object res) {
-		// TODO Auto-generated method stub
-		mItem = ((List<Restaurant>) res).get(0);
-		mName.setText(mItem.getName());
-		mText.setText(mItem.getDescription());
 	}
 }

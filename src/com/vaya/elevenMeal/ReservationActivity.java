@@ -1,5 +1,8 @@
 package com.vaya.elevenMeal;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -7,9 +10,12 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import com.google.android.gms.cast.Cast;
+import com.google.android.gms.internal.ch;
 import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Order;
+import com.vaya.elevenMeal.restaurant.Reservation;
 import com.vaya.elevenMeal.restaurant.Reservation.Payment;
+import com.vaya.elevenMeal.restaurant.Reservation.State;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
@@ -28,7 +34,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -118,8 +126,16 @@ public class ReservationActivity extends Activity implements
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			long calendar = HourDateFragment.getDateHour();
+		if (id == R.id.action_validate) {
+			Order order = new Order();
+			Reservation reservation = new Reservation();
+			order.setMealList(OrderFragment.getMealList());
+			//reservation.setOwner(owner)
+			reservation.setListGuest((ArrayList<User>) PeopleFragment.getUsers());
+			reservation.setDate(new Date(HourDateFragment.getDateHour()));
+			reservation.setPayMethod(HourDateFragment.getPaymentMethod());
+			reservation.setState(State.OPENED);
+			//new API().create(order);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -247,7 +263,7 @@ public class ReservationActivity extends Activity implements
 
 	public static class PeopleFragment extends Fragment implements
 			OnTaskCompleted {
-		private static List<User> mUsers;
+		private static List<UserCheckable> mUsers = new ArrayList<UserCheckable>();
 
 		private ListView mPeople;
 
@@ -282,14 +298,14 @@ public class ReservationActivity extends Activity implements
 					.findViewById(R.id.newReservationListPeople);
 			
 			if (mUsers != null)
-				mPeople.setAdapter(new ArrayAdapter<User>(getActivity(),
+				mPeople.setAdapter(new ArrayAdapter<UserCheckable>(getActivity(),
 						android.R.layout.simple_list_item_checked, mUsers));
 			mPeople.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					Toast.makeText(getActivity(), String.valueOf(arg2), Toast.LENGTH_SHORT).show();
+					mUsers.get(arg2).checked = !mUsers.get(arg2).checked;
 				}
 			});
 			
@@ -298,18 +314,47 @@ public class ReservationActivity extends Activity implements
 
 		@Override
 		public void onTaskCompleted(Object res) {
-			mUsers = (List<User>) res;
+			List<User> users = (List<User>) res;
+			for(User user:users)
+				mUsers.add(new UserCheckable(user, false));
 			if (mUsers != null)
-				mPeople.setAdapter(new ArrayAdapter<User>(getActivity(),
+				mPeople.setAdapter(new ArrayAdapter<UserCheckable>(getActivity(),
 						android.R.layout.simple_list_item_checked, mUsers));
+		}
+		
+		public static List<User> getUsers() {
+			List<User> users = new ArrayList<User>();
+			for (UserCheckable user:mUsers)
+				if (user.checked)
+					users.add(user.user);
+			return users;
+		}
+		
+		
+		private class UserCheckable {
+			public Boolean checked;
+			public User user;
+			
+			public UserCheckable(User u, Boolean b)
+			{
+				user = u;
+				checked = b;
+			}
+			
+			@Override
+			public String toString() {
+				return user.getLogin();
+			}
 		}
 	}
 
 	public static class OrderFragment extends Fragment implements
 			OnTaskCompleted {
 		private static List<Meal> mOrders;
+		private static ReservationMealListAdapter mAdapter;
 		private static ListView mMeal;
 		private static OrderFragment mFragment;
+		private static TextView mTotal;
 
 		/**
 		 * The fragment argument representing the section number for this
@@ -341,14 +386,21 @@ public class ReservationActivity extends Activity implements
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_reservation_order, container, false);
-			
+			mTotal = (TextView) rootView.findViewById(R.id.newReservationOrderTotal);
+			setTotalOrder();
 			mMeal = (ListView) rootView
 					.findViewById(R.id.newReservationListOrder);
-			 if (mOrders != null)
-				mMeal.setAdapter(new ArrayAdapter<Meal>(getActivity(),
-						android.R.layout.simple_list_item_1, mOrders));
+			if (mOrders != null && mAdapter != null)
+				 mMeal.setAdapter(mAdapter);
 			
+			mMeal.setOnItemClickListener(new OnItemClickListener() {
 
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					setTotalOrder();
+				}
+			});
 			
 			return rootView;
 		}
@@ -357,9 +409,42 @@ public class ReservationActivity extends Activity implements
 		public void onTaskCompleted(Object res) {
 			mOrders = (List<Meal>) res;
 			if (mOrders != null)
-				mMeal.setAdapter(new ArrayAdapter<Meal>(getActivity(),
-						android.R.layout.simple_list_item_1, mOrders));
+			{
+				mAdapter = new ReservationMealListAdapter(getActivity(), R.layout.adapter_meal_list, mOrders);
+				mMeal.setAdapter(mAdapter);
+			}
+		}
+		
+		public static List<Meal> getMealList()
+		{
 
+			List<Meal> choosen = new ArrayList<Meal>();
+			List<Boolean> listChecked;
+			
+			listChecked = Arrays.asList(mAdapter.getChecked());
+			for (int i = 0; i < listChecked.size(); i++){
+				if (listChecked.get(i))
+					choosen.add(mOrders.get(i));
+			}
+			return choosen;
+		}
+		
+		
+		private void setTotalOrder()
+		{
+			float total = 0;
+			Boolean[] checked;
+			
+			if (mAdapter == null)
+			{
+				mTotal.setText(String.valueOf(0));
+				return;
+			}
+			checked = mAdapter.getChecked();
+			for(int i = 0; i < checked.length; i++)
+				if (checked[i])
+					total += mOrders.get(i).getPrice();
+			mTotal.setText(String.valueOf(total));
 		}
 	}
 }

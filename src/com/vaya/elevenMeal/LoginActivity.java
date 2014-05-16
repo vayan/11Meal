@@ -36,31 +36,32 @@ import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements OnTaskCompleted {
 
-    //for GCM
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-    String SENDER_ID = "992584978430";
-    GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
-    String regid;
+	// for GCM
+	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	public static final String EXTRA_MESSAGE = "message";
+	public static final String PROPERTY_REG_ID = "registration_id";
+	private static final String PROPERTY_APP_VERSION = "appVersion";
+	String SENDER_ID = "992584978430";
+	GoogleCloudMessaging gcm;
+	AtomicInteger msgId = new AtomicInteger();
+	SharedPreferences prefs;
+	String regid;
+	Intent intentRestaurant;
 
-    private OnSharedPreferenceChangeListener listener = null;
+	private OnSharedPreferenceChangeListener listener = null;
 
-    static final String TAG = "Mainacti";
+	static final String TAG = "Mainacti";
 
-
-    /**
+	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
@@ -75,7 +76,7 @@ public class LoginActivity extends Activity {
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+	// private UserLoginTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -87,18 +88,18 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-    Context context;
+	Context context;
 
-    @Override
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_login);
 
-        context = getApplicationContext();
+		context = getApplicationContext();
 
-        UpdatePref();
+		UpdatePref();
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 			public void onSharedPreferenceChanged(SharedPreferences prefs,
@@ -108,12 +109,13 @@ public class LoginActivity extends Activity {
 		};
 		prefs.registerOnSharedPreferenceChangeListener(listener);
 
-		/*if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}*/
-		
-        // Set up the login form.
+		/*
+		 * if (savedInstanceState == null) {
+		 * getFragmentManager().beginTransaction() .add(R.id.container, new
+		 * PlaceholderFragment()).commit(); }
+		 */
+
+		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
@@ -143,124 +145,140 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
+		
+		findViewById(R.id.register_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						intentRestaurant = new Intent(getApplicationContext(), RestaurantListActivity.class);
+							startActivity(intentRestaurant);
+					}
+				});
 
+		if (checkPlayServices()) {
+			gcm = GoogleCloudMessaging.getInstance(this);
+			regid = getRegistrationId(context);
 
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(this);
-        regid = getRegistrationId(context);
+			if (regid.isEmpty()) {
+				new registerInBackground().execute();
+			}
+		} else {
+			Log.i(TAG, "No valid Google Play Services APK found.");
+		}
 
-        if (regid.isEmpty()) {
-            new registerInBackground().execute();
-        }
-    } else {
-        Log.i(TAG, "No valid Google Play Services APK found.");
-    }
-        
-        Meal meal = new Meal();
-        meal.setName("cacaburger");
-        meal.setPrice(999);
-        meal.setType(Type.MAIN);
-        meal.setIdRestaurant(1);
-        //new API().create(meal);
-}
-	
+		// If the user is already logged in
+		intentRestaurant = new Intent(this, RestaurantListActivity.class);
+		SharedPreferences settings = getSharedPreferences("User", 0);
+		int id = settings.getInt("id", 0);
+		Log.d("LOGIN", String.valueOf(id));
+		if (id != 0) {
+			startActivity(intentRestaurant);
+			finish();
+		}
+		
+		intentRestaurant = new Intent(getApplicationContext(), RestaurantListActivity.class);
+		startActivity(intentRestaurant);
+	}
 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-	
-    private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
-        if (registrationId.isEmpty()) {
-            Log.i(TAG, "Registration not found.");
-            return "";
-        }
-        return registrationId;
-    }
 
-    private SharedPreferences getGCMPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
-        return getSharedPreferences(LoginActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-    }
+	private String getRegistrationId(Context context) {
+		final SharedPreferences prefs = getGCMPreferences(context);
+		String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+		if (registrationId.isEmpty()) {
+			Log.i(TAG, "Registration not found.");
+			return "";
+		}
+		return registrationId;
+	}
 
-    private static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
+	private SharedPreferences getGCMPreferences(Context context) {
+		// This sample app persists the registration ID in shared preferences,
+		// but
+		// how you store the regID in your app is up to you.
+		return getSharedPreferences(LoginActivity.class.getSimpleName(),
+				Context.MODE_PRIVATE);
+	}
 
+	private static int getAppVersion(Context context) {
+		try {
+			PackageInfo packageInfo = context.getPackageManager()
+					.getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			// should never happen
+			throw new RuntimeException("Could not get package name: " + e);
+		}
+	}
 
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i("GPLAY_SERVICE", "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
+	private boolean checkPlayServices() {
+		int resultCode = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+		if (resultCode != ConnectionResult.SUCCESS) {
+			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+						PLAY_SERVICES_RESOLUTION_REQUEST).show();
+			} else {
+				Log.i("GPLAY_SERVICE", "This device is not supported.");
+				finish();
+			}
+			return false;
+		}
+		return true;
+	}
 
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
-    }
+	private void sendRegistrationIdToBackend() {
+		// Your implementation here.
+	}
 
-    private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
-    }
+	private void storeRegistrationId(Context context, String regId) {
+		final SharedPreferences prefs = getGCMPreferences(context);
+		int appVersion = getAppVersion(context);
+		Log.i(TAG, "Saving regId on app version " + appVersion);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(PROPERTY_REG_ID, regId);
+		editor.putInt(PROPERTY_APP_VERSION, appVersion);
+		editor.commit();
+	}
 
-    private class registerInBackground extends AsyncTask<Void, Void, String> {
-        protected String doInBackground(Void... params) {
-            String msg = "";
-            try {
-                if (gcm == null) {
-                    gcm = GoogleCloudMessaging.getInstance(context);
-                }
-                regid = gcm.register(SENDER_ID);
-                msg = "Device registered, registration ID=" + regid;
+	private class registerInBackground extends AsyncTask<Void, Void, String> {
+		protected String doInBackground(Void... params) {
+			String msg = "";
+			try {
+				if (gcm == null) {
+					gcm = GoogleCloudMessaging.getInstance(context);
+				}
+				regid = gcm.register(SENDER_ID);
+				msg = "Device registered, registration ID=" + regid;
 
-                // You should send the registration ID to your server over HTTP,
-                // so it can use GCM/HTTP or CCS to send messages to your app.
-                // The request to your server should be authenticated if your app
-                // is using accounts.
-                sendRegistrationIdToBackend();
+				// You should send the registration ID to your server over HTTP,
+				// so it can use GCM/HTTP or CCS to send messages to your app.
+				// The request to your server should be authenticated if your
+				// app
+				// is using accounts.
+				sendRegistrationIdToBackend();
 
-                // For this demo: we don't need to send it because the device
-                // will send upstream messages to a server that echo back the
-                // message using the 'from' address in the message.
+				// For this demo: we don't need to send it because the device
+				// will send upstream messages to a server that echo back the
+				// message using the 'from' address in the message.
 
-                // Persist the regID - no need to register again.
-                storeRegistrationId(context, regid);
-            } catch (IOException ex) {
-                msg = "Error :" + ex.getMessage();
-                // If there is an error, don't just keep trying to register.
-                // Require the user to click a button again, or perform
-                // exponential back-off.
-            }
-            return msg;
-        }
-        protected void onPostExecute(String msg) {
-            Log.i("ASYNC", msg);
-        }
-    }
+				// Persist the regID - no need to register again.
+				storeRegistrationId(context, regid);
+			} catch (IOException ex) {
+				msg = "Error :" + ex.getMessage();
+				// If there is an error, don't just keep trying to register.
+				// Require the user to click a button again, or perform
+				// exponential back-off.
+			}
+			return msg;
+		}
+
+		protected void onPostExecute(String msg) {
+			Log.i("ASYNC", msg);
+		}
+	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -268,13 +286,13 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		Intent intent = new Intent(this, RestaurantListActivity.class);
-        startActivity(intent);      
-        finish();
-        
-		if (mAuthTask != null) {
-			return;
-		}
+		intentRestaurant = new Intent(this, RestaurantListActivity.class);
+		// startActivity(intent);
+		// finish();
+
+		/*
+		 * if (mAuthTask != null) { return; }
+		 */
 
 		// Reset errors.
 		mEmailView.setError(null);
@@ -318,8 +336,7 @@ public class LoginActivity extends Activity {
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+			new API(this).get(new User(), "email", mEmail);
 		}
 	}
 
@@ -368,51 +385,33 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
+	/*
+	 * public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	 * 
+	 * @Override protected Boolean doInBackground(Void... params) { // TODO:
+	 * attempt authentication against a network service.
+	 * 
+	 * try { // Simulate network access. Thread.sleep(2000); } catch
+	 * (InterruptedException e) { return false; }
+	 * 
+	 * for (String credential : DUMMY_CREDENTIALS) { String[] pieces =
+	 * credential.split(":"); if (pieces[0].equals(mEmail)) { // Account exists,
+	 * return true if the password matches. return pieces[1].equals(mPassword);
+	 * } }
+	 * 
+	 * // TODO: register the new account here. return true; }
+	 * 
+	 * @Override protected void onPostExecute(final Boolean success) { mAuthTask
+	 * = null; showProgress(false);
+	 * 
+	 * if (success) { startActivity(intentRestaurant); finish(); } else {
+	 * mPasswordView .setError(getString(R.string.error_incorrect_password));
+	 * mPasswordView.requestFocus(); } }
+	 * 
+	 * @Override protected void onCancelled() { mAuthTask = null;
+	 * showProgress(false); } }
+	 */
 
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				finish();
-			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
-	}
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.login, menu);
@@ -433,11 +432,42 @@ public class LoginActivity extends Activity {
 		startActivity(new Intent(LoginActivity.this, UserSettingsActivity.class));
 		Log.d(TAG, "Open settings");
 	}
-	
+
 	public void UpdatePref() {
 		// get latest settings from the xml config file
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
+	}
+
+	@Override
+	public void onTaskCompleted(Object res) {
+		// TODO Auto-generated method stub
+		List<User> user = (List<User>) res;
+
+		showProgress(false);
+
+		if (mEmail.equalsIgnoreCase(user.get(0).getEmail())
+				&& mPassword.equals(user.get(0).getEmail())) {
+			Log.d("LOGIN", mEmail + "||" + mPassword + ">>"
+					+ user.get(0).getEmail() + "||" + user.get(0).getEmail());
+			intentRestaurant = new Intent(this, RestaurantListActivity.class);
+			startActivity(intentRestaurant);
+			
+			// We need an Editor object to make preference changes.
+			// All objects are from android.context.Context
+			SharedPreferences settings = getSharedPreferences("User", 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt("id", user.get(0).getId());
+			// Commit the edits!
+			editor.commit();
+			
+			finish();
+		} else {
+			mPasswordView
+					.setError(getString(R.string.error_incorrect_password));
+			mPasswordView.requestFocus();
+		}
+
 	}
 
 }

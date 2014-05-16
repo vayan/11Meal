@@ -3,6 +3,7 @@ package com.vaya.elevenMeal.restaurant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class Reservation implements IRestaurantObject {
 	public static enum State {
@@ -26,11 +27,6 @@ public class Reservation implements IRestaurantObject {
 	protected Date date;
 	protected State state;
 	protected Payment payementMethod;
-	
-	public Reservation(int id)
-	{
-		this.id = id;
-	}
 	
 	// Getters/setters
 	public int getId() {
@@ -86,6 +82,11 @@ public class Reservation implements IRestaurantObject {
 				break;
 			}
 		}
+	}
+	
+	public void setListGuest(ArrayList<User> users)
+	{
+		this.guests = users;
 	}
 
 	// FIXME: Do we really need theses methods?

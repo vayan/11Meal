@@ -11,6 +11,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -90,6 +91,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	private TextView mLoginStatusMessageView;
 	Context context;
 
+	private EditText mPassRepeatView;
+	private EditText mUsernameView;
+	private EditText mFirstnameView;
+	private EditText mLastnameView;
+	private EditText mPhoneView;
+
+	private Boolean mSwitch = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -145,15 +154,23 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 						attemptLogin();
 					}
 				});
-		
+
 		findViewById(R.id.register_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						intentRestaurant = new Intent(getApplicationContext(), RestaurantListActivity.class);
-							startActivity(intentRestaurant);
+						if (register())
+						{
+							startActivity(new Intent(context, RestaurantListActivity.class));
+						}
 					}
 				});
+
+		mPassRepeatView = (EditText) findViewById(R.id.passwordConfirm);
+		mUsernameView = (EditText) findViewById(R.id.login);
+		mFirstnameView = (EditText) findViewById(R.id.firstName);
+		mLastnameView = (EditText) findViewById(R.id.lastName);
+		mPhoneView = (EditText) findViewById(R.id.phoneNumber);
 
 		if (checkPlayServices()) {
 			gcm = GoogleCloudMessaging.getInstance(this);
@@ -175,9 +192,27 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			startActivity(intentRestaurant);
 			finish();
 		}
-		
-		intentRestaurant = new Intent(getApplicationContext(), RestaurantListActivity.class);
-		startActivity(intentRestaurant);
+	}
+
+	public Boolean register() {
+		if (mSwitch) {
+			User user = new User();
+			user.setEmail(mEmailView.getText().toString());
+			user.setLogin(mPasswordView.getText().toString());
+			user.setFirstName(mFirstnameView.getText().toString());
+			user.setLastName(mLastnameView.getText().toString());
+			user.setLogin(mUsernameView.getText().toString());
+			user.setPhone(mPhoneView.getText().toString());
+			new API().create(user);
+			return true;
+		}
+		mSwitch = !mSwitch;
+		mPassRepeatView.setVisibility(android.view.View.VISIBLE);
+		mUsernameView.setVisibility(android.view.View.VISIBLE);
+		mFirstnameView.setVisibility(android.view.View.VISIBLE);
+		mLastnameView.setVisibility(android.view.View.VISIBLE);
+		mPhoneView.setVisibility(android.view.View.VISIBLE);
+		return false;
 	}
 
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -452,7 +487,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 					+ user.get(0).getEmail() + "||" + user.get(0).getEmail());
 			intentRestaurant = new Intent(this, RestaurantListActivity.class);
 			startActivity(intentRestaurant);
-			
+
 			// We need an Editor object to make preference changes.
 			// All objects are from android.context.Context
 			SharedPreferences settings = getSharedPreferences("User", 0);
@@ -460,7 +495,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			editor.putInt("id", user.get(0).getId());
 			// Commit the edits!
 			editor.commit();
-			
+
 			finish();
 		} else {
 			mPasswordView

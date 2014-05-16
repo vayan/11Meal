@@ -137,7 +137,7 @@ public class RestaurantDetailFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				if (mItem != null) {
+				if (mMeals != null) {
 					final Dialog dialog = new Dialog(getActivity());
 					dialog.setContentView(R.layout.dialog_restaurant_menu);
 					dialog.setTitle(R.string.menu);

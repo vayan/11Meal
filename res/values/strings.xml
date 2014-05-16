@@ -27,5 +27,11 @@
     <string name="hour">Hour</string>
     <string name="payMethod">Payment Method</string>
     <string name="close">Close</string>
+    <string name="description">Description</string>
+    <string name="login">Username</string>
+    <string name="phone_number">Phone number</string>
+    <string name="password_confirm">Repeat password</string>
+    <string name="firstname">Given name</string>
+    <string name="lastname">Family name</string>
 
 </resources>

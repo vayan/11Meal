@@ -144,6 +144,67 @@ func incomingJson(req *http.Request, obj interface{}) (error, []byte) {
 	return err, data
 }
 
+func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
+	var data []byte
+	var err error = nil
+	var meals []Meal
+	var orders []Order
+	top := "10"
+
+	vars := mux.Vars(req)
+
+	_, ok := vars["valtop"]
+	if ok {
+		top = vars["valtop"]
+	}
+
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Content-Type", "application/json; charset=utf-8")
+	res.Header().Set("Access-Control-Allow-Methods", "GET")
+
+	if req.Method == "GET" {
+
+		count := make(map[string]int, 200) //TODO stop hardcord map size
+		sql_req := "select * from `order`"
+		_, err := dbmap.Select(&orders, sql_req)
+		if err != nil {
+			log.Println(err)
+		}
+		for _, order := range orders {
+			split := strings.Split(order.MealCSV, ",")
+			for _, sp := range split {
+				count[sp] += 1
+			}
+		}
+		for i := 0; i < atoi(top); i++ {
+			tmp := 0
+			key := "0"
+			var m Meal
+			for k, v := range count {
+				if tmp <= v {
+					tmp = v
+					key = k
+				}
+			}
+			err := dbmap.SelectOne(&m, "select * from meal where id=?", key)
+			if err != nil {
+				log.Println(err)
+			}
+			meals = append(meals, m)
+			delete(count, key)
+			if len(count) <= 0 {
+				i += atoi(top)
+			}
+		}
+		data, _ = json.Marshal(meals)
+	}
+	if err != nil {
+		http.Error(res, err.Error(), 400)
+	} else {
+		res.Write(data)
+	}
+}
+
 func handleglobal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var err error = nil

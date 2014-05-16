@@ -144,6 +144,7 @@ func incomingJson(req *http.Request, obj interface{}) (error, []byte) {
 	return err, data
 }
 
+//its fucking ulgy and I don't careeeeeeeee
 func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
 	var data []byte
 	var err error = nil
@@ -168,7 +169,7 @@ func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "GET" {
 
-		count := make(map[string]int, 200) //TODO stop hardcord map size
+		count := make(map[string]int, 2000) //TODO stop hardcord map size
 		sql_req := "select * from `order` where restaurant=" + vars["id"]
 		_, err := dbmap.Select(&orders, sql_req)
 		if err != nil {

@@ -32,8 +32,8 @@ func init_db() *gorp.DbMap {
 func start_web_server() {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/meal/top", handleStatsMeal)
-	r.HandleFunc("/meal/top/{valtop}", handleStatsMeal)
+	r.HandleFunc("/restaurant/{id}/meal/top", handleStatsMeal)
+	r.HandleFunc("/restaurant/{id}/meal/top/{valtop}", handleStatsMeal)
 	r.HandleFunc("/restaurant/gps/{coord}/{distance}", handleGPS)
 	r.HandleFunc("/restaurant/gps/{coord}", handleGPS)
 	r.HandleFunc("/gcm", handleGCM)

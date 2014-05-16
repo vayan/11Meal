@@ -157,6 +157,10 @@ func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
 	if ok {
 		top = vars["valtop"]
 	}
+	_, ok = vars["id"]
+	if !ok {
+		log.Panicln("meu")
+	}
 
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -165,7 +169,7 @@ func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
 
 		count := make(map[string]int, 200) //TODO stop hardcord map size
-		sql_req := "select * from `order`"
+		sql_req := "select * from `order` where restaurant=" + vars["id"]
 		_, err := dbmap.Select(&orders, sql_req)
 		if err != nil {
 			log.Println(err)
@@ -196,6 +200,7 @@ func handleStatsMeal(res http.ResponseWriter, req *http.Request) {
 				i += atoi(top)
 			}
 		}
+		log.Println("top", top, meals)
 		data, _ = json.Marshal(meals)
 	}
 	if err != nil {

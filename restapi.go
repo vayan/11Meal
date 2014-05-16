@@ -62,6 +62,34 @@ func put(r interface{}) {
 	}
 }
 
+func get_special(obj_array interface{}) interface{} {
+	switch obj_array.(type) {
+	case *[]Reservation:
+		var tmp []Reservation
+		for _, obj := range *obj_array.(*[]Reservation) {
+			obj.GuestUnserialize()
+			tmp = append(tmp, obj)
+		}
+		return tmp
+	case *[]Order:
+		var tmp []Order
+		for _, obj := range *obj_array.(*[]Order) {
+			obj.MealUnserialize()
+			obj.ComputePrice()
+			tmp = append(tmp, obj)
+		}
+		return tmp
+	case *[]Restaurant:
+		var tmp []Restaurant
+		for _, obj := range *obj_array.(*[]Restaurant) {
+			obj.PromoUnserialize()
+			tmp = append(tmp, obj)
+		}
+		return tmp
+	}
+	return obj_array
+}
+
 func get(vars map[string]string, obj_array interface{}) interface{} {
 	var sql_req string
 	table := strings.ToLower(vars["table"])
@@ -79,30 +107,7 @@ func get(vars map[string]string, obj_array interface{}) interface{} {
 	if err != nil {
 		log.Println(err)
 	}
-	switch obj_array.(type) {
-	case *[]Reservation:
-		var tmp []Reservation
-		for _, obj := range *obj_array.(*[]Reservation) {
-			obj.GuestUnserialize()
-			tmp = append(tmp, obj)
-		}
-		obj_array = tmp
-	case *[]Order:
-		var tmp []Order
-		for _, obj := range *obj_array.(*[]Order) {
-			obj.MealUnserialize()
-			obj.ComputePrice()
-			tmp = append(tmp, obj)
-		}
-		obj_array = tmp
-	case *[]Restaurant:
-		var tmp []Restaurant
-		for _, obj := range *obj_array.(*[]Restaurant) {
-			obj.PromoUnserialize()
-			tmp = append(tmp, obj)
-		}
-		obj_array = tmp
-	}
+	obj_array = get_special(obj_array)
 	log.Println("get ", obj_array)
 	return obj_array
 }
@@ -181,48 +186,6 @@ func handleglobal(res http.ResponseWriter, req *http.Request) {
 	} else {
 		res.Write(data)
 	}
-}
-
-func (r *Reservation) GuestUnserialize() {
-	var u []User
-	sql_req := "select * from `user` where id in (" + r.GuestCSV + ")"
-	log.Println(sql_req)
-	_, err := dbmap.Select(&u, sql_req)
-	if err != nil {
-		log.Println(err)
-	}
-	r.Guests = u
-}
-
-func (r *Reservation) GuestSerialize() {
-	var csv_guest []string
-	for _, user := range r.Guests {
-		if user.Id > 0 {
-			csv_guest = append(csv_guest, strconv.Itoa(user.Id))
-		}
-	}
-	r.GuestCSV = strings.Join(csv_guest, ",")
-}
-
-func (o *Order) MealUnserialize() {
-	var u []Meal
-	sql_req := "select * from `meal` where id in (" + o.MealCSV + ")"
-	log.Println(sql_req)
-	_, err := dbmap.Select(&u, sql_req)
-	if err != nil {
-		log.Println(err)
-	}
-	o.Meals = u
-}
-
-func (o *Order) MealSerialize() {
-	var csv_meal []string
-	for _, meal := range o.Meals {
-		if meal.Id > 0 {
-			csv_meal = append(csv_meal, strconv.Itoa(meal.Id))
-		}
-	}
-	o.MealCSV = strings.Join(csv_meal, ",")
 }
 
 func (o *Order) ComputePrice() {

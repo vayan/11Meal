@@ -18,6 +18,8 @@ func add(r interface{}) {
 			r.(*Reservation).GuestSerialize()
 		case *Order:
 			r.(*Order).MealSerialize()
+		case *User:
+			send_gcm(get_all_gcm_id(), "new user :)")
 		}
 		err := dbmap.Insert(r)
 		if err != nil {

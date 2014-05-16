@@ -9,11 +9,24 @@ import (
 	"net/http"
 )
 
-func send_gcm(msg string) error {
+func get_all_gcm_id() []string {
+	var gmcids []string
+	var users []User
+	sql_req := "select * from `user`"
+	_, err := dbmap.Select(users, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	for _, user := range users {
+		gmcids = append(gmcids, user.GCM_ID)
+	}
+	return gmcids
+}
+
+func send_gcm(gcmid []string, msg string) error {
 	reqGCM := RequestGCM{
-		GCM_API_KEY,
-		[]string{"APA91bEdfxCFNZCYdmHmQbO2EgUSfZcFdKtQWf9zp7uVw2DekZQKGevqvvNV_z-9iGi_wtvYEELMXVK6Ac-0-yPJ9UeFfBYbmhxcx2lCB2Zqbhq79qYGYw7QMYoHZuYYXpZwpljOVILbPwRwzBBKypDPFxZnCyrlkw", "3", "4"},
-		map[string]string{"test": "nothing"}}
+		GCM_API_KEY, gcmid,
+		map[string]string{"test": msg}}
 	data, err := json.Marshal(reqGCM)
 	if err != nil {
 		log.Println(err)
@@ -57,7 +70,7 @@ func handleGCM(res http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			send_gcm(string(p))
+			send_gcm(get_all_gcm_id(), string(p))
 		}
 	case "PUT":
 	case "DELETE":

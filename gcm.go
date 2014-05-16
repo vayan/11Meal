@@ -9,6 +9,15 @@ import (
 	"net/http"
 )
 
+func get_gcm_id(users []User) []string {
+	var gmcids []string
+
+	for _, user := range users {
+		gmcids = append(gmcids, user.GCM_ID)
+	}
+	return gmcids
+}
+
 func get_all_gcm_id() []string {
 	var gmcids []string
 	var users []User

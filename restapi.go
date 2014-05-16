@@ -47,9 +47,11 @@ func put(r interface{}) {
 		switch r.(type) {
 		case *Reservation:
 			r.(*Reservation).GuestSerialize()
+			r.(*Reservation).CheckChange()
 		case *Order:
 			r.(*Order).MealSerialize()
 		}
+
 		_, err := dbmap.Update(r)
 		if err != nil {
 			log.Println(err)
@@ -229,6 +231,18 @@ func (o *Order) ComputePrice() {
 		total_price += meal.Price
 	}
 	o.Total_price = total_price
+}
+
+func (o *Reservation) CheckChange() {
+	var oldone Reservation
+
+	err := dbmap.SelectOne(&oldone, "select * from reservation where id=?", o.Id)
+	if err != nil {
+		log.Println(err)
+	}
+	if o.State != oldone.State {
+		send_gcm(get_gcm_id(o.Guests), "Reservation status changed")
+	}
 }
 
 func (o *Restaurant) PromoUnserialize() {

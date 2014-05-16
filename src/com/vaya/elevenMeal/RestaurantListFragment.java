@@ -154,8 +154,7 @@ public class RestaurantListFragment extends ListFragment implements OnTaskComple
 	}
 
 	@Override
-	public void onTaskCompleted(Object res) {
-		// TODO Auto-generated method stub
+	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
 		listResto = (List<Restaurant>)res;
 		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, listResto));
 	}

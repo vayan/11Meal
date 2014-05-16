@@ -440,7 +440,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	}
 
 	@Override
-	public void onTaskCompleted(Object res) {
+	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
 		// TODO Auto-generated method stub
 		List<User> user = (List<User>) res;
 

@@ -314,7 +314,7 @@ public class ReservationActivity extends Activity implements
 		}
 
 		@Override
-		public void onTaskCompleted(Object res) {
+		public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
 			List<User> users = (List<User>) res;
 			for(User user:users)
 				mUsers.add(new UserCheckable(user, false));
@@ -407,7 +407,7 @@ public class ReservationActivity extends Activity implements
 		}
 
 		@Override
-		public void onTaskCompleted(Object res) {
+		public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
 			mOrders = (List<Meal>) res;
 			if (mOrders != null)
 			{

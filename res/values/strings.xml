@@ -26,5 +26,6 @@
     <string name="date">Date</string>
     <string name="hour">Hour</string>
     <string name="payMethod">Payment Method</string>
+    <string name="close">Close</string>
 
 </resources>

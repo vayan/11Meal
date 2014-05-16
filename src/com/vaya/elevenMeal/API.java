@@ -106,7 +106,7 @@ public class API {
 		String result = makeHttpRequest(request);
 		mLastResult = mGson.fromJson(result, objectType);
 		if (result != null && mListener != null)
-			mListener.onTaskCompleted(mLastResult);
+			mListener.onTaskCompleted(mLastResult, objectType);
 	}
 
 	private HttpEntity makeJSONObjectEntity(IRestaurantObject object) {
@@ -191,7 +191,7 @@ public class API {
 			Log.d("API.onPostExecute", result);
 			mLastResult = mGson.fromJson(result, mType);
 			if (mListener != null)
-				mListener.onTaskCompleted(mLastResult);
+				mListener.onTaskCompleted(mLastResult, mType);
 		}
 	}
 }

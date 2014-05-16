@@ -25,5 +25,7 @@
     <string name="date">Date</string>
     <string name="hour">Hour</string>
     <string name="payMethod">Payment Method</string>
-
+  	<string name="action_map">Map</string>
+    <string name="title_mapActivity">Map activity</string>
+    
 </resources>

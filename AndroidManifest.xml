@@ -13,7 +13,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />    
+    
     <permission
         android:name="com.example.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -32,6 +33,12 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
     </uses-permission>
 
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	
+	
     <!-- Activity -->
     <application
         android:icon="@drawable/ic_launcher"
@@ -106,6 +113,13 @@
             android:name="com.vaya.elevenMeal.ReservationActivity"
             android:label="@string/title_activity_reservation" >
         </activity>
+         <activity
+            android:name="com.vaya.elevenMeal.MapActivity"
+            android:label="@string/title_mapActivity" >
+        </activity>
+        <meta-data
+     android:name="com.google.android.maps.v2.API_KEY"
+     android:value="AIzaSyDDHydwy9jFF0kChx2aNZS1PQWxvUG9-0Y" />
     </application>
 
 </manifest>

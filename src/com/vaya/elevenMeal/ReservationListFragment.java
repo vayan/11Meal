@@ -1,14 +1,15 @@
 package com.vaya.elevenMeal;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.vaya.elevenMeal.dummy.DummyContent;
-import com.vaya.elevenMeal.restaurant.Reservation;;;
+import com.vaya.elevenMeal.restaurant.Reservation;
 
 /**
  * A list fragment representing a list of Reservations. This fragment also
@@ -19,7 +20,10 @@ import com.vaya.elevenMeal.restaurant.Reservation;;;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ReservationListFragment extends ListFragment {
+public class ReservationListFragment extends ListFragment
+	implements OnTaskCompleted {
+
+	private List<Reservation> reservationList;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -65,13 +69,18 @@ public class ReservationListFragment extends ListFragment {
 	 * fragment (e.g. upon screen orientation changes).
 	 */
 	public ReservationListFragment() {
+		//FIXME: Get id from preferences
+		//int id= this
+		//		.getActivity()
+		//		.getSharedPreferences("User", 0)
+		//		.getInt("id", 0);
+		int id = 5;
+		new API(this).get(new Reservation(), "user", String.valueOf(id));
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setListAdapter(new ReservationListAdapter(getActivity(), R.layout.adapter_reservation_list, DummyContent.ITEMS_BOOKS));
 	}
 
 	@Override
@@ -114,7 +123,7 @@ public class ReservationListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEM_MAP_BOOKS.get(position).getId());
+		mCallbacks.onItemSelected(reservationList.get(position).getId());
 	}
 
 	@Override
@@ -146,5 +155,15 @@ public class ReservationListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+		if (res == null)
+			return ;
+		reservationList = (List<Reservation>) res;
+		setListAdapter(new ReservationListAdapter(
+				getActivity(), R.layout.adapter_reservation_list, reservationList));
 	}
 }

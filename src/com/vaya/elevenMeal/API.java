@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.vaya.elevenMeal.OnTaskCompleted;
 import com.vaya.elevenMeal.restaurant.*;
@@ -61,7 +62,7 @@ public class API {
 	public void get(IRestaurantObject from, String column, String search) {
 		String oClass  = from.getClass().getSimpleName();
 		HttpGet request = new HttpGet(mUrl + "/" + oClass + "/" + column + "/" + search);
-		new RequestTask(getType(oClass)).execute(request);
+		request(getType(oClass), request);
 	}
 
 	public void getAll(IRestaurantObject from) {
@@ -104,6 +105,7 @@ public class API {
 			return ;
 		} 
 		String result = makeHttpRequest(request);
+		Log.d("API.request", result);
 		mLastResult = mGson.fromJson(result, objectType);
 		if (result != null && mListener != null)
 			mListener.onTaskCompleted(mLastResult, objectType);
@@ -129,6 +131,7 @@ public class API {
 		try {
 			request.addHeader("Accept", "application/json");
 			request.addHeader("Content-type", "application/json");
+			Log.d("API.makeHttpRequest", request.getRequestLine().toString() );
 			response = httpclient.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
@@ -188,8 +191,13 @@ public class API {
 			super.onPostExecute(result);
 			if (result == null)
 				return ;
-			Log.d("API.onPostExecute", result);
-			mLastResult = mGson.fromJson(result, mType);
+			try {
+				mLastResult = mGson.fromJson(result, mType);
+			}
+			catch (JsonSyntaxException e) {
+				Log.e("API.onPostExecute", e.getMessage());
+				mLastResult = mType.getClass();
+			}
 			if (mListener != null)
 				mListener.onTaskCompleted(mLastResult, mType);
 		}

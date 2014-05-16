@@ -1,5 +1,6 @@
 package com.vaya.elevenMeal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -153,9 +154,13 @@ public class RestaurantListFragment extends ListFragment implements OnTaskComple
 		mActivatedPosition = position;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
-		listResto = (List<Restaurant>)res;
+		if (res == null)
+			listResto = new ArrayList<Restaurant>();
+		else
+			listResto = (List<Restaurant>)res;
 		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, listResto));
 	}
 }

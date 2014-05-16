@@ -482,9 +482,9 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		showProgress(false);
 
 		if (mEmail.equalsIgnoreCase(user.get(0).getEmail())
-				&& mPassword.equals(user.get(0).getEmail())) {
+				&& mPassword.equals(user.get(0).getPassword())) {
 			Log.d("LOGIN", mEmail + "||" + mPassword + ">>"
-					+ user.get(0).getEmail() + "||" + user.get(0).getEmail());
+					+ user.get(0).getEmail() + "||" + user.get(0).getPassword());
 			intentRestaurant = new Intent(this, RestaurantListActivity.class);
 			startActivity(intentRestaurant);
 

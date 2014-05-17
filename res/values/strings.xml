@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MyActivity</string>
+    <string name="app_name">11Meal</string>
     <string name="title_restaurant_list">Restaurants</string>
     <string name="explanation">No tag detected</string>
     <string name="title_restaurant_detail">Restaurant Detail</string>
@@ -33,6 +33,8 @@
     <string name="password_confirm">Repeat password</string>
     <string name="firstname">Given name</string>
     <string name="lastname">Family name</string>
+    <string name="unk_user">(unknown user)</string>
+    <string name="unk_restaurant">Unknown Restaurant</string>
 
   	<string name="action_map">Map</string>
     <string name="title_mapActivity">Map activity</string>

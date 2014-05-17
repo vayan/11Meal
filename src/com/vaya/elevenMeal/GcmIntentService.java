@@ -40,6 +40,8 @@ public class GcmIntentService  extends IntentService {
              * any message types you're not interested in, or that you don't
              * recognize.
              */
+            Log.i(TAG, "Content message recut" + extras.get("msg").toString());
+            String mmsg = extras.get("msg").toString();
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
                 sendNotification("Send error: " + extras.toString());
@@ -61,7 +63,7 @@ public class GcmIntentService  extends IntentService {
                 }
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(mmsg);
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -82,7 +84,7 @@ public class GcmIntentService  extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_menu_edit)
-                        .setContentTitle("GCM Notification")
+                        .setContentTitle("APIMeal talk to you")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setContentText(msg);

@@ -12,17 +12,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context="com.vaya.elevenMeal.ReservationDetailFragment" >
+            android:layout_height="wrap_content" >
 
-            <TextView
-                android:id="@+id/reservationResName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/reservationResName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/reservationDateHourTitle"
@@ -30,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/reservationResName"
-                android:text="Small Text"
+                android:text="@string/date_hour_title"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/darker_gray" />
 
@@ -47,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/sseparation1"
-                android:text="Medium Text"
+                android:text="(no date)"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -56,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/dateHour"
-                android:text="Small Text"
+                android:text="@string/participants_title"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/darker_gray" />
 
@@ -67,13 +66,13 @@
                 android:layout_below="@+id/peopleTitle"
                 android:background="@android:color/darker_gray" />
 
-            <Button
+            <TextView
                 android:id="@+id/viewPeople"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/sseparation2"
-                android:text="Button" />
+                android:text="(nobody)" />
 
             <TextView
                 android:id="@+id/orderTitle"
@@ -81,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/viewPeople"
-                android:text="Small Text"
+                android:text="@string/order_title"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/darker_gray" />
 
@@ -92,13 +91,13 @@
                 android:layout_below="@+id/orderTitle"
                 android:background="@android:color/darker_gray" />
 
-            <Button
+            <TextView
                 android:id="@+id/viewOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/sseparation3"
-                android:text="Button" />
+                android:text="(empty)" />
         </RelativeLayout>
     </ScrollView>
 

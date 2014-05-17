@@ -40,5 +40,8 @@
     <string name="title_mapActivity">Map activity</string>
     <string name="refuse">Refuse</string>
     <string name="accept">Accept</string>
+    <string name="date_hour_title">Date:</string>
+    <string name="participants_title">Participants:</string>
+    <string name="order_title">Order:</string>
     
 </resources>

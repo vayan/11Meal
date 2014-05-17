@@ -32,10 +32,15 @@ public class ReservationListAdapter extends ArrayAdapter<ResView> {
 		nameView.setText(getItem(position).mRestaurantName);
 		creatorView.setText(getItem(position).mOwnerName);
 		
+		View dot = ((View) rowView.findViewById(R.id.doabarrelroll));
 		if (getItem(position).mState == State.OPENED)
-		{
-			rowView.setBackground(getContext().getResources().getDrawable(R.drawable.button_red));
-		}
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_orange));
+		else if (getItem(position).mState == State.CONFIRMED)
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_green));
+		else if (getItem(position).mState == State.CANCELED)
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_red));
+		else
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
 
 		return rowView;
 	}

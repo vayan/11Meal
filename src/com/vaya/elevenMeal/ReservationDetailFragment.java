@@ -122,7 +122,9 @@ implements OnTaskCompleted, OnClickListener {
 			Order order = Order.class.cast(result);
 			viewOrder.setText("");
 			for (Meal m: order.getMealList()) {
-				viewOrder.setText(m.getName() + "\t\t\t" + m.getPrice() + "\n");
+				viewOrder.setText(
+						viewOrder.getText() +
+						m.getName() + "\t\t\t" + m.getPrice() + "\n");
 			}
 		}
 	}

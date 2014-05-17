@@ -180,20 +180,39 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			Log.i(TAG, "No valid Google Play Services APK found.");
 		}
 
+		
+		new AsyncTask() {
+
+			@Override
+			protected Object doInBackground(Object... params) {
+				try {
+					Bundle data = new Bundle();
+					gcm.send(SENDER_ID + "@gcm.googleapis.com",
+							Integer.toString(msgId.incrementAndGet()), data);
+				} catch (IOException ex) {
+					Log.e("11MealLogin", ex.getMessage());
+				}
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}.execute(null, null, null);
+		
 		// If the user is already logged in
-		intentRestaurant = new Intent(this, RestaurantListActivity.class);
-		SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
-		int id = settings.getInt("user_id", -1);
-		Log.d("LOGIN", String.valueOf(id));
-		if (id != -1) {
-			startActivity(intentRestaurant);
-			finish();
-		}
+//		intentRestaurant = new Intent(this, RestaurantListActivity.class);
+//		SharedPreferences settings = getSharedPreferences("11Meal",
+//				MODE_PRIVATE);
+//		int id = settings.getInt("user_id", -1);
+//		Log.d("LOGIN", String.valueOf(id));
+//		if (id != -1) {
+//			startActivity(intentRestaurant);
+//			finish();
+//		}
 	}
 
 	public Boolean register() {
 		if (mSwitch) {
-			if (!(mPasswordView.getText().toString().equals(mPassRepeatView.getText().toString()))) {
+			if (!(mPasswordView.getText().toString().equals(mPassRepeatView
+					.getText().toString()))) {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
@@ -488,7 +507,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 				.equals("class com.vaya.elevenMeal.restaurant.User")) {
 			User user = (User) res;
 			startActivity(intentRestaurant);
-			SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
+			SharedPreferences settings = getSharedPreferences("11Meal",
+					MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putInt("user_id", user.getId());
 			finish();
@@ -496,6 +516,12 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		}
 
 		List<User> user = (List<User>) res;
+		if (user.size() == 0)
+		{
+			mEmailView.setError(getString(R.string.error_invalid_email));
+			mEmailView.requestFocus();
+			return;
+		}
 		if (mEmailView.getText().toString()
 				.equalsIgnoreCase(user.get(0).getEmail())
 				&& mPasswordView.getText().toString()

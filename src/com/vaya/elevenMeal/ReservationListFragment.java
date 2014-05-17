@@ -73,7 +73,7 @@ public class ReservationListFragment extends ListFragment {
 
 		setListAdapter(new ReservationListAdapter(getActivity(), R.layout.adapter_reservation_list, DummyContent.ITEMS_BOOKS));
 	}
-
+	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);

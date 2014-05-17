@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
+    
+    <View 
+        android:id="@+id/doabarrelroll"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/circle_red"/>
 
-    <TextView
-        android:id="@+id/reservationListName"
+    <LinearLayout
+        android:id="@+id/whatislove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/doabarrelroll"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/reservationListCreator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:textColor="@android:color/darker_gray"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:id="@+id/reservationListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/reservationListCreator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/darker_gray" />
+    </LinearLayout>
+
+</RelativeLayout>

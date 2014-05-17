@@ -2,6 +2,7 @@ package com.vaya.elevenMeal;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.vaya.elevenMeal.restaurant.IRestaurantObject;
 import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Order;
 import com.vaya.elevenMeal.restaurant.Reservation;
+import com.vaya.elevenMeal.restaurant.Reservation.State;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
@@ -71,6 +73,7 @@ implements OnTaskCompleted, OnClickListener {
 		viewOrder  = (TextView) rootView.findViewById(R.id.viewOrder);
 		buttonRefuse = (Button) rootView.findViewById(R.id.buttonRefuse);
 		
+		buttonRefuse.setVisibility(View.INVISIBLE);
 		buttonRefuse.setOnClickListener(this);
 
 		return rootView;
@@ -79,6 +82,11 @@ implements OnTaskCompleted, OnClickListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+		if (mDelete)
+		{
+			getActivity().finish();
+			return;
+		}
 		if (res == null)
 			return ;
 		IRestaurantObject result;
@@ -89,12 +97,12 @@ implements OnTaskCompleted, OnClickListener {
 		}
 		
 		if (result.getClass().equals(Reservation.class)) {
-			if (mDelete)
-			{
-				getActivity().finish();
-				return;
-			}
 			reservation = Reservation.class.cast(result);
+			
+			SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", Context.MODE_PRIVATE);
+			if (reservation.getOwnerId() != preferences.getInt("user_id", -1) && reservation.getState() == State.OPENED)
+				buttonRefuse.setVisibility(View.VISIBLE);
+			
 			dateHour.setText(reservation.getDate().toString());
 			viewPeople.setText("");
 			for (User u: reservation.getGuests()) {
@@ -123,8 +131,7 @@ implements OnTaskCompleted, OnClickListener {
 	
 	@Override
 	public void onClick(View arg0) {
-		SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", 0);
-		int i = preferences.getInt("user_id", 0);
+		SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", Context.MODE_PRIVATE);
 		reservation.removeGuest(preferences.getInt("user_id", 0));
 		mDelete = true;
 		new API(this).update(reservation);

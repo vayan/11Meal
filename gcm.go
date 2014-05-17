@@ -22,7 +22,7 @@ func get_all_gcm_id() []string {
 	var gmcids []string
 	var users []User
 	sql_req := "select * from `user`"
-	_, err := dbmap.Select(users, sql_req)
+	_, err := dbmap.Select(&users, sql_req)
 	if err != nil {
 		log.Println(err)
 	}
@@ -32,10 +32,10 @@ func get_all_gcm_id() []string {
 	return gmcids
 }
 
-func send_gcm(gcmid []string, msg string) error {
+func send_gcm(gcmid []string, title string, msg string) error {
 	reqGCM := RequestGCM{
 		GCM_API_KEY, gcmid,
-		map[string]string{"test": msg}}
+		map[string]string{"msg": msg, "title": title}}
 	data, err := json.Marshal(reqGCM)
 	if err != nil {
 		log.Println(err)
@@ -79,7 +79,7 @@ func handleGCM(res http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Println(err)
 		} else {
-			send_gcm(get_all_gcm_id(), string(p))
+			send_gcm(get_all_gcm_id(), "APIMeal is talking to you", string(p))
 		}
 	case "PUT":
 	case "DELETE":

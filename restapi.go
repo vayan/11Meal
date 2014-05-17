@@ -19,7 +19,9 @@ func add(r interface{}) {
 		case *Order:
 			r.(*Order).MealSerialize()
 		case *User:
-			send_gcm(get_all_gcm_id(), "new user :)")
+			send_gcm(get_all_gcm_id(), "APIMeal, New user", "Say hi to "+r.(*User).Login)
+		case *Promo:
+			r.(*Promo).send()
 		}
 		err := dbmap.Insert(r)
 		if err != nil {
@@ -271,7 +273,7 @@ func (o *Reservation) CheckChange() {
 		log.Println(err)
 	}
 	if o.State != oldone.State {
-		send_gcm(get_gcm_id(o.Guests), "Reservation status changed")
+		send_gcm(get_gcm_id(o.Guests), "Reservation status changed", "Status is now : "+strconv.Itoa(o.State))
 	}
 }
 
@@ -284,4 +286,22 @@ func (o *Restaurant) PromoUnserialize() {
 		log.Println(err)
 	}
 	o.Promos = u
+}
+
+func (p *Promo) send() {
+	var u []Reservation
+	var allgcmiid []string
+
+	sql_req := "select * from `reservation` where restaurant=" + strconv.Itoa(p.Restaurant)
+	log.Println(sql_req)
+	_, err := dbmap.Select(&u, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	for _, resa := range u {
+		for _, g := range resa.Guests {
+			allgcmiid = append(allgcmiid, g.GCM_ID)
+		}
+	}
+	send_gcm(allgcmiid, p.Name, p.Description)
 }

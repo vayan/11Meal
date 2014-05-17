@@ -1,14 +1,24 @@
 package com.vaya.elevenMeal;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.client.methods.HttpRequestBase;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.webkit.WebView.FindListener;
 import android.widget.ListView;
 
-import com.vaya.elevenMeal.dummy.DummyContent;
-import com.vaya.elevenMeal.restaurant.Reservation;;;
+import com.vaya.elevenMeal.restaurant.IRestaurantObject;
+import com.vaya.elevenMeal.restaurant.Reservation;
+import com.vaya.elevenMeal.restaurant.Restaurant;
+import com.vaya.elevenMeal.restaurant.User;
 
 /**
  * A list fragment representing a list of Reservations. This fragment also
@@ -19,7 +29,11 @@ import com.vaya.elevenMeal.restaurant.Reservation;;;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ReservationListFragment extends ListFragment {
+public class ReservationListFragment extends ListFragment
+	implements OnTaskCompleted {
+
+	private List<Reservation> reservationList;
+	private ListView	mListReservationView;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -70,10 +84,12 @@ public class ReservationListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setListAdapter(new ReservationListAdapter(getActivity(), R.layout.adapter_reservation_list, DummyContent.ITEMS_BOOKS));
+		SharedPreferences settings = getActivity().getSharedPreferences("11Meal",
+				Context.MODE_PRIVATE);
+		int id = settings.getInt("user_id", 0);
+		new API(this).get(new Reservation(), "user", String.valueOf(id));
 	}
-
+	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
@@ -114,7 +130,7 @@ public class ReservationListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEM_MAP_BOOKS.get(position).getId());
+		mCallbacks.onItemSelected(reservationList.get(position).getId());
 	}
 
 	@Override
@@ -146,5 +162,69 @@ public class ReservationListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+	
+	public class ResView {
+		public String mRestaurantName;
+		public String mOwnerName;
+
+		public ResView(String restaurantName, String ownerName) {
+			mRestaurantName = restaurantName;
+			mOwnerName = ownerName;
+		}
+	}
+
+	private class BuildResViewList extends AsyncTask<List<Reservation>, List<ResView>, List<ResView>> {
+
+		@SuppressWarnings("unchecked")
+		@Override
+		protected List<ResView> doInBackground(List<Reservation>... list) {
+			List<ResView> resViewList = new ArrayList<ResView>();
+			API api = new API();
+			api.setAsync(false);
+			for (Reservation r: reservationList) {
+				List<IRestaurantObject> resultList;
+				User owner = new User();
+				Restaurant restaurant = new Restaurant();
+
+				owner.setLogin(getString(R.string.unk_user));
+				restaurant.setName(getString(R.string.unk_restaurant));
+
+				api.get(new User(), "id", String.valueOf(r.getOwnerId()));
+				resultList = 
+						(List<IRestaurantObject> ) api.getLastResult();
+				if (resultList != null)
+					owner = User.class.cast(resultList.get(0));
+
+				api.get(new Restaurant(), "id", String.valueOf(r.getRestaurantId()));
+				resultList = 
+						(List<IRestaurantObject> ) api.getLastResult();
+				if (resultList != null)
+					restaurant = Restaurant.class.cast(resultList.get(0));
+
+				resViewList.add(new ResView(restaurant.getName(), owner.getLogin()));
+			}
+
+			return resViewList;
+		}
+
+		@Override
+		protected void onPostExecute(List<ResView> result) {
+			super.onPostExecute(result);
+			setListAdapter(new ReservationListAdapter(
+					getActivity(), R.layout.adapter_reservation_list, result));
+		}
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+		if (res == null) {
+			//TODO: Show error to user
+			return ;
+		}
+		reservationList = (List<Reservation>) res;
+		new BuildResViewList().execute(reservationList);
 	}
 }

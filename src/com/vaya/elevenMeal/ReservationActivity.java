@@ -1,6 +1,7 @@
 package com.vaya.elevenMeal;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -24,6 +25,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
@@ -52,8 +54,8 @@ import android.widget.Toast;
 
 // Trop de static, c'est caca
 public class ReservationActivity extends Activity implements
-		ActionBar.TabListener {
-
+		ActionBar.TabListener, OnTaskCompleted {
+	
 	public static final String ARG_ITEM_ID = "item_id";
 
 	/**
@@ -71,6 +73,10 @@ public class ReservationActivity extends Activity implements
 	ViewPager mViewPager;
 
 	private static int mIdRestaurant;
+	
+	private static ReservationMealListAdapter mReservationAdapter;
+	
+	private static int mIdUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,18 @@ public class ReservationActivity extends Activity implements
 					.setTabListener(this));
 		}
 		mIdRestaurant = getIntent().getExtras().getInt(ARG_ITEM_ID);
+		
+		SharedPreferences preferences = getSharedPreferences("11Meal", MODE_PRIVATE);
+		mIdUser = preferences.getInt("user_id", -1);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		//mSectionsPagerAdapter.destroyItem(mViewPager, 2, mSectionsPagerAdapter.getItem(2));
+		//mSectionsPagerAdapter.destroyItem(mViewPager, 1, mSectionsPagerAdapter.getItem(1));
+		//mSectionsPagerAdapter.destroyItem(mViewPager, 0, mSectionsPagerAdapter.getItem(0));
+		//mSectionsPagerAdapter = null;
+		super.onDestroy();
 	}
 
 	@Override
@@ -128,15 +146,16 @@ public class ReservationActivity extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_validate) {
-			Order order = new Order();
 			Reservation reservation = new Reservation();
-			order.setMealList(OrderFragment.getMealList());
-			//reservation.setOwner(owner)
+			
+			reservation.setOwnerId(mIdUser);
 			reservation.setListGuest((ArrayList<User>) PeopleFragment.getUsers());
 			reservation.setDate(new Date(HourDateFragment.getDateHour()));
 			reservation.setPayMethod(HourDateFragment.getPaymentMethod());
 			reservation.setState(State.OPENED);
-			//new API().create(order);
+			reservation.setRestaurantId(mIdRestaurant);
+			
+			new API(this).create(reservation);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -183,7 +202,7 @@ public class ReservationActivity extends Activity implements
 				return HourDateFragment.newInstance(position + 1);
 			}
 		}
-
+		
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
@@ -203,6 +222,18 @@ public class ReservationActivity extends Activity implements
 			}
 			return null;
 		}
+		
+	    @Override
+	    public void destroyItem(ViewGroup container, int position, Object object) {
+	        super.destroyItem(container, position, object);
+
+	        if (position <= getCount()) {
+	            FragmentManager manager = ((Fragment) object).getFragmentManager();
+	            FragmentTransaction trans = manager.beginTransaction();
+	            trans.remove((Fragment) object);
+	            trans.commit();
+	        }
+	    }
 	}
 
 	public static class HourDateFragment extends Fragment {
@@ -264,9 +295,10 @@ public class ReservationActivity extends Activity implements
 
 	public static class PeopleFragment extends Fragment implements
 			OnTaskCompleted {
-		private static List<UserCheckable> mUsers = new ArrayList<UserCheckable>();
+		private static List<UserCheckable> mUsers;
 
-		private ListView mPeople;
+		private static ListView mPeople;
+		private static ArrayAdapter<UserCheckable> mAdapter;
 
 		/**
 		 * The fragment argument representing the section number for this
@@ -282,7 +314,8 @@ public class ReservationActivity extends Activity implements
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 			fragment.setArguments(args);
-			new API(fragment).getAll(new User());
+			if (mAdapter == null)
+				new API(fragment).getAll(new User());
 			return fragment;
 		}
 
@@ -298,9 +331,8 @@ public class ReservationActivity extends Activity implements
 			mPeople = (ListView) rootView
 					.findViewById(R.id.newReservationListPeople);
 			
-			if (mUsers != null)
-				mPeople.setAdapter(new ArrayAdapter<UserCheckable>(getActivity(),
-						android.R.layout.simple_list_item_checked, mUsers));
+			if (mAdapter != null)
+				mPeople.setAdapter(mAdapter);
 			mPeople.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -316,11 +348,15 @@ public class ReservationActivity extends Activity implements
 		@Override
 		public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
 			List<User> users = (List<User>) res;
+			mUsers = new ArrayList<UserCheckable>();
 			for(User user:users)
+				if (user.getId() != mIdUser)
 				mUsers.add(new UserCheckable(user, false));
 			if (mUsers != null)
-				mPeople.setAdapter(new ArrayAdapter<UserCheckable>(getActivity(),
-						android.R.layout.simple_list_item_checked, mUsers));
+			{
+				mAdapter = new ArrayAdapter<UserCheckable>(getActivity(), android.R.layout.simple_list_item_checked, mUsers);
+				mPeople.setAdapter(mAdapter);
+			}
 		}
 		
 		public static List<User> getUsers() {
@@ -352,8 +388,8 @@ public class ReservationActivity extends Activity implements
 	public static class OrderFragment extends Fragment implements
 			OnTaskCompleted {
 		private static List<Meal> mOrders;
-		private static ReservationMealListAdapter mAdapter;
-		private static ListView mMeal;
+		
+		private ListView mMeal;
 		private static OrderFragment mFragment;
 		private static TextView mTotal;
 
@@ -372,10 +408,9 @@ public class ReservationActivity extends Activity implements
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 			fragment.setArguments(args);
 			mFragment = fragment;
-			// new API(fragment).get(new Restaurant(), "Id",
-			// String.valueOf(mIdRestaurant));
-			new API(mFragment).get(new Meal(), "Restaurant",
-					String.valueOf(mIdRestaurant));
+			if (mReservationAdapter == null)
+				new API(mFragment).get(new Meal(), "Restaurant",
+						String.valueOf(mIdRestaurant));
 			return fragment;
 		}
 
@@ -389,20 +424,10 @@ public class ReservationActivity extends Activity implements
 					R.layout.fragment_reservation_order, container, false);
 			mTotal = (TextView) rootView.findViewById(R.id.newReservationOrderTotal);
 			setTotalOrder();
-			mMeal = (ListView) rootView
+				mMeal = (ListView) rootView
 					.findViewById(R.id.newReservationListOrder);
-			if (mOrders != null && mAdapter != null)
-				 mMeal.setAdapter(mAdapter);
-			
-			mMeal.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					setTotalOrder();
-				}
-			});
-			
+			if (mReservationAdapter != null)
+				 mMeal.setAdapter(mReservationAdapter);
 			return rootView;
 		}
 
@@ -411,41 +436,55 @@ public class ReservationActivity extends Activity implements
 			mOrders = (List<Meal>) res;
 			if (mOrders != null)
 			{
-				mAdapter = new ReservationMealListAdapter(getActivity(), R.layout.adapter_meal_list, mOrders);
-				mMeal.setAdapter(mAdapter);
+				mReservationAdapter = new ReservationMealListAdapter(getActivity(), R.layout.adapter_meal_list, mOrders);
+				mMeal.setAdapter(mReservationAdapter);
 			}
+		}
+		
+		@Override
+		public void onDestroy() {
+			// TODO Auto-generated method stub
+			super.onDestroy();
 		}
 		
 		public static List<Meal> getMealList()
 		{
 
 			List<Meal> choosen = new ArrayList<Meal>();
-			List<Boolean> listChecked;
+			List<Integer> quantities;
 			
-			listChecked = Arrays.asList(mAdapter.getChecked());
-			for (int i = 0; i < listChecked.size(); i++){
-				if (listChecked.get(i))
+			quantities = Arrays.asList(mReservationAdapter.getQuantities());
+			for (int i = 0; i < quantities.size(); i++){
+				for (int j = 0; j < quantities.get(i); j++)
 					choosen.add(mOrders.get(i));
 			}
 			return choosen;
 		}
 		
-		
 		public static void setTotalOrder()
 		{
 			float total = 0;
-			Boolean[] checked;
+			Integer[] quantities;
 			
-			if (mAdapter == null)
+			if (mReservationAdapter == null)
 			{
 				mTotal.setText(String.valueOf(0));
 				return;
 			}
-			checked = mAdapter.getChecked();
-			for(int i = 0; i < checked.length; i++)
-				if (checked[i])
-					total += mOrders.get(i).getPrice();
+			quantities = mReservationAdapter.getQuantities();
+			for(int i = 0; i < quantities.length; i++)
+				total += mOrders.get(i).getPrice() * quantities[i];
 			mTotal.setText(String.valueOf(total));
 		}
+	}
+
+	@Override
+	public void onTaskCompleted(Object res, Type type) {
+			Reservation reservation = (Reservation) res;
+			Order order = new Order();
+			order.setIdReservation(reservation.getId());
+			order.setMealList(OrderFragment.getMealList());
+			new API().create(order);
+			this.finish();
 	}
 }

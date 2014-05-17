@@ -29,8 +29,8 @@ public class Reservation implements IRestaurantObject {
 	protected ArrayList<User> guests;
 	protected int restaurant;
 	protected String date;
-	protected State state;
-	protected Payment payementMethod;
+	protected int state;
+	protected int payementMethod;
 
 	public Reservation() {
 		guests = new ArrayList<User>();
@@ -72,8 +72,8 @@ public class Reservation implements IRestaurantObject {
 		return restaurant;
 	}
 	
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant.getId();
+	public void setRestaurantId(int id) {
+		this.restaurant = id;
 	}
 
 	public void setDate(Date date) {
@@ -81,19 +81,19 @@ public class Reservation implements IRestaurantObject {
 	}
 
 	public State getState() {
-		return state;
+		return State.values()[state];
 	}
 
 	public void setState(State state) {
-		this.state = state;
+		this.state = state.ordinal();
 	}
 
 	public Payment getPayMethod() {
-		return payementMethod;
+		return Payment.values()[payementMethod];
 	}
 
 	public void setPayMethod(Payment payMethod) {
-		this.payementMethod = payMethod;
+		this.payementMethod = payMethod.ordinal();
 	}
 
 	// Methods
@@ -123,5 +123,10 @@ public class Reservation implements IRestaurantObject {
 
 	public boolean update() {
 		return false; //TODO: complete stub
+	}
+
+	public void setOwnerId(int id) {
+		this.user = id; // TODO Auto-generated method stub
+		
 	}
 }

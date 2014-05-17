@@ -7,10 +7,19 @@ import java.util.List;
 public class Order implements IRestaurantObject {
 	// Attributes
 	protected int mId;
+	protected int mIdReservation;
 	protected List<Meal> mMealList;
 
 	public Order() {
 		mMealList = new ArrayList<Meal>();
+	}
+
+	public int getIdReservation() {
+		return mIdReservation;
+	}
+
+	public void setIdReservation(int mIdReservation) {
+		this.mIdReservation = mIdReservation;
 	}
 
 	// Getters/setters

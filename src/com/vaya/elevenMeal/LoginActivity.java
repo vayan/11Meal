@@ -12,9 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.opengl.Visibility;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
+import android.os.*;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -102,6 +100,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 	private Boolean mSwitch = false;
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mLoginbut.setEnabled(true);
+            mRegisterbut.setEnabled(true);
+        }
+    };
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -186,7 +192,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			regid = getRegistrationId(context);
 
 			if (regid.isEmpty()) {
-				new registerInBackground().execute();
+               new registerInBackground().execute();
 			} else {
                 mLoginbut.setEnabled(true);
                 mRegisterbut.setEnabled(true);
@@ -288,8 +294,9 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	}
 
 	private void sendRegistrationIdToBackend() {
-        mLoginbut.setEnabled(true);
-        mRegisterbut.setEnabled(true);
+        Message msg = new Message();
+        msg.obj = "done";
+        mHandler.sendMessage(msg);
 	}
 
 	private void storeRegistrationId(Context context, String regId) {
@@ -327,9 +334,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 				storeRegistrationId(context, regid);
 			} catch (IOException ex) {
 				msg = "Error :" + ex.getMessage();
-				// If there is an error, don't just keep trying to register.
-				// Require the user to click a button again, or perform
-				// exponential back-off.
+                new registerInBackground().execute();
 			}
 			return msg;
 		}
@@ -547,5 +552,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		}
 
 	}
+
+
 
 }

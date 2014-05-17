@@ -1,6 +1,7 @@
 package com.vaya.elevenMeal;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -53,8 +54,8 @@ import android.widget.Toast;
 
 // Trop de static, c'est caca
 public class ReservationActivity extends Activity implements
-		ActionBar.TabListener {
-
+		ActionBar.TabListener, OnTaskCompleted {
+	
 	public static final String ARG_ITEM_ID = "item_id";
 
 	/**
@@ -129,20 +130,16 @@ public class ReservationActivity extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_validate) {
-			Order order = new Order();
+			SharedPreferences sharedPreference = getSharedPreferences("11Meal", MODE_PRIVATE);
 			Reservation reservation = new Reservation();
-			order.setMealList(OrderFragment.getMealList());
-
-			//reservation.setOwner(owner)
+			
+			reservation.setOwnerId(sharedPreference.getInt("user_id", 0));
 			reservation.setListGuest((ArrayList<User>) PeopleFragment.getUsers());
 			reservation.setDate(new Date(HourDateFragment.getDateHour()));
 			reservation.setPayMethod(HourDateFragment.getPaymentMethod());
-			
-			SharedPreferences sharedPreference = getSharedPreferences("11Meal", MODE_PRIVATE);
-			reservation.setOwnerId(sharedPreference.getInt("user_id", 0));
-			
 			reservation.setState(State.OPENED);
-			new API().create(order);
+			
+			new API(this).create(reservation);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -453,5 +450,14 @@ public class ReservationActivity extends Activity implements
 					total += mOrders.get(i).getPrice();
 			mTotal.setText(String.valueOf(total));
 		}
+	}
+
+	@Override
+	public void onTaskCompleted(Object res, Type type) {
+			Reservation reservation = ((List<Reservation>) res).get(0);
+			Order order = new Order();
+			order.setIdReservation(reservation.getId());
+			order.setMealList(OrderFragment.getMealList());
+			new API().create(order);
 	}
 }

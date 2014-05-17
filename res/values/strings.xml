@@ -38,5 +38,7 @@
 
   	<string name="action_map">Map</string>
     <string name="title_mapActivity">Map activity</string>
+    <string name="refuse">Refuse</string>
+    <string name="accept">Accept</string>
     
 </resources>

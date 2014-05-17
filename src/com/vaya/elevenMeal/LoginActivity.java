@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -89,6 +90,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+    private Button mRegisterbut;
+    private Button mLoginbut;
 	Context context;
 
 	private EditText mPassRepeatView;
@@ -129,6 +132,10 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
+
+        mLoginbut = (Button) findViewById(R.id.sign_in_button);
+        mRegisterbut = (Button) findViewById(R.id.register_button);
+
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -163,6 +170,11 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 					}
 				});
 
+
+
+        mLoginbut.setEnabled(false);
+        mRegisterbut.setEnabled(false);
+
 		mPassRepeatView = (EditText) findViewById(R.id.passwordConfirm);
 		mUsernameView = (EditText) findViewById(R.id.login);
 		mFirstnameView = (EditText) findViewById(R.id.firstName);
@@ -175,17 +187,20 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 			if (regid.isEmpty()) {
 				new registerInBackground().execute();
-			}
+			} else {
+                mLoginbut.setEnabled(true);
+                mRegisterbut.setEnabled(true);
+            }
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");
 		}
 
 		// If the user is already logged in
 		intentRestaurant = new Intent(this, RestaurantListActivity.class);
-		SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
-		int id = settings.getInt("user_id", -1);
+		SharedPreferences settings = getSharedPreferences("User", 0);
+		int id = settings.getInt("id", 0);
 		Log.d("LOGIN", String.valueOf(id));
-		if (id != -1) {
+		if (id != 0) {
 			startActivity(intentRestaurant);
 			finish();
 		}
@@ -207,6 +222,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			user.setLastName(mLastnameView.getText().toString());
 			user.setLogin(mUsernameView.getText().toString());
 			user.setPhone(mPhoneView.getText().toString());
+            user.setGcmId(getRegistrationId(this));
 			new API(this).create(user);
 			showProgress(true);
 			return true;
@@ -270,7 +286,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	}
 
 	private void sendRegistrationIdToBackend() {
-		// Your implementation here.
+        mLoginbut.setEnabled(true);
+        mRegisterbut.setEnabled(true);
 	}
 
 	private void storeRegistrationId(Context context, String regId) {
@@ -427,27 +444,27 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	 */
 	/*
 	 * public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-	 * 
+	 *
 	 * @Override protected Boolean doInBackground(Void... params) { // TODO:
 	 * attempt authentication against a network service.
-	 * 
+	 *
 	 * try { // Simulate network access. Thread.sleep(2000); } catch
 	 * (InterruptedException e) { return false; }
-	 * 
+	 *
 	 * for (String credential : DUMMY_CREDENTIALS) { String[] pieces =
 	 * credential.split(":"); if (pieces[0].equals(mEmail)) { // Account exists,
 	 * return true if the password matches. return pieces[1].equals(mPassword);
 	 * } }
-	 * 
+	 *
 	 * // TODO: register the new account here. return true; }
-	 * 
+	 *
 	 * @Override protected void onPostExecute(final Boolean success) { mAuthTask
 	 * = null; showProgress(false);
-	 * 
+	 *
 	 * if (success) { startActivity(intentRestaurant); finish(); } else {
 	 * mPasswordView .setError(getString(R.string.error_incorrect_password));
 	 * mPasswordView.requestFocus(); } }
-	 * 
+	 *
 	 * @Override protected void onCancelled() { mAuthTask = null;
 	 * showProgress(false); } }
 	 */
@@ -474,7 +491,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	}
 
 	public void UpdatePref() {
-		// get latest settings from the xml config file
+		// get latest settings from the xml config file d
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 	}
@@ -488,7 +505,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 				.equals("class com.vaya.elevenMeal.restaurant.User")) {
 			User user = (User) res;
 			startActivity(intentRestaurant);
-			SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
+			SharedPreferences settings = getSharedPreferences("11Meal", 0);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putInt("user_id", user.getId());
 			finish();

@@ -227,6 +227,29 @@ createController.controller('createController', ['$scope', '$routeParams', funct
 }]);
 
 
+var statisticsController = angular.module('statisticsController', []);
+
+statisticsController.controller('statisticsController', ['$scope', '$routeParams', function($scope, $ro1uteParams) {
+
+    showMenu().done(function(data) {
+	$scope.leftMenu = data;
+	$scope.$apply();
+    });
+
+    API.get("restaurant/"+parseInt(utils.readCookie("session"))+"/meal/top", null, null).done(function(data) {
+	$scope.foodCat = FoodCatString; 
+	var arraytmp = [];
+	angular.forEach(data, function(value, key){
+	    if (value.Id != "0")
+		arraytmp[key] = new Meal(value);
+	});
+	$scope.List = arraytmp;
+	$scope.$apply();
+    });
+
+}]);
+
+
 var restaurantDetailsController = angular.module('restaurantDetailsController',[]);
 
 restaurantDetailsController.controller('restaurantDetailsController', ['$scope', '$routeParams', function($scope, $routeParams) {

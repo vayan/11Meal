@@ -5,6 +5,7 @@ var restaurantApp = angular.module('restaurantApp', [
     'rDetailCtrl',
     'deleteController',
     'createController',
+    'statisticsController',
     'restaurantDetailsController'
 ]);
 
@@ -39,7 +40,11 @@ restaurantApp.config(['$routeProvider',function($routeProvider) {
             templateUrl: 'partials/restaurantDetails.html',
             controller: 'restaurantDetailsController'
 	}).
+	when('/hot', {
+            templateUrl: 'partials/statistics.html',
+            controller: 'statisticsController'
+	}).
 	otherwise({
-            redirectTo: '/'
+            redirectTo: '/list/reservation/null/null'
 	});
 }]);

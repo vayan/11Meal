@@ -1,0 +1,28 @@
+<!-- THE TWO FOLLOWING LINE ARE FOR THE MENU ON THE LEFT -->
+<div ng-bind-html="leftMenu"></div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <h1 class="page-header">Hot food</h1>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+	<tr>
+            <th>id</th>
+            <th>name</th>
+            <th>price</th>
+            <th>cat</th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr ng-repeat="item in List">
+          <td>{{item.id}}</td>
+	  <td>{{item.name}}</td>
+	  <td>{{item.price}}</td>
+	  <td>{{foodCat[item.cat]}}</td>
+	</tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- close the two for the menu on the left -->
+</div>
+</div>

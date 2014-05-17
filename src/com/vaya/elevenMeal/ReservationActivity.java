@@ -24,6 +24,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
@@ -131,12 +132,17 @@ public class ReservationActivity extends Activity implements
 			Order order = new Order();
 			Reservation reservation = new Reservation();
 			order.setMealList(OrderFragment.getMealList());
+
 			//reservation.setOwner(owner)
 			reservation.setListGuest((ArrayList<User>) PeopleFragment.getUsers());
 			reservation.setDate(new Date(HourDateFragment.getDateHour()));
 			reservation.setPayMethod(HourDateFragment.getPaymentMethod());
+			
+			SharedPreferences sharedPreference = getSharedPreferences("11Meal", MODE_PRIVATE);
+			reservation.setOwnerId(sharedPreference.getInt("user_id", 0));
+			
 			reservation.setState(State.OPENED);
-			//new API().create(order);
+			new API().create(order);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

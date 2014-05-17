@@ -6,42 +6,64 @@ import java.util.List;
 
 public class Order implements IRestaurantObject {
 	// Attributes
-	protected int mId;
-	protected int mIdReservation;
-	protected List<Meal> mMealList;
+	protected int id;
+	protected int user;
+	protected int total_price;
+	protected int restaurant;
+	protected int reservation;
+	protected List<Meal> meals;
 
+	public int getUser() {
+		return user;
+	}
+
+	public void setUser(int user) {
+		this.user = user;
+	}
+
+	public int getTotal_price() {
+		return total_price;
+	}
+
+	public void setTotal_price(int total_price) {
+		this.total_price = total_price;
+	}
+
+	public int getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(int restaurant) {
+		this.restaurant = restaurant;
+	}
+
+	public int getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(int reservation) {
+		this.reservation = reservation;
+	}
+	
 	public Order() {
-		mMealList = new ArrayList<Meal>();
-	}
-
-	public int getIdReservation() {
-		return mIdReservation;
-	}
-
-	public void setIdReservation(int mIdReservation) {
-		this.mIdReservation = mIdReservation;
-	}
-
-	// Getters/setters
-	public int getId() {
-		return mId;
+		meals = new ArrayList<Meal>();
 	}
 
 	public List<Meal> getMealList() {
-		return mMealList;
+		return meals;
 	}
 
 	public void setMealList(List<Meal> mealList) {
-		mMealList = mealList;
+		meals = mealList;
 	}
 
 	// Methods
 	public void addMeal(Meal meal) {
-		mMealList.add(meal);
+		meals.add(meal);
 	}
 
 	public void removeMeal(Meal meal) {
-		Iterator<Meal> it = mMealList.iterator();
+		Iterator<Meal> it = meals.iterator();
 		while (it.hasNext()) {
 			if (it.next().getId() == meal.getId()) {
 				it.remove();
@@ -52,8 +74,13 @@ public class Order implements IRestaurantObject {
 
 	public float getTotalPrice() {
 		float totalPrice = 0;
-		for (Meal m: mMealList)
+		for (Meal m: meals)
 			totalPrice += m.getPrice();
 		return totalPrice;
+	}
+
+	@Override
+	public int getId() {
+		return id;
 	}
 }

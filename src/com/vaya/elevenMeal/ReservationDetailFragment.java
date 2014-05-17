@@ -2,11 +2,14 @@ package com.vaya.elevenMeal;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.vaya.elevenMeal.restaurant.IRestaurantObject;
@@ -22,7 +25,7 @@ import com.vaya.elevenMeal.restaurant.User;
  * tablets) or a {@link ReservationDetailActivity} on handsets.
  */
 public class ReservationDetailFragment extends Fragment
-implements OnTaskCompleted {
+implements OnTaskCompleted, OnClickListener {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -37,6 +40,8 @@ implements OnTaskCompleted {
 	private TextView dateHour;
 	private TextView viewPeople;
 	private TextView viewOrder;
+	private Button buttonRefuse;
+	private Boolean mDelete = false;
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -64,6 +69,9 @@ implements OnTaskCompleted {
 		dateHour   = (TextView) rootView.findViewById(R.id.dateHour);
 		viewPeople = (TextView) rootView.findViewById(R.id.viewPeople);
 		viewOrder  = (TextView) rootView.findViewById(R.id.viewOrder);
+		buttonRefuse = (Button) rootView.findViewById(R.id.buttonRefuse);
+		
+		buttonRefuse.setOnClickListener(this);
 
 		return rootView;
 	}
@@ -81,6 +89,11 @@ implements OnTaskCompleted {
 		}
 		
 		if (result.getClass().equals(Reservation.class)) {
+			if (mDelete)
+			{
+				getActivity().finish();
+				return;
+			}
 			reservation = Reservation.class.cast(result);
 			dateHour.setText(reservation.getDate().toString());
 			viewPeople.setText("");
@@ -104,5 +117,14 @@ implements OnTaskCompleted {
 				viewOrder.setText(m.getName() + "\t\t\t" + m.getPrice() + "\n");
 			}
 		}
+	}
+	
+	@Override
+	public void onClick(View arg0) {
+		SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", 0);
+		int i = preferences.getInt("user_id", 0);
+		reservation.removeGuest(preferences.getInt("user_id", 0));
+		mDelete = true;
+		new API(this).update(reservation);
 	}
 }

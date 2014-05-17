@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.vaya.elevenMeal.restaurant.IRestaurantObject;
 import com.vaya.elevenMeal.restaurant.Reservation;
+import com.vaya.elevenMeal.restaurant.Reservation.State;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
@@ -167,10 +168,12 @@ public class ReservationListFragment extends ListFragment
 	public class ResView {
 		public String mRestaurantName;
 		public String mOwnerName;
+		public State mState;
 
-		public ResView(String restaurantName, String ownerName) {
+		public ResView(String restaurantName, String ownerName, State state) {
 			mRestaurantName = restaurantName;
 			mOwnerName = ownerName;
+			mState = state;
 		}
 	}
 
@@ -202,7 +205,7 @@ public class ReservationListFragment extends ListFragment
 				if (resultList != null)
 					restaurant = Restaurant.class.cast(resultList.get(0));
 
-				resViewList.add(new ResView(restaurant.getName(), owner.getLogin()));
+				resViewList.add(new ResView(restaurant.getName(), owner.getLogin(), r.getState()));
 			}
 
 			return resViewList;

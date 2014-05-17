@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.dummy.DummyContent;
+import com.vaya.elevenMeal.restaurant.Meal;
+import com.vaya.elevenMeal.restaurant.Meal.Type;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.OnTaskCompleted;
 
@@ -157,6 +159,7 @@ public class RestaurantListFragment extends ListFragment implements OnTaskComple
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+		
 		if (res == null)
 			listResto = new ArrayList<Restaurant>();
 		else

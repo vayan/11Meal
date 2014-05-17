@@ -193,6 +193,7 @@ public class API {
 			if (result == null)
 				return ;
 			try {
+				Log.d("API.onPostExecute", result);
 				mLastResult = mGson.fromJson(result, mType);
 			}
 			catch (JsonSyntaxException e) {

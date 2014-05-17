@@ -88,7 +88,11 @@ public class ReservationListFragment extends ListFragment
 		SharedPreferences settings = getActivity().getSharedPreferences("11Meal",
 				Context.MODE_PRIVATE);
 		int id = settings.getInt("user_id", 0);
-		new API(this).get(new Reservation(), "user", String.valueOf(id));
+		new API(this).get(new Reservation(),
+				//guest` LIKE "%id%" OR `user
+				"guest%60%20LIKE%20%22%25" + id + "%25%22%20OR%20%60user",
+				String.valueOf(id));
+
 	}
 	
 	@Override

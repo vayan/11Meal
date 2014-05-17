@@ -6,6 +6,17 @@ import (
 	"strings"
 )
 
+func (o *Restaurant) PromoUnserialize() {
+	var u []Promo
+	sql_req := "select * from `promo` where restaurant =" + strconv.Itoa(o.Id)
+	log.Println(sql_req)
+	_, err := dbmap.Select(&u, sql_req)
+	if err != nil {
+		log.Println(err)
+	}
+	o.Promos = u
+}
+
 func (r *Reservation) GuestUnserialize() {
 	var u []User
 	sql_req := "select * from `user` where id in (" + r.GuestCSV + ")"

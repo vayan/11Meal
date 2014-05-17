@@ -16,6 +16,7 @@ func add(r interface{}) {
 		switch r.(type) {
 		case *Reservation:
 			r.(*Reservation).GuestSerialize()
+			r.(*Reservation).NotifNewResa()
 		case *Order:
 			r.(*Order).MealSerialize()
 		case *User:
@@ -277,15 +278,8 @@ func (o *Reservation) CheckChange() {
 	}
 }
 
-func (o *Restaurant) PromoUnserialize() {
-	var u []Promo
-	sql_req := "select * from `promo` where restaurant =" + strconv.Itoa(o.Id)
-	log.Println(sql_req)
-	_, err := dbmap.Select(&u, sql_req)
-	if err != nil {
-		log.Println(err)
-	}
-	o.Promos = u
+func (o *Reservation) NotifNewResa() {
+	send_gcm(get_gcm_id(o.Guests), "APIMeal, Reservation", "You've been added to a reservation")
 }
 
 func (p *Promo) send() {

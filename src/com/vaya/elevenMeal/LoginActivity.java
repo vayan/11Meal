@@ -182,10 +182,10 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 		// If the user is already logged in
 		intentRestaurant = new Intent(this, RestaurantListActivity.class);
-		SharedPreferences settings = getSharedPreferences("User", 0);
-		int id = settings.getInt("id", 0);
+		SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
+		int id = settings.getInt("user_id", -1);
 		Log.d("LOGIN", String.valueOf(id));
-		if (id != 0) {
+		if (id != -1) {
 			startActivity(intentRestaurant);
 			finish();
 		}
@@ -488,7 +488,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 				.equals("class com.vaya.elevenMeal.restaurant.User")) {
 			User user = (User) res;
 			startActivity(intentRestaurant);
-			SharedPreferences settings = getSharedPreferences("11Meal", 0);
+			SharedPreferences settings = getSharedPreferences("11Meal", MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putInt("user_id", user.getId());
 			finish();

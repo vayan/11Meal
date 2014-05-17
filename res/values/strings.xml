@@ -36,4 +36,7 @@
     <string name="unk_user">(unknown user)</string>
     <string name="unk_restaurant">Unknown Restaurant</string>
 
+  	<string name="action_map">Map</string>
+    <string name="title_mapActivity">Map activity</string>
+    
 </resources>

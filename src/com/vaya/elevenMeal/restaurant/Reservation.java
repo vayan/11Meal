@@ -124,4 +124,9 @@ public class Reservation implements IRestaurantObject {
 	public boolean update() {
 		return false; //TODO: complete stub
 	}
+
+	public void setOwnerId(int id) {
+		this.user = id; // TODO Auto-generated method stub
+		
+	}
 }

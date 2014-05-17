@@ -89,7 +89,7 @@ public class ReservationListFragment extends ListFragment
 		int id = settings.getInt("user_id", 0);
 		new API(this).get(new Reservation(), "user", String.valueOf(id));
 	}
-
+	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);

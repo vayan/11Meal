@@ -101,6 +101,9 @@ public class RestaurantListActivity extends FragmentActivity implements
 		case R.id.action_events:
 			startActivity(new Intent(this, ReservationListActivity.class));
 			return true;
+		case R.id.action_map:
+			startActivity(new Intent(this, MapActivity.class));
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}

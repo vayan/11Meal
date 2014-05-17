@@ -31,3 +31,10 @@ Thumbs.db
 .settings/org.eclipse.jdt.core.prefs
 .settings/org.eclipse.jdt.core.prefs
 .settings
+.settings/org.eclipse.jdt.core.prefs
+sugar-1.2.jar
+test/project.properties
+.settings/org.eclipse.jdt.core.prefs
+.settings/
+
+*.iml

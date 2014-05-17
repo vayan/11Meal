@@ -4,5 +4,6 @@
     <item android:id="@+id/action_events" android:title="@string/events" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_recent_history"></item>
     <item android:title="@string/action_settings" android:showAsAction="never" android:id="@+id/settings" ></item>
     <item android:title="@string/action_logout" android:showAsAction="never" android:id="@+id/logout" ></item>
+    <item android:id="@+id/action_map" android:title="@string/action_map" android:showAsAction="ifRoom"></item>
 
 </menu>

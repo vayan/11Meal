@@ -46,7 +46,7 @@ public class ReservationMealListAdapter extends ArrayAdapter<Meal>{
 		//checkbox.setTag(Integer.valueOf(position));
 		checkbox.setChecked(mChecked[position]);
 		//checkbox.setOnCheckedChangeListener(mListener);
-		
+
 		checkbox.setText(getItem(position).getName());
 		price.setText(String.valueOf(getItem(position).getPrice()));
 		

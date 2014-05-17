@@ -196,15 +196,15 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		}
 		
 		// If the user is already logged in
-//		intentRestaurant = new Intent(this, RestaurantListActivity.class);
-//		SharedPreferences settings = getSharedPreferences("11Meal",
-//				MODE_PRIVATE);
-//		int id = settings.getInt("user_id", -1);
-//		Log.d("LOGIN", String.valueOf(id));
-//		if (id != -1) {
-//			startActivity(intentRestaurant);
-//			finish();
-//		}
+		intentRestaurant = new Intent(this, RestaurantListActivity.class);
+		SharedPreferences settings = getSharedPreferences("11Meal",
+				MODE_PRIVATE);
+		int id = settings.getInt("user_id", -1);
+		Log.d("LOGIN", String.valueOf(id));
+		if (id != -1) {
+			startActivity(intentRestaurant);
+			finish();
+		}
 	}
 
 	public Boolean register() {

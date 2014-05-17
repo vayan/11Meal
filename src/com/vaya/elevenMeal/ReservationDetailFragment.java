@@ -82,6 +82,11 @@ implements OnTaskCompleted, OnClickListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+		if (mDelete)
+		{
+			getActivity().finish();
+			return;
+		}
 		if (res == null)
 			return ;
 		IRestaurantObject result;
@@ -92,11 +97,6 @@ implements OnTaskCompleted, OnClickListener {
 		}
 		
 		if (result.getClass().equals(Reservation.class)) {
-			if (mDelete)
-			{
-				getActivity().finish();
-				return;
-			}
 			reservation = Reservation.class.cast(result);
 			
 			SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", Context.MODE_PRIVATE);

@@ -1,0 +1,18 @@
+<div class="container">
+  
+  <form class="form-signin" role="form" ng-repeat="lang in langs" name="signForm">
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <div class="form-group">
+    <input type="text" class="form-control" id="name"
+	   placeholder="{{lang.email}}" ng-model="signin.name" required autofocus>
+    <input type="password" class="form-control" id="password"
+	   placeholder="{{lang.password}}" ng-model="signin.password" required>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block"
+	    ng-disabled="signForm.$invalid"
+	    ng-click="signIn(signin.name, signin.password)">
+      Sign in
+    </button>
+  </form>
+  
+</div> <!-- /container -->

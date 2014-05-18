@@ -49,3 +49,5 @@ test/project.properties
 
 *.iml
 test/project.properties
+
+*~

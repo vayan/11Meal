@@ -1,0 +1,11 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar"  ng-init="partial = 'main'">
+        <li ng-class="{selected:partial=='active'}"><a href="#/list/reservation/null/null">Reservations</a></li>
+	<li ng-class="{selected:partial=='active'}"><a href="#/list/order/null/null">Orders</a></li>
+	<li ng-class="{selected:partial=='active'}"><a href="#/list/meal/null/null">Meals</a></li>
+	<li ng-class="{selected:partial=='active'}"><a href="#/list/promo/null/null">Discounts</a></li>
+        <li ng-class="{selected:partial=='active'}"><a href="#/hot">Hot food</a></li>
+      </ul>
+    </div>

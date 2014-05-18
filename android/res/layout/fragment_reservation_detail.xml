@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vaya.elevenMeal.ReservationDetailFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/imyourfatherluke"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/reservationResName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/reservationDateHourTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/reservationResName"
+                android:text="@string/date_hour_title"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/sseparation1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/reservationDateHourTitle"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/dateHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sseparation1"
+                android:text="(no date)"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/peopleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/dateHour"
+                android:text="@string/participants_title"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/sseparation2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/peopleTitle"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/viewPeople"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sseparation2"
+                android:text="(nobody)" />
+
+            <TextView
+                android:id="@+id/orderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/viewPeople"
+                android:text="@string/order_title"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/sseparation3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/orderTitle"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/viewOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sseparation3"
+                android:text="(empty)" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/imyourfatherluke"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/buttonRefuse"
+        android:background="@android:color/darker_gray" />
+
+        <Button
+            android:id="@+id/buttonRefuse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+            android:background="@drawable/button_red"
+            android:text="@string/refuse" />
+
+</RelativeLayout>

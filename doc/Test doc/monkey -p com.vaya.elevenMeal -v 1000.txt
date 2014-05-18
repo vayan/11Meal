@@ -1,0 +1,283 @@
+monkey -p com.vaya.elevenMeal -v 1000
+
+
+:Monkey: seed=0 count=1000
+:AllowPackage: com.vaya.elevenMeal
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 15.0%
+//   1: 10.0%
+//   2: 2.0%
+//   3: 15.0%
+//   4: -0.0%
+//   5: 25.0%
+//   6: 15.0%
+//   7: 2.0%
+//   8: 2.0%
+//   9: 1.0%
+//   10: 13.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.vaya.elevenMeal/.LoginActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.vaya.elevenMeal/.LoginActivity } in package com.vaya.elevenMeal
+:Sending Flip keyboardOpen=false
+:Sending Touch (ACTION_DOWN): 0:(313.0,419.0)
+:Sending Touch (ACTION_UP): 0:(313.19876,419.49512)
+:Sending Touch (ACTION_DOWN): 0:(427.0,730.0)
+:Sending Touch (ACTION_UP): 0:(432.7109,728.9021)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-2.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] cmp=com.huawei.android.launcher/.Launcher } in package com.huawei.android.launcher
+:Sending Touch (ACTION_DOWN): 0:(257.0,101.0)
+:Sending Touch (ACTION_UP): 0:(248.47726,92.060104)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.android.settings/.UsbSettings } in package com.android.settings
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(353.0,825.0)
+:Sending Touch (ACTION_UP): 0:(367.02255,824.70325)
+:Sending Touch (ACTION_DOWN): 0:(460.0,36.0)
+:Sending Touch (ACTION_UP): 0:(478.2656,91.67999)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-4.0)
+Invalid int: ""
+    //[calendar_time:2014-05-17 16:26:22.712  system_uptime:646597]
+    // Sending event #100
+:Sending Touch (ACTION_DOWN): 0:(57.0,821.0)
+:Sending Touch (ACTION_UP): 0:(37.1931,812.3518)
+:Sending Touch (ACTION_DOWN): 0:(314.0,825.0)
+:Sending Touch (ACTION_UP): 0:(311.58575,818.51685)
+:Sending Touch (ACTION_DOWN): 0:(270.0,148.0)
+:Sending Touch (ACTION_UP): 0:(292.0574,172.04134)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.huawei.android.browser/com.android.browser.BrowserActivity } in package com.huawei.android.browser
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-1.0)
+:Sending Touch (ACTION_DOWN): 0:(87.0,21.0)
+:Sending Touch (ACTION_UP): 0:(86.42902,26.985004)
+:Sending Touch (ACTION_DOWN): 0:(180.0,729.0)
+:Sending Touch (ACTION_UP): 0:(174.44862,680.22144)
+:Sending Touch (ACTION_DOWN): 0:(321.0,455.0)
+:Sending Touch (ACTION_UP): 0:(323.4723,453.23087)
+:Sending Touch (ACTION_DOWN): 0:(263.0,495.0)
+:Sending Touch (ACTION_UP): 0:(260.67447,494.68863)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,3.0)
+:Sending Touch (ACTION_DOWN): 0:(455.0,41.0)
+:Sending Touch (ACTION_UP): 0:(473.70074,123.833405)
+:Sending Touch (ACTION_DOWN): 0:(220.0,544.0)
+:Sending Touch (ACTION_UP): 0:(227.5121,529.42615)
+:Sending Touch (ACTION_DOWN): 0:(60.0,576.0)
+:Sending Touch (ACTION_UP): 0:(59.627926,580.37195)
+:Sending Touch (ACTION_DOWN): 0:(17.0,129.0)
+    //[calendar_time:2014-05-17 16:26:23.597  system_uptime:647262]
+    // Sending event #200
+:Sending Touch (ACTION_UP): 0:(0.0,117.55976)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,2.0)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(54.0,644.0)
+:Sending Touch (ACTION_UP): 0:(70.23189,634.46063)
+:Sending Touch (ACTION_DOWN): 0:(412.0,9.0)
+:Sending Touch (ACTION_UP): 0:(408.2985,7.556138)
+:Sending Touch (ACTION_DOWN): 0:(268.0,355.0)
+:Sending Touch (ACTION_UP): 0:(267.8827,341.57898)
+    // Rejecting start of Intent { act=android.settings.SETTINGS cmp=com.android.settings/.SettingsEMUI } in package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(101.0,357.0)
+:Sending Touch (ACTION_UP): 0:(98.0403,364.6024)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.android.settings/.UsbSettings } in package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(10.0,8.0)
+:Sending Touch (ACTION_UP): 0:(17.424154,7.805002)
+:Sending Flip keyboardOpen=true
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.android.settings/.UsbSettings } in package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(114.0,257.0)
+:Sending Touch (ACTION_UP): 0:(144.14879,279.0429)
+:Sending Touch (ACTION_DOWN): 0:(22.0,628.0)
+:Sending Touch (ACTION_UP): 0:(21.255947,632.51385)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.vaya.elevenMeal/.LoginActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.vaya.elevenMeal/.LoginActivity } in package com.vaya.elevenMeal
+:Sending Touch (ACTION_DOWN): 0:(446.0,701.0)
+:Sending Touch (ACTION_UP): 0:(456.80484,773.7969)
+:Sending Touch (ACTION_DOWN): 0:(165.0,396.0)
+:Sending Touch (ACTION_UP): 0:(166.81113,394.14938)
+:Sending Touch (ACTION_DOWN): 0:(112.0,184.0)
+:Sending Touch (ACTION_UP): 0:(88.82703,238.68633)
+:Sending Touch (ACTION_DOWN): 0:(329.0,575.0)
+:Sending Touch (ACTION_UP): 0:(336.2307,567.04364)
+:Sending Touch (ACTION_DOWN): 0:(133.0,819.0)
+:Sending Touch (ACTION_UP): 0:(139.00114,809.12274)
+:Sending Touch (ACTION_DOWN): 0:(452.0,476.0)
+    //[calendar_time:2014-05-17 16:26:24.043  system_uptime:647707]
+    // Sending event #300
+:Sending Touch (ACTION_UP): 0:(480.0,360.61746)
+:Sending Touch (ACTION_DOWN): 0:(99.0,154.0)
+:Sending Touch (ACTION_UP): 0:(107.54795,140.08955)
+:Sending Touch (ACTION_DOWN): 0:(247.0,428.0)
+:Sending Touch (ACTION_UP): 0:(238.40408,422.08496)
+:Sending Touch (ACTION_DOWN): 0:(380.0,648.0)
+:Sending Touch (ACTION_UP): 0:(387.91678,657.0203)
+:Sending Touch (ACTION_DOWN): 0:(400.0,785.0)
+:Sending Touch (ACTION_UP): 0:(384.0611,824.53253)
+:Sending Touch (ACTION_DOWN): 0:(102.0,394.0)
+:Sending Touch (ACTION_UP): 0:(98.68609,397.19934)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,3.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-1.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+    // activityResuming(com.android.settings)
+    // Rejecting resume of package com.android.settings
+:Sending Touch (ACTION_DOWN): 0:(452.0,803.0)
+:Sending Touch (ACTION_UP): 0:(480.0,854.0)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Sending Touch (ACTION_DOWN): 0:(365.0,417.0)
+:Sending Touch (ACTION_UP): 0:(353.96414,402.09528)
+    //[calendar_time:2014-05-17 16:26:24.606  system_uptime:648270]
+    // Sending event #400
+    //[calendar_time:2014-05-17 16:26:24.607  system_uptime:648271]
+    // Sending event #400
+:Sending Touch (ACTION_DOWN): 0:(252.0,743.0)
+:Sending Touch (ACTION_UP): 0:(249.25243,737.6257)
+:Sending Touch (ACTION_DOWN): 0:(162.0,604.0)
+    // activityResuming(com.android.settings)
+    // Rejecting resume of package com.android.settings
+:Sending Touch (ACTION_UP): 0:(140.07066,630.95905)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(316.0,464.0)
+:Sending Touch (ACTION_UP): 0:(330.36206,463.87384)
+:Sending Touch (ACTION_DOWN): 0:(94.0,456.0)
+:Sending Touch (ACTION_UP): 0:(102.93653,456.9221)
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,4.0)
+:Sending Touch (ACTION_DOWN): 0:(262.0,772.0)
+:Sending Touch (ACTION_UP): 0:(259.15402,770.1949)
+:Sending Touch (ACTION_DOWN): 0:(188.0,642.0)
+:Sending Touch (ACTION_UP): 0:(183.82263,603.1976)
+:Sending Touch (ACTION_DOWN): 0:(44.0,381.0)
+:Sending Touch (ACTION_UP): 0:(47.93326,357.40192)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.vaya.elevenMeal/.LoginActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.vaya.elevenMeal/.LoginActivity } in package com.vaya.elevenMeal
+:Sending Touch (ACTION_DOWN): 0:(42.0,561.0)
+:Sending Touch (ACTION_UP): 0:(41.823475,564.8878)
+:Sending Touch (ACTION_DOWN): 0:(425.0,684.0)
+:Sending Touch (ACTION_UP): 0:(374.63745,628.8031)
+:Sending Touch (ACTION_DOWN): 0:(77.0,376.0)
+:Sending Touch (ACTION_UP): 0:(90.53031,343.4226)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(279.0,786.0)
+:Sending Touch (ACTION_UP): 0:(288.57446,772.9235)
+    //[calendar_time:2014-05-17 16:26:27.392  system_uptime:651056]
+    // Sending event #500
+    //[calendar_time:2014-05-17 16:26:27.393  system_uptime:651057]
+    // Sending event #500
+:Sending Touch (ACTION_DOWN): 0:(0.0,551.0)
+:Sending Touch (ACTION_UP): 0:(3.2013373,541.51776)
+:Sending Touch (ACTION_DOWN): 0:(294.0,278.0)
+:Sending Touch (ACTION_UP): 0:(309.94366,270.7798)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,4.0)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,-1.0)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,0.0)
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(40.0,386.0)
+:Sending Touch (ACTION_UP): 0:(35.140022,383.30728)
+:Sending Touch (ACTION_DOWN): 0:(173.0,48.0)
+:Sending Touch (ACTION_UP): 0:(149.6802,77.05221)
+:Sending Touch (ACTION_DOWN): 0:(363.0,63.0)
+:Sending Touch (ACTION_UP): 0:(362.99274,63.751408)
+:Sending Touch (ACTION_DOWN): 0:(455.0,732.0)
+:Sending Touch (ACTION_UP): 0:(467.2002,728.2123)
+:Sending Touch (ACTION_DOWN): 0:(29.0,770.0)
+:Sending Touch (ACTION_UP): 0:(20.129738,771.21484)
+:Sending Trackball (ACTION_MOVE): 0:(-3.0,2.0)
+    //[calendar_time:2014-05-17 16:26:30.513  system_uptime:654178]
+    // Sending event #600
+    //[calendar_time:2014-05-17 16:26:30.515  system_uptime:654179]
+    // Sending event #600
+:Sending Touch (ACTION_DOWN): 0:(34.0,623.0)
+:Sending Touch (ACTION_UP): 0:(49.83629,630.7064)
+:Sending Touch (ACTION_DOWN): 0:(48.0,464.0)
+:Sending Touch (ACTION_UP): 0:(61.368332,456.48355)
+:Sending Touch (ACTION_DOWN): 0:(194.0,417.0)
+:Sending Touch (ACTION_UP): 0:(170.94289,413.66824)
+:Sending Touch (ACTION_DOWN): 0:(395.0,726.0)
+:Sending Touch (ACTION_UP): 0:(395.13055,726.01764)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,1.0)
+:Sending Touch (ACTION_DOWN): 0:(208.0,330.0)
+:Sending Touch (ACTION_UP): 0:(218.40155,330.18695)
+:Sending Touch (ACTION_DOWN): 0:(132.0,518.0)
+:Sending Touch (ACTION_UP): 0:(134.64886,500.2047)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(377.0,820.0)
+:Sending Touch (ACTION_UP): 0:(344.0887,837.2697)
+:Sending Trackball (ACTION_MOVE): 0:(1.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(21.0,682.0)
+:Sending Touch (ACTION_UP): 0:(92.055046,718.83124)
+:Sending Touch (ACTION_DOWN): 0:(376.0,358.0)
+    //[calendar_time:2014-05-17 16:26:31.849  system_uptime:655514]
+    // Sending event #700
+:Sending Touch (ACTION_UP): 0:(402.57306,436.24542)
+:Sending Trackball (ACTION_MOVE): 0:(-2.0,-4.0)
+    // Allowing start of Intent { cmp=com.vaya.elevenMeal/.UserSettingsActivity } in package com.vaya.elevenMeal
+:Sending Flip keyboardOpen=false
+:Sending Touch (ACTION_DOWN): 0:(300.0,657.0)
+:Sending Touch (ACTION_UP): 0:(336.33975,636.48627)
+:Sending Touch (ACTION_DOWN): 0:(366.0,699.0)
+:Sending Touch (ACTION_UP): 0:(364.91925,696.7399)
+:Sending Touch (ACTION_DOWN): 0:(234.0,464.0)
+:Sending Touch (ACTION_UP): 0:(237.79152,462.214)
+:Sending Touch (ACTION_DOWN): 0:(444.0,409.0)
+:Sending Touch (ACTION_UP): 0:(443.91315,410.91547)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] cmp=com.huawei.android.launcher/.Launcher } in package com.huawei.android.launcher
+:Sending Trackball (ACTION_MOVE): 0:(-1.0,-5.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.vaya.elevenMeal/.LoginActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.vaya.elevenMeal/.LoginActivity } in package com.vaya.elevenMeal
+:Sending Trackball (ACTION_MOVE): 0:(-4.0,-2.0)
+:Sending Touch (ACTION_DOWN): 0:(454.0,703.0)
+:Sending Touch (ACTION_UP): 0:(454.9931,698.78754)
+:Sending Touch (ACTION_DOWN): 0:(57.0,260.0)
+:Sending Touch (ACTION_UP): 0:(58.98057,259.96875)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,4.0)
+    //[calendar_time:2014-05-17 16:26:34.677  system_uptime:658342]
+    // Sending event #800
+:Sending Touch (ACTION_DOWN): 0:(21.0,520.0)
+:Sending Touch (ACTION_UP): 0:(103.09425,592.7761)
+:Sending Touch (ACTION_DOWN): 0:(299.0,283.0)
+:Sending Touch (ACTION_UP): 0:(298.66782,286.76312)
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.huawei.android.browser/com.android.browser.BrowserActivity } in package com.huawei.android.browser
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-4.0)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,3.0)
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.vaya.elevenMeal/.LoginActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.vaya.elevenMeal/.LoginActivity } in package com.vaya.elevenMeal
+:Sending Touch (ACTION_DOWN): 0:(175.0,136.0)
+:Sending Touch (ACTION_UP): 0:(156.41754,118.30658)
+:Sending Touch (ACTION_DOWN): 0:(210.0,480.0)
+:Sending Touch (ACTION_UP): 0:(207.2791,491.32025)
+:Sending Touch (ACTION_DOWN): 0:(320.0,43.0)
+:Sending Touch (ACTION_UP): 0:(334.1007,33.668427)
+:Sending Touch (ACTION_DOWN): 0:(357.0,433.0)
+:Sending Touch (ACTION_UP): 0:(359.66965,442.24454)
+:Sending Touch (ACTION_DOWN): 0:(378.0,521.0)
+:Sending Touch (ACTION_UP): 0:(370.17557,513.67017)
+:Sending Touch (ACTION_DOWN): 0:(460.0,352.0)
+:Sending Touch (ACTION_UP): 0:(480.0,257.53543)
+:Sending Touch (ACTION_DOWN): 0:(389.0,417.0)
+:Sending Touch (ACTION_UP): 0:(390.45306,422.313)
+:Sending Trackball (ACTION_MOVE): 0:(2.0,-4.0)
+:Sending Touch (ACTION_DOWN): 0:(110.0,378.0)
+:Sending Touch (ACTION_UP): 0:(113.81003,389.78543)
+    //[calendar_time:2014-05-17 16:26:35.869  system_uptime:659533]
+    // Sending event #900
+:Sending Touch (ACTION_DOWN): 0:(105.0,557.0)
+:Sending Touch (ACTION_UP): 0:(137.27368,636.8361)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,1.0)
+:Sending Trackball (ACTION_MOVE): 0:(4.0,2.0)
+:Sending Trackball (ACTION_MOVE): 0:(-5.0,-2.0)
+:Sending Trackball (ACTION_MOVE): 0:(3.0,-3.0)
+:Sending Trackball (ACTION_UP): 0:(0.0,0.0)
+:Sending Flip keyboardOpen=true
+:Sending Touch (ACTION_DOWN): 0:(468.0,806.0)
+:Sending Touch (ACTION_UP): 0:(468.81918,804.39044)
+:Sending Touch (ACTION_DOWN): 0:(373.0,436.0)
+:Sending Touch (ACTION_UP): 0:(374.35745,435.89087)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,-3.0)
+:Sending Trackball (ACTION_MOVE): 0:(0.0,2.0)
+:Sending Touch (ACTION_DOWN): 0:(95.0,750.0)
+:Sending Touch (ACTION_UP): 0:(112.239784,746.5449)
+Events injected: 1000
+:Sending rotation degree=0, persist=false
+:Dropped: keys=2 pointers=0 trackballs=0 flips=0 rotations=0
+## Network stats: elapsed time=14320ms (2768ms mobile, 0ms wifi, 11552ms not connected)
+// Monkey finished

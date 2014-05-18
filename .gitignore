@@ -1,4 +1,4 @@
-B1;2802;0c# Built application files
+# Built application files
 *.apk
 *.ap_
 
@@ -30,3 +30,22 @@ pkg/
 *.db
 
 *.cfg
+=======
+=======
+.idea/
+.classpath
+.settings
+/project.properties
+11Meal.rar
+Thumbs.db
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings
+.settings/org.eclipse.jdt.core.prefs
+sugar-1.2.jar
+test/project.properties
+.settings/org.eclipse.jdt.core.prefs
+.settings/
+
+*.iml
+test/project.properties

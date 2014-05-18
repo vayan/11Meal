@@ -101,10 +101,10 @@ public class Reservation implements IRestaurantObject {
 		guests.add(user);
 	}
 	
-	public void removeGuest(User user) {
+	public void removeGuest(int user) {
 		Iterator<User> it = guests.iterator();
 		while (it.hasNext()) {
-			if (it.next().getId() == user.getId()) {
+			if (it.next().getId() == user) {
 				it.remove();
 				break;
 			}

@@ -14,8 +14,8 @@ public class Meal implements IRestaurantObject {
 	protected int id;
 	protected int restaurant;
 	protected String name;
-	protected float price;
-	protected Type type;
+	protected int price;
+	protected int type;
 
 	// Getter/setters
 	public int getId() {
@@ -34,7 +34,7 @@ public class Meal implements IRestaurantObject {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
@@ -43,11 +43,11 @@ public class Meal implements IRestaurantObject {
 	}
 	
 	public Type getType() {
-		return type;
+		return Type.values()[type];
 	}
 
 	public void setType(Type type) {
-		this.type = type;
+		this.type = type.ordinal();
 	}
 	
 	@Override

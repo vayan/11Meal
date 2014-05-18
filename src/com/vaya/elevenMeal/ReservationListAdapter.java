@@ -3,6 +3,7 @@ package com.vaya.elevenMeal;
 import java.util.List;
 
 import com.vaya.elevenMeal.ReservationListFragment.ResView;
+import com.vaya.elevenMeal.restaurant.Reservation.State;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -30,6 +31,16 @@ public class ReservationListAdapter extends ArrayAdapter<ResView> {
 		//FIXME: Use @strings resources
 		nameView.setText(getItem(position).mRestaurantName);
 		creatorView.setText(getItem(position).mOwnerName);
+		
+		View dot = ((View) rowView.findViewById(R.id.doabarrelroll));
+		if (getItem(position).mState == State.OPENED)
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_orange));
+		else if (getItem(position).mState == State.CONFIRMED)
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_green));
+		else if (getItem(position).mState == State.CANCELED)
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_red));
+		else
+			dot.setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
 
 		return rowView;
 	}

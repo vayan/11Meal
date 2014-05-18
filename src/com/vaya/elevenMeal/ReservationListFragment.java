@@ -1,9 +1,8 @@
 package com.vaya.elevenMeal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
-import org.apache.http.client.methods.HttpRequestBase;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,11 +11,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.webkit.WebView.FindListener;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.restaurant.IRestaurantObject;
+import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Reservation;
+import com.vaya.elevenMeal.restaurant.Reservation.State;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
@@ -33,7 +33,7 @@ public class ReservationListFragment extends ListFragment
 	implements OnTaskCompleted {
 
 	private List<Reservation> reservationList;
-	private ListView	mListReservationView;
+	private int userId;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -86,8 +86,12 @@ public class ReservationListFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 		SharedPreferences settings = getActivity().getSharedPreferences("11Meal",
 				Context.MODE_PRIVATE);
-		int id = settings.getInt("user_id", 0);
-		new API(this).get(new Reservation(), "user", String.valueOf(id));
+		userId = settings.getInt("user_id", 0);
+		new API(this).get(new Reservation(),
+				//guest` LIKE "%<userId>%" OR `user
+				"guest%60%20LIKE%20%22%25" + userId + "%25%22%20OR%20%60user",
+				String.valueOf(userId));
+
 	}
 	
 	@Override
@@ -167,10 +171,12 @@ public class ReservationListFragment extends ListFragment
 	public class ResView {
 		public String mRestaurantName;
 		public String mOwnerName;
+		public State mState;
 
-		public ResView(String restaurantName, String ownerName) {
+		public ResView(String restaurantName, String ownerName, State state) {
 			mRestaurantName = restaurantName;
 			mOwnerName = ownerName;
+			mState = state;
 		}
 	}
 
@@ -202,7 +208,7 @@ public class ReservationListFragment extends ListFragment
 				if (resultList != null)
 					restaurant = Restaurant.class.cast(resultList.get(0));
 
-				resViewList.add(new ResView(restaurant.getName(), owner.getLogin()));
+				resViewList.add(new ResView(restaurant.getName(), owner.getLogin(), r.getState()));
 			}
 
 			return resViewList;
@@ -216,6 +222,27 @@ public class ReservationListFragment extends ListFragment
 		}
 		
 	}
+	
+	private List<Reservation> filterUser(List<Reservation> resList) {
+		Iterator<Reservation> it = resList.iterator();
+		while (it.hasNext()) {
+			Reservation r = it.next();
+			boolean toDelete = true;
+			if (r.getOwnerId() != userId) {
+				Iterator<User> uIt = r.getGuests().iterator();
+				while(uIt.hasNext()) {
+					if (uIt.next().getId() == userId) {
+						toDelete = false;
+					}
+				}
+			}
+			else
+				continue ;
+			if (toDelete)
+				it.remove();
+		}
+		return resList;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -225,6 +252,7 @@ public class ReservationListFragment extends ListFragment
 			return ;
 		}
 		reservationList = (List<Reservation>) res;
+		reservationList = filterUser(reservationList);
 		new BuildResViewList().execute(reservationList);
 	}
 }

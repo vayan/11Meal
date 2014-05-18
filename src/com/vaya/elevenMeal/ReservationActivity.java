@@ -77,6 +77,8 @@ public class ReservationActivity extends Activity implements
 	private static ReservationMealListAdapter mReservationAdapter;
 	
 	private static int mIdUser;
+	
+	private Boolean mSwitch = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -476,15 +478,34 @@ public class ReservationActivity extends Activity implements
 				total += mOrders.get(i).getPrice() * quantities[i];
 			mTotal.setText(String.valueOf(total));
 		}
+		
+		private static float getTotalPrice()
+		{
+			float total = 0;
+			Integer[] quantities;
+			
+			quantities = mReservationAdapter.getQuantities();
+			for(int i = 0; i < quantities.length; i++)
+				total += mOrders.get(i).getPrice() * quantities[i];
+			return total;
+		}
 	}
 
 	@Override
 	public void onTaskCompleted(Object res, Type type) {
+		if (!mSwitch)
+		{
 			Reservation reservation = (Reservation) res;
 			Order order = new Order();
-			order.setIdReservation(reservation.getId());
+			order.setRestaurant(mIdRestaurant);
+			order.setUser(mIdUser);
+			order.setTotal_price((int) OrderFragment.getTotalPrice());
+			order.setReservation(reservation.getId());
 			order.setMealList(OrderFragment.getMealList());
-			new API().create(order);
+			new API(this).create(order);
+			mSwitch = !mSwitch;
+		}
+		else
 			this.finish();
 	}
 }

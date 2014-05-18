@@ -13,9 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.opengl.Visibility;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
+import android.os.*;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -116,6 +114,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 
 	private Boolean mSwitch = false;
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mLoginbut.setEnabled(true);
+            mRegisterbut.setEnabled(true);
+        }
+    };
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -211,7 +217,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			regid = getRegistrationId(context);
 
 			if (regid.isEmpty()) {
-				new registerInBackground().execute();
+               new registerInBackground().execute();
 			} else {
                 mLoginbut.setEnabled(true);
                 mRegisterbut.setEnabled(true);
@@ -219,13 +225,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");
 		}
-
+		
 		// If the user is already logged in
 		intentRestaurant = new Intent(this, RestaurantListActivity.class);
-		SharedPreferences settings = getSharedPreferences("User", 0);
-		int id = settings.getInt("id", 0);
+		SharedPreferences settings = getSharedPreferences("11Meal",
+				MODE_PRIVATE);
+		int id = settings.getInt("user_id", -1);
 		Log.d("LOGIN", String.valueOf(id));
-		if (id != 0) {
+		if (id != -1) {
 			startActivity(intentRestaurant);
 			finish();
 		}
@@ -241,7 +248,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 		/*Location mCurrentLocation;
 	    mCurrentLocation = mLocationClient.getLastLocation();*/
 		if (mSwitch) {
-			if (!(mPasswordView.getText().toString().equals(mPassRepeatView.getText().toString()))) {
+			if (!(mPasswordView.getText().toString().equals(mPassRepeatView
+					.getText().toString()))) {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
@@ -320,8 +328,9 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	}
 
 	private void sendRegistrationIdToBackend() {
-        mLoginbut.setEnabled(true);
-        mRegisterbut.setEnabled(true);
+        Message msg = new Message();
+        msg.obj = "done";
+        mHandler.sendMessage(msg);
 	}
 
 	private void storeRegistrationId(Context context, String regId) {
@@ -359,9 +368,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 				storeRegistrationId(context, regid);
 			} catch (IOException ex) {
 				msg = "Error :" + ex.getMessage();
-				// If there is an error, don't just keep trying to register.
-				// Require the user to click a button again, or perform
-				// exponential back-off.
+                new registerInBackground().execute();
 			}
 			return msg;
 		}
@@ -539,7 +546,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 				.equals("class com.vaya.elevenMeal.restaurant.User")) {
 			User user = (User) res;
 			startActivity(intentRestaurant);
-			SharedPreferences settings = getSharedPreferences("11Meal", 0);
+			SharedPreferences settings = getSharedPreferences("11Meal",
+					MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putInt("user_id", user.getId());
 			finish();
@@ -547,6 +555,12 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 		}
 
 		List<User> user = (List<User>) res;
+		if (user.size() == 0)
+		{
+			mEmailView.setError(getString(R.string.error_invalid_email));
+			mEmailView.requestFocus();
+			return;
+		}
 		if (mEmailView.getText().toString()
 				.equalsIgnoreCase(user.get(0).getEmail())
 				&& mPasswordView.getText().toString()

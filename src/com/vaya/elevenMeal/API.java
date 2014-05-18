@@ -45,7 +45,6 @@ public class API {
 
 	private void init() {
 		//mUrl = "http://bee.darkifrit.tk:8181";
-		
 		mUrl = "http://192.168.0.107:8181";
 		mGson = new GsonBuilder()
 		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
@@ -76,7 +75,7 @@ public class API {
 	public void update(IRestaurantObject object) {
 		String oClass  = object.getClass().getSimpleName();
 		String oId     = String.valueOf(object.getId());
-		HttpPut request = new HttpPut("/" + oClass + "/" + oId);
+		HttpPut request = new HttpPut(mUrl + "/" + oClass + "/" + oId);
 		request.setEntity(makeJSONObjectEntity(object));
 		request(getType(oClass), request);
 	}
@@ -194,6 +193,7 @@ public class API {
 			if (result == null)
 				return ;
 			try {
+				Log.d("API.onPostExecute", result);
 				mLastResult = mGson.fromJson(result, mType);
 			}
 			catch (JsonSyntaxException e) {

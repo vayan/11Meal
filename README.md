@@ -1,7 +1,7 @@
 11Meal
 ======
 
-# How to install :
+# How to install Server :
 
  * Install go : http://golang.org/
  * Create a new folder somewhere e.g : /foo/bar

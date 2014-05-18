@@ -46,7 +46,7 @@ public class API {
 	private void init() {
 		//mUrl = "http://bee.darkifrit.tk:8181";
 		
-		mUrl = "http://192.168.11.12:8181";
+		mUrl = "http://192.168.0.107:8181";
 		mGson = new GsonBuilder()
 		.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 		mAsync = true;

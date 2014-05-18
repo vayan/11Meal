@@ -11,6 +11,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,9 +29,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationRequest;
 import com.vaya.elevenMeal.API;
 import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Meal.Type;
@@ -45,7 +50,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends Activity implements OnTaskCompleted {
+public class LoginActivity extends Activity implements OnTaskCompleted{ /*  GooglePlayServicesClient.ConnectionCallbacks,
+														GooglePlayServicesClient.OnConnectionFailedListener{*/
 
 	// for GCM
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -58,7 +64,15 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	SharedPreferences prefs;
 	String regid;
 	Intent intentRestaurant;
-
+	
+	Location mCurrentLocation;
+	LocationClient mLocationClient;
+	Location myLocation;
+	double latitude;
+    double longitude;
+    
+	 private LocationRequest mLocationRequest;
+	
 	private OnSharedPreferenceChangeListener listener = null;
 
 	static final String TAG = "Mainacti";
@@ -104,10 +118,20 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_login);
+
+		/*mLocationRequest = LocationRequest.create();
+		 mLocationRequest.setInterval(1000*60);
+
+	        // Use high accuracy
+	        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+	        // Set the interval ceiling to one minute
+	        mLocationRequest.setFastestInterval(1000);*/
 
 		context = getApplicationContext();
 
@@ -120,7 +144,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			}
 		};
 		prefs.registerOnSharedPreferenceChangeListener(listener);
-
+		 prefs = getSharedPreferences("com.vaya.elevenMeal.location.SHARED_PREFERENCES", Context.MODE_PRIVATE);
+		// mLocationClient = new LocationClient(this, this, this);
 		/*
 		 * if (savedInstanceState == null) {
 		 * getFragmentManager().beginTransaction() .add(R.id.container, new
@@ -131,7 +156,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
-
+		
 
         mLoginbut = (Button) findViewById(R.id.sign_in_button);
         mRegisterbut = (Button) findViewById(R.id.register_button);
@@ -207,6 +232,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 	}
 
 	public Boolean register() {
+		GPSTracker gps = new GPSTracker(this);
+		
+		if(gps.canGetLocation()){
+			latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+		}
+		/*Location mCurrentLocation;
+	    mCurrentLocation = mLocationClient.getLastLocation();*/
 		if (mSwitch) {
 			if (!(mPasswordView.getText().toString().equals(mPassRepeatView.getText().toString()))) {
 				mPasswordView
@@ -223,6 +256,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 			user.setLogin(mUsernameView.getText().toString());
 			user.setPhone(mPhoneView.getText().toString());
             user.setGcmId(getRegistrationId(this));
+           user.setLocation(String.valueOf(latitude) + "," + String.valueOf(longitude));
 			new API(this).create(user);
 			showProgress(true);
 			return true;
@@ -538,5 +572,24 @@ public class LoginActivity extends Activity implements OnTaskCompleted {
 		}
 
 	}
+
+	/*@Override
+	public void onConnectionFailed(ConnectionResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		// TODO Auto-generated method stub
+		mLocationClient.connect();
+		
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+		mLocationClient.disconnect();
+	}*/
 
 }

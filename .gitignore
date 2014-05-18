@@ -38,3 +38,4 @@ test/project.properties
 .settings/
 
 *.iml
+test/project.properties

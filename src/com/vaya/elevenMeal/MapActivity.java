@@ -1,6 +1,10 @@
 package com.vaya.elevenMeal;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -10,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.vaya.elevenMeal.restaurant.Restaurant;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +26,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MapActivity extends FragmentActivity implements LocationListener, LocationSource{
+public class MapActivity extends FragmentActivity implements LocationListener, LocationSource, OnTaskCompleted{
 
 	/**
      * Crash is if the Google Play services APK is not available or null.
@@ -31,6 +36,8 @@ public class MapActivity extends FragmentActivity implements LocationListener, L
      
     private OnLocationChangedListener mListener;
     private LocationManager locationManager;
+    
+    private List<Restaurant> listResto;
     
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // in meter
     
@@ -72,7 +79,7 @@ public class MapActivity extends FragmentActivity implements LocationListener, L
             {
                 Log.d(TAG, "Error localisation manager");
             }
-         
+            new API(this).getAll(new Restaurant());
         setUpMapIfNeeded();
     }
  
@@ -124,8 +131,17 @@ public class MapActivity extends FragmentActivity implements LocationListener, L
     {
     	mMap.setMyLocationEnabled(true);
     	mMap.getUiSettings().setMyLocationButtonEnabled(true);
+    	newMarker("39.913602,116.394758", "Forbidden City");
+    	newMarker("39.910602,116.390758", "lol");
     }
      
+    private void newMarker(String position, String title)
+    {
+    	String[] tokens = position.split(",");
+    	
+    	MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.parseDouble(tokens[0]), Double.parseDouble(tokens[1]))).title(title);
+    	mMap.addMarker(marker);
+    }
     @Override
     public void activate(OnLocationChangedListener listener) 
     {
@@ -168,5 +184,19 @@ public class MapActivity extends FragmentActivity implements LocationListener, L
     {
         // TODO Auto-generated method stub
         Toast.makeText(this, "status changed", Toast.LENGTH_SHORT).show();
+    }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
+     
+    	/*if (res == null)
+    		listResto = new ArrayList<Restaurant>();
+    	else
+    		listResto = (List<Restaurant>)res;
+    	for(int i = 0; listResto.get(i) != null; i++ ){   		
+    		newMarker(listResto.get(i).getPosition(), listResto.get(i).getName());
+    	}*/
+
     }
 }

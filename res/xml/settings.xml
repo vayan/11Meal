@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Video" >
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="switch_size"
-            android:switchTextOff="LOW"
-            android:switchTextOn="HIGH"
-            android:title="Quality" />
-    </PreferenceCategory>
+    <PreferenceCategory android:title="Serveur address" >
+ 	<EditTextPreference
+                android:key="server_address"
+                android:title="Edit server address"
+                android:summary="URL"
+                android:dialogTitle="dialog_title_edittext_preference" />
+  	</PreferenceCategory>
+  
     <PreferenceCategory android:title="Photo" >
         <SwitchPreference
             android:defaultValue="false"

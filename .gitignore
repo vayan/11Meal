@@ -23,6 +23,14 @@ local.properties
 proguard/
 
 .idea/
+
+src/
+pkg/
+
+*.db
+
+*.cfg
+=======
 =======
 .idea/
 .classpath

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.vaya.elevenMeal.restaurant.IRestaurantObject;
-import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Reservation;
 import com.vaya.elevenMeal.restaurant.Reservation.State;
 import com.vaya.elevenMeal.restaurant.Restaurant;

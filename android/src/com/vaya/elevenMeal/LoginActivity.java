@@ -12,7 +12,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
-import android.opengl.Visibility;
 import android.os.*;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -29,15 +28,11 @@ import android.widget.TextView;
 
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 import com.vaya.elevenMeal.API;
-import com.vaya.elevenMeal.restaurant.Meal;
-import com.vaya.elevenMeal.restaurant.Meal.Type;
-import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
 import java.io.IOException;

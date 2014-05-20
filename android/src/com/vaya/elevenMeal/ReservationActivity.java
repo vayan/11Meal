@@ -1,6 +1,5 @@
 package com.vaya.elevenMeal;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,14 +9,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.google.android.gms.cast.Cast;
-import com.google.android.gms.internal.ch;
 import com.vaya.elevenMeal.restaurant.Meal;
 import com.vaya.elevenMeal.restaurant.Order;
 import com.vaya.elevenMeal.restaurant.Reservation;
 import com.vaya.elevenMeal.restaurant.Reservation.Payment;
 import com.vaya.elevenMeal.restaurant.Reservation.State;
-import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.restaurant.User;
 
 import android.app.Activity;
@@ -27,30 +23,21 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 // Trop de static, c'est caca
 public class ReservationActivity extends Activity implements

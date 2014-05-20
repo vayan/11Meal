@@ -1,23 +1,13 @@
 package com.vaya.elevenMeal;
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 
-import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,7 +27,6 @@ public class MapActivity extends FragmentActivity implements LocationListener, L
     private OnLocationChangedListener mListener;
     private LocationManager locationManager;
     
-    private List<Restaurant> listResto;
     
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // in meter
     

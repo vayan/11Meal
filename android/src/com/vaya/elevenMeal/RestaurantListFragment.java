@@ -7,12 +7,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.vaya.elevenMeal.dummy.DummyContent;
-import com.vaya.elevenMeal.restaurant.Meal;
-import com.vaya.elevenMeal.restaurant.Meal.Type;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 import com.vaya.elevenMeal.OnTaskCompleted;
 

@@ -1,19 +1,10 @@
 package com.vaya.elevenMeal;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * An activity representing a single Restaurant detail screen. This activity is

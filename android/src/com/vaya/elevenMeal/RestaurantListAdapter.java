@@ -5,7 +5,6 @@ import java.util.List;
 import com.vaya.elevenMeal.restaurant.Restaurant;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

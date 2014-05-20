@@ -2,11 +2,9 @@ package com.vaya.elevenMeal;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;

@@ -41,8 +41,8 @@ import android.widget.TimePicker;
 
 // Trop de static, c'est caca
 public class ReservationActivity extends Activity implements
-		ActionBar.TabListener, OnTaskCompleted {
-	
+ActionBar.TabListener, OnTaskCompleted {
+
 	public static final String ARG_ITEM_ID = "item_id";
 
 	/**
@@ -60,11 +60,11 @@ public class ReservationActivity extends Activity implements
 	ViewPager mViewPager;
 
 	private static int mIdRestaurant;
-	
+
 	private static ReservationMealListAdapter mReservationAdapter;
-	
+
 	private static int mIdUser;
-	
+
 	private Boolean mSwitch = false;
 
 	@Override
@@ -88,12 +88,12 @@ public class ReservationActivity extends Activity implements
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
 		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
+		.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
 
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
@@ -106,11 +106,11 @@ public class ReservationActivity extends Activity implements
 					.setTabListener(this));
 		}
 		mIdRestaurant = getIntent().getExtras().getInt(ARG_ITEM_ID);
-		
+
 		SharedPreferences preferences = getSharedPreferences("11Meal", MODE_PRIVATE);
 		mIdUser = preferences.getInt("user_id", -1);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		//mSectionsPagerAdapter.destroyItem(mViewPager, 2, mSectionsPagerAdapter.getItem(2));
@@ -136,14 +136,14 @@ public class ReservationActivity extends Activity implements
 		int id = item.getItemId();
 		if (id == R.id.action_validate) {
 			Reservation reservation = new Reservation();
-			
+
 			reservation.setOwnerId(mIdUser);
 			reservation.setListGuest((ArrayList<User>) PeopleFragment.getUsers());
 			reservation.setDate(new Date(HourDateFragment.getDateHour()));
 			reservation.setPayMethod(HourDateFragment.getPaymentMethod());
 			reservation.setState(State.OPENED);
 			reservation.setRestaurantId(mIdRestaurant);
-			
+
 			new API(this).create(reservation);
 			return true;
 		}
@@ -191,7 +191,7 @@ public class ReservationActivity extends Activity implements
 				return HourDateFragment.newInstance(position + 1);
 			}
 		}
-		
+
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
@@ -211,18 +211,18 @@ public class ReservationActivity extends Activity implements
 			}
 			return null;
 		}
-		
-	    @Override
-	    public void destroyItem(ViewGroup container, int position, Object object) {
-	        super.destroyItem(container, position, object);
 
-	        if (position <= getCount()) {
-	            FragmentManager manager = ((Fragment) object).getFragmentManager();
-	            FragmentTransaction trans = manager.beginTransaction();
-	            trans.remove((Fragment) object);
-	            trans.commit();
-	        }
-	    }
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			super.destroyItem(container, position, object);
+
+			if (position <= getCount()) {
+				FragmentManager manager = ((Fragment) object).getFragmentManager();
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.remove((Fragment) object);
+				trans.commit();
+			}
+		}
 	}
 
 	public static class HourDateFragment extends Fragment {
@@ -283,7 +283,7 @@ public class ReservationActivity extends Activity implements
 	}
 
 	public static class PeopleFragment extends Fragment implements
-			OnTaskCompleted {
+	OnTaskCompleted {
 		private static List<UserCheckable> mUsers;
 
 		private static ListView mPeople;
@@ -319,7 +319,7 @@ public class ReservationActivity extends Activity implements
 					R.layout.fragment_reservation_people, container, false);
 			mPeople = (ListView) rootView
 					.findViewById(R.id.newReservationListPeople);
-			
+
 			if (mAdapter != null)
 				mPeople.setAdapter(mAdapter);
 			mPeople.setOnItemClickListener(new OnItemClickListener() {
@@ -330,7 +330,7 @@ public class ReservationActivity extends Activity implements
 					mUsers.get(arg2).checked = !mUsers.get(arg2).checked;
 				}
 			});
-			
+
 			return rootView;
 		}
 
@@ -340,14 +340,17 @@ public class ReservationActivity extends Activity implements
 			mUsers = new ArrayList<UserCheckable>();
 			for(User user:users)
 				if (user.getId() != mIdUser)
-				mUsers.add(new UserCheckable(user, false));
+					mUsers.add(new UserCheckable(user, false));
 			if (mUsers != null)
 			{
-				mAdapter = new ArrayAdapter<UserCheckable>(getActivity(), android.R.layout.simple_list_item_checked, mUsers);
+				mAdapter = new ArrayAdapter<UserCheckable>(
+						getActivity(),
+						android.R.layout.simple_list_item_checked, mUsers
+						);
 				mPeople.setAdapter(mAdapter);
 			}
 		}
-		
+
 		public static List<User> getUsers() {
 			List<User> users = new ArrayList<User>();
 			for (UserCheckable user:mUsers)
@@ -355,18 +358,18 @@ public class ReservationActivity extends Activity implements
 					users.add(user.user);
 			return users;
 		}
-		
-		
+
+
 		private class UserCheckable {
 			public Boolean checked;
 			public User user;
-			
+
 			public UserCheckable(User u, Boolean b)
 			{
 				user = u;
 				checked = b;
 			}
-			
+
 			@Override
 			public String toString() {
 				return user.getLogin();
@@ -375,9 +378,9 @@ public class ReservationActivity extends Activity implements
 	}
 
 	public static class OrderFragment extends Fragment implements
-			OnTaskCompleted {
+	OnTaskCompleted {
 		private static List<Meal> mOrders;
-		
+
 		private ListView mMeal;
 		private static OrderFragment mFragment;
 		private static TextView mTotal;
@@ -413,10 +416,10 @@ public class ReservationActivity extends Activity implements
 					R.layout.fragment_reservation_order, container, false);
 			mTotal = (TextView) rootView.findViewById(R.id.newReservationOrderTotal);
 			setTotalOrder();
-				mMeal = (ListView) rootView
+			mMeal = (ListView) rootView
 					.findViewById(R.id.newReservationListOrder);
 			if (mReservationAdapter != null)
-				 mMeal.setAdapter(mReservationAdapter);
+				mMeal.setAdapter(mReservationAdapter);
 			return rootView;
 		}
 
@@ -425,23 +428,24 @@ public class ReservationActivity extends Activity implements
 			mOrders = (List<Meal>) res;
 			if (mOrders != null)
 			{
-				mReservationAdapter = new ReservationMealListAdapter(getActivity(), R.layout.adapter_meal_list, mOrders);
+				mReservationAdapter = new ReservationMealListAdapter(
+						getActivity(), R.layout.adapter_meal_list, mOrders);
 				mMeal.setAdapter(mReservationAdapter);
 			}
 		}
-		
+
 		@Override
 		public void onDestroy() {
 			// TODO Auto-generated method stub
 			super.onDestroy();
 		}
-		
+
 		public static List<Meal> getMealList()
 		{
 
 			List<Meal> choosen = new ArrayList<Meal>();
 			List<Integer> quantities;
-			
+
 			quantities = Arrays.asList(mReservationAdapter.getQuantities());
 			for (int i = 0; i < quantities.size(); i++){
 				for (int j = 0; j < quantities.get(i); j++)
@@ -449,12 +453,12 @@ public class ReservationActivity extends Activity implements
 			}
 			return choosen;
 		}
-		
+
 		public static void setTotalOrder()
 		{
 			float total = 0;
 			Integer[] quantities;
-			
+
 			if (mReservationAdapter == null)
 			{
 				mTotal.setText(String.valueOf(0));
@@ -465,12 +469,12 @@ public class ReservationActivity extends Activity implements
 				total += mOrders.get(i).getPrice() * quantities[i];
 			mTotal.setText(String.valueOf(total));
 		}
-		
+
 		private static float getTotalPrice()
 		{
 			float total = 0;
 			Integer[] quantities;
-			
+
 			quantities = mReservationAdapter.getQuantities();
 			for(int i = 0; i < quantities.length; i++)
 				total += mOrders.get(i).getPrice() * quantities[i];

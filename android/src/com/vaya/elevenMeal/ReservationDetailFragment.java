@@ -72,7 +72,7 @@ implements OnTaskCompleted, OnClickListener {
 		viewPeople = (TextView) rootView.findViewById(R.id.viewPeople);
 		viewOrder  = (TextView) rootView.findViewById(R.id.viewOrder);
 		buttonRefuse = (Button) rootView.findViewById(R.id.buttonRefuse);
-		
+
 		buttonRefuse.setVisibility(View.INVISIBLE);
 		buttonRefuse.setOnClickListener(this);
 
@@ -95,14 +95,16 @@ implements OnTaskCompleted, OnClickListener {
 		} catch (IndexOutOfBoundsException e) {
 			return ;
 		}
-		
+
 		if (result.getClass().equals(Reservation.class)) {
 			reservation = Reservation.class.cast(result);
-			
-			SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", Context.MODE_PRIVATE);
-			if (reservation.getOwnerId() != preferences.getInt("user_id", -1) && reservation.getState() == State.OPENED)
+
+			SharedPreferences preferences = getActivity().getSharedPreferences(
+					"11Meal", Context.MODE_PRIVATE);
+			if (reservation.getOwnerId() != preferences.getInt("user_id", -1) &&
+					reservation.getState() == State.OPENED)
 				buttonRefuse.setVisibility(View.VISIBLE);
-			
+
 			dateHour.setText(reservation.getDate().toString());
 			viewPeople.setText("");
 			for (User u: reservation.getGuests()) {
@@ -128,10 +130,11 @@ implements OnTaskCompleted, OnClickListener {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onClick(View arg0) {
-		SharedPreferences preferences = getActivity().getSharedPreferences("11Meal", Context.MODE_PRIVATE);
+		SharedPreferences preferences = getActivity().getSharedPreferences(
+				"11Meal", Context.MODE_PRIVATE);
 		reservation.removeGuest(preferences.getInt("user_id", 0));
 		mDelete = true;
 		new API(this).update(reservation);

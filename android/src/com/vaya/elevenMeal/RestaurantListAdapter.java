@@ -24,15 +24,19 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View rowView = inflater.inflate(R.layout.adapter_restaurant_list, null);
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.restaurantPreview);
-		TextView titleView = (TextView) rowView.findViewById(R.id.restaurantTitle);
-		TextView detailsView = (TextView) rowView.findViewById(R.id.restaurantDetails);
-		
-		
-		imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_launcher));
+		ImageView imageView = (ImageView) rowView.findViewById(
+				R.id.restaurantPreview);
+		TextView titleView = (TextView) rowView.findViewById(
+				R.id.restaurantTitle);
+		TextView detailsView = (TextView) rowView.findViewById(
+				R.id.restaurantDetails);
+
+
+		imageView.setImageDrawable(getContext().getResources().getDrawable(
+				R.drawable.ic_launcher));
 		titleView.setText(getItem(position).getName());
 		detailsView.setText(getItem(position).getAddress());
-		
+
 		return rowView;
 	}
 }

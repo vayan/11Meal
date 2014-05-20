@@ -26,7 +26,7 @@ import android.view.MenuItem;
  * selections.
  */
 public class RestaurantListActivity extends FragmentActivity implements
-		RestaurantListFragment.Callbacks {
+RestaurantListFragment.Callbacks {
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -71,8 +71,8 @@ public class RestaurantListActivity extends FragmentActivity implements
 			RestaurantDetailFragment fragment = new RestaurantDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.restaurant_detail_container, fragment)
-					.commit();
+			.replace(R.id.restaurant_detail_container, fragment)
+			.commit();
 
 		} else {
 			// In single-pane mode, simply start the detail activity
@@ -86,12 +86,12 @@ public class RestaurantListActivity extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    // Inflate the menu items for use in the action bar
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);
-	    return super.onCreateOptionsMenu(menu);
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {

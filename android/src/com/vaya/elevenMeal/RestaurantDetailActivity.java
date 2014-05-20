@@ -17,7 +17,7 @@ import android.view.MenuItem;
  */
 public class RestaurantDetailActivity extends FragmentActivity {
 
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +25,7 @@ public class RestaurantDetailActivity extends FragmentActivity {
 
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		// savedInstanceState is non-null when there is fragment state
 		// saved from previous configurations of this activity
 		// (e.g. when rotating the screen from portrait to landscape).
@@ -46,17 +46,15 @@ public class RestaurantDetailActivity extends FragmentActivity {
 			RestaurantDetailFragment fragment = new RestaurantDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.restaurant_detail_container, fragment).commit();
+				.add(R.id.restaurant_detail_container, fragment).commit();
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
-
-		
 		super.onResume();
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();

@@ -57,15 +57,15 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	SharedPreferences prefs;
 	String regid;
 	Intent intentRestaurant;
-	
+
 	Location mCurrentLocation;
 	LocationClient mLocationClient;
 	Location myLocation;
 	double latitude;
-    double longitude;
-    
-	 private LocationRequest mLocationRequest;
-	
+	double longitude;
+
+	private LocationRequest mLocationRequest;
+
 	private OnSharedPreferenceChangeListener listener = null;
 
 	static final String TAG = "Mainacti";
@@ -75,7 +75,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
+		"foo@example.com:hello", "bar@example.com:world" };
 
 	/**
 	 * The default email to populate the email field with.
@@ -97,8 +97,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-    private Button mRegisterbut;
-    private Button mLoginbut;
+	private Button mRegisterbut;
+	private Button mLoginbut;
 	Context context;
 
 	private EditText mPassRepeatView;
@@ -109,17 +109,17 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 
 	private Boolean mSwitch = false;
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            mLoginbut.setEnabled(true);
-            mRegisterbut.setEnabled(true);
-        }
-    };
+	Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			mLoginbut.setEnabled(true);
+			mRegisterbut.setEnabled(true);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -145,7 +145,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			}
 		};
 		prefs.registerOnSharedPreferenceChangeListener(listener);
-		 prefs = getSharedPreferences("com.vaya.elevenMeal.location.SHARED_PREFERENCES", Context.MODE_PRIVATE);
+		prefs = getSharedPreferences("com.vaya.elevenMeal.location.SHARED_PREFERENCES", Context.MODE_PRIVATE);
 		// mLocationClient = new LocationClient(this, this, this);
 		/*
 		 * if (savedInstanceState == null) {
@@ -157,24 +157,24 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
-		
 
-        mLoginbut = (Button) findViewById(R.id.sign_in_button);
-        mRegisterbut = (Button) findViewById(R.id.register_button);
+
+		mLoginbut = (Button) findViewById(R.id.sign_in_button);
+		mRegisterbut = (Button) findViewById(R.id.register_button);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
-						return false;
-					}
-				});
+		.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView textView, int id,
+					KeyEvent keyEvent) {
+				if (id == R.id.login || id == EditorInfo.IME_NULL) {
+					attemptLogin();
+					return true;
+				}
+				return false;
+			}
+		});
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
@@ -198,8 +198,8 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 
 
 
-        mLoginbut.setEnabled(false);
-        mRegisterbut.setEnabled(false);
+		mLoginbut.setEnabled(false);
+		mRegisterbut.setEnabled(false);
 
 		mPassRepeatView = (EditText) findViewById(R.id.passwordConfirm);
 		mUsernameView = (EditText) findViewById(R.id.login);
@@ -212,15 +212,15 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			regid = getRegistrationId(context);
 
 			if (regid.isEmpty()) {
-               new registerInBackground().execute();
+				new registerInBackground().execute();
 			} else {
-                mLoginbut.setEnabled(true);
-                mRegisterbut.setEnabled(true);
-            }
+				mLoginbut.setEnabled(true);
+				mRegisterbut.setEnabled(true);
+			}
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");
 		}
-		
+
 		// If the user is already logged in
 		intentRestaurant = new Intent(this, RestaurantListActivity.class);
 		SharedPreferences settings = getSharedPreferences("11Meal",
@@ -235,10 +235,10 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 
 	public Boolean register() {
 		GPSTracker gps = new GPSTracker(this);
-		
+
 		if(gps.canGetLocation()){
 			latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
+			longitude = gps.getLongitude();
 		}
 		/*Location mCurrentLocation;
 	    mCurrentLocation = mLocationClient.getLastLocation();*/
@@ -246,7 +246,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			if (!(mPasswordView.getText().toString().equals(mPassRepeatView
 					.getText().toString()))) {
 				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
+				.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 				return false;
 			}
@@ -258,8 +258,9 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			user.setLastName(mLastnameView.getText().toString());
 			user.setLogin(mUsernameView.getText().toString());
 			user.setPhone(mPhoneView.getText().toString());
-            user.setGcmId(getRegistrationId(this));
-           user.setLocation(String.valueOf(latitude) + "," + String.valueOf(longitude));
+			user.setGcmId(getRegistrationId(this));
+			user.setLocation(
+					String.valueOf(latitude) + "," + String.valueOf(longitude));
 			new API(this).create(user);
 			showProgress(true);
 			return true;
@@ -323,9 +324,9 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	}
 
 	private void sendRegistrationIdToBackend() {
-        Message msg = new Message();
-        msg.obj = "done";
-        mHandler.sendMessage(msg);
+		Message msg = new Message();
+		msg.obj = "done";
+		mHandler.sendMessage(msg);
 	}
 
 	private void storeRegistrationId(Context context, String regId) {
@@ -363,7 +364,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 				storeRegistrationId(context, regid);
 			} catch (IOException ex) {
 				msg = "Error :" + ex.getMessage();
-                new registerInBackground().execute();
+				new registerInBackground().execute();
 			}
 			return msg;
 		}
@@ -447,25 +448,25 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
 			mLoginStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
+			.alpha(show ? 1 : 0)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginStatusView.setVisibility(show ? View.VISIBLE
+							: View.GONE);
+				}
+			});
 
 			mLoginFormView.setVisibility(View.VISIBLE);
 			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
+			.alpha(show ? 0 : 1)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginFormView.setVisibility(show ? View.GONE
+							: View.VISIBLE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -559,7 +560,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 		if (mEmailView.getText().toString()
 				.equalsIgnoreCase(user.get(0).getEmail())
 				&& mPasswordView.getText().toString()
-						.equals((user.get(0)).getPassword())) {
+				.equals((user.get(0)).getPassword())) {
 			Log.d("LOGIN", mEmail + "||" + mPassword + ">>"
 					+ user.get(0).getEmail() + "||" + user.get(0).getPassword());
 			startActivity(intentRestaurant);
@@ -576,7 +577,7 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 			finish();
 		} else {
 			mPasswordView
-					.setError(getString(R.string.error_incorrect_password));
+			.setError(getString(R.string.error_incorrect_password));
 			mPasswordView.requestFocus();
 		}
 
@@ -585,14 +586,14 @@ public class LoginActivity extends Activity implements OnTaskCompleted{ /*  Goog
 	/*@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
 		mLocationClient.connect();
-		
+
 	}
 
 	@Override

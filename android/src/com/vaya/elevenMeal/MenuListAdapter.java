@@ -25,11 +25,11 @@ public class MenuListAdapter extends ArrayAdapter<Meal>{
 		View rowView = inflater.inflate(R.layout.adapter_menu_list, null);
 		TextView name = (TextView) rowView.findViewById(R.id.dialogMenuName);
 		TextView price = (TextView) rowView.findViewById(R.id.dialogMenuPrice);
-		
-		
+
+
 		name.setText(getItem(position).getName());
 		price.setText(String.valueOf(getItem(position).getPrice()));
-		
+
 		return rowView;
 	}
 }

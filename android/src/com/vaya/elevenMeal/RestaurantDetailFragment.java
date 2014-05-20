@@ -25,7 +25,7 @@ import com.vaya.elevenMeal.restaurant.Restaurant;
  * tablets) or a {@link RestaurantDetailActivity} on handsets.
  */
 public class RestaurantDetailFragment extends Fragment implements
-		OnTaskCompleted {
+OnTaskCompleted {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -130,16 +130,16 @@ public class RestaurantDetailFragment extends Fragment implements
 					dialog.setContentView(R.layout.dialog_restaurant_menu);
 					dialog.setTitle(R.string.menu);
 					((ListView) dialog.findViewById(R.id.dialogMenuList))
-							.setAdapter(new MenuListAdapter(getActivity(),
-									R.layout.adapter_menu_list, mMeals));
+					.setAdapter(new MenuListAdapter(getActivity(),
+							R.layout.adapter_menu_list, mMeals));
 					dialog.findViewById(R.id.dialogMenuDismiss)
-							.setOnClickListener(new OnClickListener() {
+					.setOnClickListener(new OnClickListener() {
 
-								@Override
-								public void onClick(View arg0) {
-									dialog.dismiss();
-								}
-							});
+						@Override
+						public void onClick(View arg0) {
+							dialog.dismiss();
+						}
+					});
 					dialog.show();
 				}
 			}
@@ -177,7 +177,9 @@ public class RestaurantDetailFragment extends Fragment implements
 			public void onClick(View v) {
 				Intent intent = new Intent(
 						android.content.Intent.ACTION_VIEW,
-						Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));
+						Uri.parse(
+								"http://maps.google.com/maps?" +
+								"saddr=20.344,34.34&daddr=20.5666,45.345"));
 				startActivity(intent);
 			}
 		});

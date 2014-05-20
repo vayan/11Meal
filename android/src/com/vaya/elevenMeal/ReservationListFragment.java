@@ -29,7 +29,7 @@ import com.vaya.elevenMeal.restaurant.User;
  * interface.
  */
 public class ReservationListFragment extends ListFragment
-	implements OnTaskCompleted {
+implements OnTaskCompleted {
 
 	private List<Reservation> reservationList;
 	private int userId;
@@ -92,7 +92,7 @@ public class ReservationListFragment extends ListFragment
 				String.valueOf(userId));
 
 	}
-	
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
@@ -166,7 +166,7 @@ public class ReservationListFragment extends ListFragment
 
 		mActivatedPosition = position;
 	}
-	
+
 	public class ResView {
 		public String mRestaurantName;
 		public String mOwnerName;
@@ -179,7 +179,8 @@ public class ReservationListFragment extends ListFragment
 		}
 	}
 
-	private class BuildResViewList extends AsyncTask<List<Reservation>, List<ResView>, List<ResView>> {
+	private class BuildResViewList extends
+	AsyncTask<List<Reservation>, List<ResView>, List<ResView>> {
 
 		@SuppressWarnings("unchecked")
 		@Override
@@ -201,13 +202,15 @@ public class ReservationListFragment extends ListFragment
 				if (resultList != null)
 					owner = User.class.cast(resultList.get(0));
 
-				api.get(new Restaurant(), "id", String.valueOf(r.getRestaurantId()));
+				api.get(
+						new Restaurant(), "id", String.valueOf(r.getRestaurantId()));
 				resultList = 
 						(List<IRestaurantObject> ) api.getLastResult();
 				if (resultList != null)
 					restaurant = Restaurant.class.cast(resultList.get(0));
 
-				resViewList.add(new ResView(restaurant.getName(), owner.getLogin(), r.getState()));
+				resViewList.add(
+						new ResView(restaurant.getName(), owner.getLogin(), r.getState()));
 			}
 
 			return resViewList;
@@ -219,9 +222,9 @@ public class ReservationListFragment extends ListFragment
 			setListAdapter(new ReservationListAdapter(
 					getActivity(), R.layout.adapter_reservation_list, result));
 		}
-		
+
 	}
-	
+
 	private List<Reservation> filterUser(List<Reservation> resList) {
 		Iterator<Reservation> it = resList.iterator();
 		while (it.hasNext()) {

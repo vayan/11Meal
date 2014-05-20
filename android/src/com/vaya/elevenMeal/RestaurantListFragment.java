@@ -40,7 +40,7 @@ public class RestaurantListFragment extends ListFragment implements OnTaskComple
 	 */
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
-	
+
 	private List<Restaurant> listResto;
 	/**
 	 * A callback interface that all activities containing this fragment must
@@ -155,11 +155,12 @@ public class RestaurantListFragment extends ListFragment implements OnTaskComple
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onTaskCompleted(Object res, java.lang.reflect.Type type) {
-		
+
 		if (res == null)
 			listResto = new ArrayList<Restaurant>();
 		else
 			listResto = (List<Restaurant>)res;
-		setListAdapter(new RestaurantListAdapter(getActivity(), R.layout.adapter_restaurant_list, listResto));
+		setListAdapter(new RestaurantListAdapter(
+				getActivity(), R.layout.adapter_restaurant_list, listResto));
 	}
 }
